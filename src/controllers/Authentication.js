@@ -43,7 +43,7 @@ let login = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error);
+        console.log('Token hết hạn');
         return res.status(500).json(error);
     }
 }
@@ -85,7 +85,7 @@ let refreshToken = async (req, res) => {
     } else {
         // Không tìm thấy token trong request
         return res.status(403).send({
-        message: 'No token provided.',
+            message: 'No token provided.',
         });
     }
 };

@@ -26,8 +26,8 @@ let isAuth = async (req, res, next) => {
             next();
         } catch (error) {
             // Nếu giải mã gặp lỗi: Không đúng, hết hạn...etc:
-            // Lưu ý trong dự án thực tế hãy bỏ dòng debug bên dưới, mình để đây để debug lỗi cho các bạn xem thôi
-            debug("Error while verify token:", error);
+            // // Lưu ý trong dự án thực tế hãy bỏ dòng debug bên dưới, mình để đây để debug lỗi cho các bạn xem thôi
+            // debug("Error while verify token:", error);
             return res.status(401).json({
                 message: 'Unauthorized.',
             });

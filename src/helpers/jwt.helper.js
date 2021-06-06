@@ -42,9 +42,9 @@ let generateToken = (user, secretSignature, tokenLife) => {
 let verifyToken = (token, secretKey) => {
     return new Promise((resolve, reject) => {
         jwt.verify(token, secretKey, (error, decoded) => {
-        if (error) {
-            return reject(error);
-        }
+            if (error) {
+                return reject(error);
+            }
             resolve(decoded);
         });
     });
