@@ -5,17 +5,20 @@ const AddressSchema = require('./Address');
 
 const clientAccountSchema = new Schema({
     customerCode: { type: String, required: true },
-    account: {
+    userName: {
         type: String,
-        index: true,
         unique: true,
         required: true
     },
     password: { type: String, required: true },
-    name: { type: String, required: true },
-    email: { type: String, required: true },
+    name: {type: String, required: true },
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
     phoneNumber: { type: String, required: true },
-    address: [AddressSchema],
+    address: {type:[AddressSchema], default: []},
     facebookId: { type: String },
     googleId: { type: String },
     zaloId: { type: String },

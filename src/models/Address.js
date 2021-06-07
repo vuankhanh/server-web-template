@@ -12,7 +12,7 @@ const AddressSchema = new Schema({
     district: { type: String, required: true },
     province: { type: String, required: true },
     position: PositionSchema,
-    isHeadquarters: { type: Boolean, required: true },
+    isHeadquarters: { type: Boolean, default: true, required: true },
 },{
     timestamps: true,
 });
