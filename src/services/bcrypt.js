@@ -5,7 +5,8 @@ function checkCompare(password, hash){
 }
 
 function hashPassword(password){
-    return bcrypt.hashSync(password, 12);
+    const salt = bcrypt.genSaltSync(12);
+    return bcrypt.hashSync(password, salt);
 }
 
 module.exports = {

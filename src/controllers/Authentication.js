@@ -1,5 +1,6 @@
 const jwtHelper = require("../helpers/jwt.helper");
 const adminAccount = require('../services/matchAdminAccount');
+const clientAccount = require('../services/matchClientAccount');
 const debug = console.log.bind(console);
 
 // Biến cục bộ trên server này sẽ lưu trữ tạm danh sách token
@@ -23,14 +24,23 @@ const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || "refresh-token-se
  */
 let login = async (req, res) => {
     try {
-        console.log(req.body);
-        const matchedAccount = await adminAccount.getAccount(req.body);
+        const originalUrl = req.originalUrl;
+        let typeOfAccount = originalUrl.split("/");
+        let matchedAccount;
+        if(typeOfAccount.length>0 && typeOfAccount[1]){
+            console.log(typeOfAccount[1]);
+            if(typeOfAccount[1]==='admin'){
+                matchedAccount = await adminAccount(req.body);
+            }else if(typeOfAccount[1]==='client'){
+                matchedAccount = await clientAccount(req.body);
+            }
+        }
         if(matchedAccount){
             debug(`Thực hiện tạo mã Token, [thời gian sống 1 giờ.]`);
-            const accessToken = await jwtHelper.generateToken(matchedAccount, accessTokenSecret, accessTokenLife);
+            const accessToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, accessTokenSecret, accessTokenLife);
             
             debug(`Thực hiện tạo mã Refresh Token, [thời gian sống 10 năm] =))`);
-            const refreshToken = await jwtHelper.generateToken(matchedAccount, refreshTokenSecret, refreshTokenLife);
+            const refreshToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, refreshTokenSecret, refreshTokenLife);
     
             // Lưu lại 2 mã access & Refresh token, với key chính là cái refreshToken để đảm bảo unique và không sợ hacker sửa đổi dữ liệu truyền lên.
             // lưu ý trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
@@ -41,8 +51,8 @@ let login = async (req, res) => {
         }else{
             return res.status(403).json({message: 'Sai tên đăng nhập hoặc mật khẩu'});
         }
-
     } catch (error) {
+        console.log(error);
         console.log('Token hết hạn');
         return res.status(500).json(error);
     }
@@ -60,27 +70,29 @@ let refreshToken = async (req, res) => {
 
     // Nếu như tồn tại refreshToken truyền lên và nó cũng nằm trong tokenList của chúng ta
     if (refreshTokenFromClient && (tokenList[refreshTokenFromClient])) {
+        const originalUrl = req.originalUrl;
+        let typeOfAccount = originalUrl.split("/");
         try {
-        // Verify kiểm tra tính hợp lệ của cái refreshToken và lấy dữ liệu giải mã decoded 
-        const decoded = await jwtHelper.verifyToken(refreshTokenFromClient, refreshTokenSecret);
+            // Verify kiểm tra tính hợp lệ của cái refreshToken và lấy dữ liệu giải mã decoded 
+            const decoded = await jwtHelper.verifyToken(req.originalUrl, refreshTokenFromClient, refreshTokenSecret);
 
-        // Thông tin user lúc này các bạn có thể lấy thông qua biến decoded.data
-        // có thể mở comment dòng debug bên dưới để xem là rõ nhé.
-        // debug("decoded: ", decoded);
-        const userFakeData = decoded.data;
+            // Thông tin user lúc này các bạn có thể lấy thông qua biến decoded.data
+            // có thể mở comment dòng debug bên dưới để xem là rõ nhé.
+            // debug("decoded: ", decoded);
+            const userFakeData = decoded.data;
 
-        debug(`Thực hiện tạo mã Token trong bước gọi refresh Token, [thời gian sống vẫn là 1 giờ.]`);
-        const accessToken = await jwtHelper.generateToken(userFakeData, accessTokenSecret, accessTokenLife);
+            debug(`Thực hiện tạo mã Token trong bước gọi refresh Token, [thời gian sống vẫn là 1 giờ.]`);
+            const accessToken = await jwtHelper.generateToken(typeOfAccount, userFakeData, accessTokenSecret, accessTokenLife);
 
-        // gửi token mới về cho người dùng
-        return res.status(200).json({accessToken});
+            // gửi token mới về cho người dùng
+            return res.status(200).json({accessToken});
         } catch (error) {
-        // Lưu ý trong dự án thực tế hãy bỏ dòng debug bên dưới, mình để đây để debug lỗi cho các bạn xem thôi
-        debug(error);
+            // Lưu ý trong dự án thực tế hãy bỏ dòng debug bên dưới, mình để đây để debug lỗi cho các bạn xem thôi
+            debug(error);
 
-        res.status(403).json({
-            message: 'Invalid refresh token.',
-        });
+            res.status(403).json({
+                message: 'Invalid refresh token.',
+            });
         }
     } else {
         // Không tìm thấy token trong request
