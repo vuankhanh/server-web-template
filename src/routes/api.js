@@ -10,8 +10,6 @@ const clientRoutes = require('../routes/client');
  * @param {*} app from express
  */
 let initRoutes = (app) => {
-    // Sử dụng authMiddleware.isAuth trước những api cần xác thực
-    router.use(AuthMiddleWare.isAuth);
     
     // router.get("/example-protect-api", ExampleController.someAction);
     app.use('/admin', adminRoutes);

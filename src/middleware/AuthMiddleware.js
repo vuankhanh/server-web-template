@@ -13,12 +13,11 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "access-token-secre
 let isAuth = async (req, res, next) => {
     // Lấy token được gửi lên từ phía client, thông thường tốt nhất là các bạn nên truyền token vào header
     const tokenFromClient = req.body.token || req.query.token || req.headers["x-access-token"];
-
     if (tokenFromClient) {
         // Nếu tồn tại token
         try {
             // Thực hiện giải mã token xem có hợp lệ hay không?
-            const decoded = await jwtHelper.verifyToken(req.originalUrl, typeOfAccount[1], tokenFromClient, accessTokenSecret);
+            const decoded = await jwtHelper.verifyToken(req.originalUrl, tokenFromClient, accessTokenSecret);
             // Nếu token hợp lệ, lưu thông tin giải mã được vào đối tượng req, dùng cho các xử lý ở phía sau.
             req.jwtDecoded = decoded;
 
@@ -28,6 +27,7 @@ let isAuth = async (req, res, next) => {
             // Nếu giải mã gặp lỗi: Không đúng, hết hạn...etc:
             // // Lưu ý trong dự án thực tế hãy bỏ dòng debug bên dưới, mình để đây để debug lỗi cho các bạn xem thôi
             // debug("Error while verify token:", error);
+            console.log(error);
             return res.status(401).json({
                 message: 'Unauthorized.',
             });
