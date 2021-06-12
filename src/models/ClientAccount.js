@@ -4,21 +4,23 @@ const Schema = mongoose.Schema;
 const AddressSchema = require('./Address');
 
 const clientAccountSchema = new Schema({
-    customerCode: { type: String, required: true },
+    customerCode: { type: String, required: true, immutable: true },
     userName: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        immutable: true
     },
     password: { type: String, required: true },
-    name: {type: String, required: true },
+    name: { type: String, required: true },
     email: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        immutable: true
     },
     phoneNumber: { type: String, required: true },
-    address: {type:[AddressSchema], default: []},
+    address: { type:[AddressSchema], default: [] },
     facebookId: { type: String },
     googleId: { type: String },
     zaloId: { type: String },

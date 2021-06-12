@@ -6,6 +6,7 @@ const Auth = require('../../controllers/Authentication');
 const Config = require("../../controllers/Config");
 const Register = require('../../controllers/client/Register');
 const CheckExistsUserName = require('../../controllers/client/CheckExistsAccount');
+const UpdateInformation = require('../../controllers/client/UpdateInformation');
 
 router.get("/");
 router.post("/login", Auth.login);
@@ -19,5 +20,6 @@ router.use(AuthMiddleWare.isAuth);
 
 // List Protect APIs:
 router.get("/config", Config.friendLists);
+router.put("/update-customer", UpdateInformation);
 
 module.exports = router;

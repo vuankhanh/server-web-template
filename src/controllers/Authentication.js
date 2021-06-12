@@ -1,3 +1,4 @@
+const process = require('../config/evironment/index');
 const jwtHelper = require("../helpers/jwt.helper");
 const adminAccount = require('../services/matchAdminAccount');
 const clientAccount = require('../services/matchClientAccount');
@@ -8,14 +9,14 @@ const debug = console.log.bind(console);
 let tokenList = {};
 
 // Thời gian sống của token
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1h";
+const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "access-token-secret-example-trungquandev.com-green-cat-a@";
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
 // Thời gian sống của refreshToken
-const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE || "3650d";
+const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET || "refresh-token-secret-example-trungquandev.com-green-cat-a@";
+const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
 
 /**
  * controller login
@@ -39,7 +40,6 @@ let login = async (req, res) => {
             debug(`Thực hiện tạo mã Token, [thời gian sống 1 giờ.]`);
             const accessToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, accessTokenSecret, accessTokenLife);
             
-            debug(`Thực hiện tạo mã Refresh Token, [thời gian sống 10 năm] =))`);
             const refreshToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, refreshTokenSecret, refreshTokenLife);
     
             // Lưu lại 2 mã access & Refresh token, với key chính là cái refreshToken để đảm bảo unique và không sợ hacker sửa đổi dữ liệu truyền lên.

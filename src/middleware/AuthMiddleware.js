@@ -1,8 +1,9 @@
+const process = require('../config/evironment');
 const jwtHelper = require("../helpers/jwt.helper");
 const debug = console.log.bind(console);
 
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "access-token-secret-example-trungquandev.com-green-cat-a@";
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
 /**
  * Middleware: Authorization user by Token
@@ -24,10 +25,6 @@ let isAuth = async (req, res, next) => {
             // Cho phép req đi tiếp sang controller.
             next();
         } catch (error) {
-            // Nếu giải mã gặp lỗi: Không đúng, hết hạn...etc:
-            // // Lưu ý trong dự án thực tế hãy bỏ dòng debug bên dưới, mình để đây để debug lỗi cho các bạn xem thôi
-            // debug("Error while verify token:", error);
-            console.log(error);
             return res.status(401).json({
                 message: 'Unauthorized.',
             });
