@@ -7,6 +7,8 @@ const Config = require("../../controllers/Config");
 const Register = require('../../controllers/client/Register');
 const CheckExistsUserName = require('../../controllers/client/CheckExistsAccount');
 const UpdateInformation = require('../../controllers/client/UpdateInformation');
+const AdministrativeUnits = require('../../controllers/client/AdministrativeUnits');
+const CustomerAddress = require('../../controllers/client/CustomerAddress');
 
 router.get("/");
 router.post("/login", Auth.login);
@@ -20,6 +22,13 @@ router.use(AuthMiddleWare.isAuth);
 
 // List Protect APIs:
 router.get("/config", Config.friendLists);
+router.get("/administrative-units", AdministrativeUnits.province);
+router.get("/administrative-units/:provinceCode/district", AdministrativeUnits.district);
+router.get("/administrative-units/:districtCode/ward", AdministrativeUnits.ward);
+router.post("/customer/address/insert", CustomerAddress.insert);
+router.put("/customer/address/update", CustomerAddress.update);
+router.put("/customer/address/update", CustomerAddress.update);
+router.put("/customer/address/remove", CustomerAddress.remove);
 router.put("/update-customer", UpdateInformation);
 
 module.exports = router;

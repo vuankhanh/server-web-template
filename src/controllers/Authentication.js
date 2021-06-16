@@ -37,7 +37,7 @@ let login = async (req, res) => {
             }
         }
         if(matchedAccount){
-            debug(`Thực hiện tạo mã Token, [thời gian sống 1 giờ.]`);
+            debug(`Thực hiện tạo mã Token, [thời gian sống 30 ngày.]`);
             const accessToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, accessTokenSecret, accessTokenLife);
             
             const refreshToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, refreshTokenSecret, refreshTokenLife);
@@ -81,7 +81,7 @@ let refreshToken = async (req, res) => {
             // debug("decoded: ", decoded);
             const userFakeData = decoded.data;
 
-            debug(`Thực hiện tạo mã Token trong bước gọi refresh Token, [thời gian sống vẫn là 1 giờ.]`);
+            debug(`Thực hiện tạo mã Token trong bước gọi refresh Token, [thời gian sống vẫn là 30 ngày.]`);
             const accessToken = await jwtHelper.generateToken(typeOfAccount, userFakeData, accessTokenSecret, accessTokenLife);
 
             // gửi token mới về cho người dùng
