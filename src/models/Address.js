@@ -9,6 +9,8 @@ const PositionSchema = new Schema({
 })
 
 const AddressSchema = new Schema({
+    responsiblePerson: { type: String, require: true },
+    phoneNumber: { type: String, require: true },
     street: { type: String, required: true },
     ward: {
         type: VnAdministrativeUnitsSchemae.schema.WardChema,
@@ -23,7 +25,7 @@ const AddressSchema = new Schema({
         required: true
     },
     position: PositionSchema,
-    isHeadquarters: { type: Boolean, default: false, required: true },
+    isHeadquarters: { type: Boolean, default: true, required: true },
 },{
     timestamps: true,
 });

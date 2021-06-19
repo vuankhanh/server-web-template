@@ -2,8 +2,6 @@ const VnAdminUnits = require('../../models/VnAdministrativeUnits');
 
 async function province(req, res){
     let queryParams = req.query;
-    console.log(queryParams);
-    console.log('asds');
     try {
         if(queryParams && queryParams.province && queryParams.province === 'all'){
             const province = await VnAdminUnits.model.Province.find({}, { name: 1, code: 1 });
@@ -19,7 +17,6 @@ async function province(req, res){
 
 async function district(req, res){
     let queryParams = req.params;
-    console.log(queryParams);
     try {
         if(queryParams && queryParams.provinceCode){
             const districs = await VnAdminUnits.model.District.find(
@@ -37,7 +34,6 @@ async function district(req, res){
 
 async function ward(req, res){
     let queryParams = req.params;
-    console.log(queryParams);
     try {
         if(queryParams && queryParams.districtCode ){
             const wards = await VnAdminUnits.model.Ward.find(

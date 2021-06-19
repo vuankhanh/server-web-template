@@ -13,6 +13,9 @@ async function insert(req, res){
 
     try {
         if(formData.address){
+            if(formData.address.isHeadquarters){
+                await refreshDefault(customerInfo);
+            }
             let accessToken = await insertAddress(customerInfo, formData.address);
             
             if(accessToken){
@@ -32,8 +35,12 @@ async function update(req, res){
     const customerInfo = req.jwtDecoded.data;
     try {
         if(formData.address){
+            console.log(formData.address.isHeadquarters)
+            if(formData.address.isHeadquarters){
+                await refreshDefault(customerInfo);
+            }
             let accessToken = await updateAddress(customerInfo, formData.address);
-            
+
             if(accessToken){
                 return res.status(200).json({ message: 'successfully', accessToken: accessToken });
             }else{
@@ -87,6 +94,8 @@ async function updateAddress(customerInfo, newAddress){
         },
         {
             $set: {
+                'address.$.responsiblePerson': newAddress.responsiblePerson,
+                'address.$.phoneNumber': newAddress.phoneNumber,
                 'address.$.district': newAddress.district,
                 'address.$.isHeadquarters': newAddress.isHeadquarters,
                 'address.$.position': newAddress.position,
@@ -117,6 +126,21 @@ async function removeAddress(customerInfo, newAddress){
     if(result){
         return await jwtHelper.generateToken('client', result, accessTokenSecret, accessTokenLife);
     }return null;
+}
+
+async function refreshDefault(customerInfo){
+    return await ClientAccount.findOneAndUpdate(
+        {
+            userName: customerInfo.userName,
+            'address.isHeadquarters': true
+        },
+        {
+            $set: {
+                'address.$.isHeadquarters': false
+            }
+        },
+        { new: true }
+    );
 }
 
 module.exports = {
