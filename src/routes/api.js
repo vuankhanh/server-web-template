@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const path = require("path");
 const AuthMiddleWare = require("../middleware/AuthMiddleware");
+const localPathConfig = require('../config/local-path');
 
 const adminRoutes = require("../routes/admin");
 const clientRoutes = require('../routes/client');
@@ -11,7 +13,7 @@ const clientRoutes = require('../routes/client');
  */
 let initRoutes = (app) => {
     
-    // router.get("/example-protect-api", ExampleController.someAction);
+    app.use('/gallery', express.static(localPathConfig.gallery));
     app.use('/admin', adminRoutes);
     app.use('/client', clientRoutes);
 

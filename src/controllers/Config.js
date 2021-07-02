@@ -18,5 +18,5 @@ let friendLists = (req, res) => {
 }
 
 module.exports = {
-    friendLists: friendLists,
+    friendLists
 };

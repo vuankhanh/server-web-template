@@ -72,9 +72,11 @@ let refreshToken = async (req, res) => {
     if (refreshTokenFromClient && (tokenList[refreshTokenFromClient])) {
         const originalUrl = req.originalUrl;
         let typeOfAccount = originalUrl.split("/");
+        console.log(typeOfAccount);
+        console.log(originalUrl);
         try {
             // Verify kiểm tra tính hợp lệ của cái refreshToken và lấy dữ liệu giải mã decoded 
-            const decoded = await jwtHelper.verifyToken(req.originalUrl, refreshTokenFromClient, refreshTokenSecret);
+            const decoded = await jwtHelper.verifyToken(originalUrl, refreshTokenFromClient, refreshTokenSecret);
 
             // Thông tin user lúc này các bạn có thể lấy thông qua biến decoded.data
             // có thể mở comment dòng debug bên dưới để xem là rõ nhé.
@@ -82,7 +84,7 @@ let refreshToken = async (req, res) => {
             const userFakeData = decoded.data;
 
             debug(`Thực hiện tạo mã Token trong bước gọi refresh Token, [thời gian sống vẫn là 30 ngày.]`);
-            const accessToken = await jwtHelper.generateToken(typeOfAccount, userFakeData, accessTokenSecret, accessTokenLife);
+            const accessToken = await jwtHelper.generateToken(typeOfAccount[1], userFakeData, accessTokenSecret, accessTokenLife);
 
             // gửi token mới về cho người dùng
             return res.status(200).json({accessToken});
