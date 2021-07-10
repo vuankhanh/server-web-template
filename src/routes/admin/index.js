@@ -8,6 +8,7 @@ const Config = require('../../controllers/Config');
 const ProductCategory = require('../../controllers/admin/ProductCategory');
 const ProductGallery = require('../../controllers/admin/ProductGallery');
 const Product = require('../../controllers/admin/Product');
+const Post = require('../../controllers/admin/Post');
 
 router.get("/", Config.friendLists);
 router.post("/login", Auth.login);
@@ -25,12 +26,18 @@ router.post('/product-category/remove', ProductCategory.remove);
 
 router.get('/product-gallery', ProductGallery.getAll);
 router.post('/product-gallery/insert', ProductGallery.insert);
-router.post('/product-gallery/update', ProductGallery.update);
+router.put('/product-gallery/update', ProductGallery.update);
 router.post('/product-gallery/remove', ProductGallery.remove);
+// router.post('/product-gallery//remove', ProductGallery.remove)
 
 router.get('/product', Product.getAll);
 router.post('/product/insert', Product.insert);
 router.put('/product/update', Product.update);
-router.post('/product/remove', Product.remove);
+// router.post('/product/remove', Product.remove);
+
+router.get('/posts', Post.getAll);
+router.post('/posts/insert', Post.insert);
+router.put('/posts/update', Post.update);
+router.post('/posts/remove', Post.remove);
 
 module.exports = router;

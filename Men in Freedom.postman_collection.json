@@ -1,0 +1,891 @@
+{
+	"info": {
+		"_postman_id": "110ab495-b865-42a9-abff-6590cd894f90",
+		"name": "Men in Freedom",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\": \"admin\",\r\n    \"password\": \"123123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Check Token",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjF9LCJpYXQiOjE2MjM0MDkxMjEsImV4cCI6MTYyMzQxMjcyMX0.tWtGFiqrvsXqhJzJ7YesCf9KIDbgMm7uWltK4sNiggE",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/admin/config",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"config"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjF9LCJpYXQiOjE2MjUyMTc0MDEsImV4cCI6MTYyNzgwOTQwMX0.k3_CS5YD12cl6tpQIT38NaaygsV6J2iwJDuZIvA-Gjo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/refresh-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Product Category",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmggMTIyMjIiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTc0MDE3MDMwIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjp0cnVlLCJfaWQiOiI2MGM4OGU3MzViZGI4ZDRhM2NkYjg4NjkiLCJkaXN0cmljdCI6IlRow6BuaCBwaOG7kSBDYW8gQuG6sW5nIiwicG9zaXRpb24iOnsiX2lkIjoiNjBjODhlNzM1YmRiOGQ0YTNjZGI4ODZhIiwibGF0IjpudWxsLCJsbmciOm51bGx9LCJwcm92aW5jZSI6IlThu4luaCBDYW8gQuG6sW5nIiwic3RyZWV0IjoiVsWpIEFuIEtow6FuaCIsIndhcmQiOiJQaMaw4budbmcgVMOibiBHaWFuZyIsInVwZGF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiIsImNyZWF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiJ9XSwiY3JlYXRlZEF0IjoiMjAyMS0wNi0xM1QwODoxMDo0Ny4yOTdaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0xNVQxMTo0MjoyOS4xNThaIn0sImlhdCI6MTYyMzgxNjU2OCwiZXhwIjoxNjIzODIwMTY4fQ.-jjGU_f6dO_wn3Gf5iUMPh81ax6i9vFaKd5sXv9jBsI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/admin/product-category",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"product-category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Insert Product Category",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmggMTIyMjIiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTc0MDE3MDMwIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjp0cnVlLCJfaWQiOiI2MGM4OGU3MzViZGI4ZDRhM2NkYjg4NjkiLCJkaXN0cmljdCI6IlRow6BuaCBwaOG7kSBDYW8gQuG6sW5nIiwicG9zaXRpb24iOnsiX2lkIjoiNjBjODhlNzM1YmRiOGQ0YTNjZGI4ODZhIiwibGF0IjpudWxsLCJsbmciOm51bGx9LCJwcm92aW5jZSI6IlThu4luaCBDYW8gQuG6sW5nIiwic3RyZWV0IjoiVsWpIEFuIEtow6FuaCIsIndhcmQiOiJQaMaw4budbmcgVMOibiBHaWFuZyIsInVwZGF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiIsImNyZWF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiJ9XSwiY3JlYXRlZEF0IjoiMjAyMS0wNi0xM1QwODoxMDo0Ny4yOTdaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0xNVQxMTo0MjoyOS4xNThaIn0sImlhdCI6MTYyMzgxNjU2OCwiZXhwIjoxNjIzODIwMTY4fQ.-jjGU_f6dO_wn3Gf5iUMPh81ax6i9vFaKd5sXv9jBsI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"address\": {\r\n        \"district\": \"Thành phố Cao Bằng\",\r\n        \"isHeadquarters\": true,\r\n        \"position\": {\"lat\": null, \"lng\": null},\r\n        \"province\": \"Tỉnh Cao Bằng\",\r\n        \"street\": \"Vũ An Khánh\",\r\n        \"ward\": \"Phường Tân Giang\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/customer/address/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"customer",
+						"address",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Update Product Category",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjF9LCJpYXQiOjE2MjQ2MTcwNTksImV4cCI6MTYyNDYyMDY1OX0.mIbjEyACSeoHobffJ6OcAsX_TGYbQ72OOCiJiwgu5yE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"_id\": \"60d586249d5c370f983492af\",\r\n    \"name\": \"Cá nước ngọt\",\r\n    \"route\": \"ca-nuoc-ngot\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/product-category/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"product-category",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Remove Product Category",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjF9LCJpYXQiOjE2MjQ2MTcwNTksImV4cCI6MTYyNDYyMDY1OX0.mIbjEyACSeoHobffJ6OcAsX_TGYbQ72OOCiJiwgu5yE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"_id\": \"60d586249d5c370f983492af\",\r\n    \"name\": \"Cá nước ngọt\",\r\n    \"route\": \"ca-nuoc-ngot\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/product-category/remove",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"product-category",
+						"remove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Product Gallery",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCJ9LCJpYXQiOjE2MjUyMTc0MTMsImV4cCI6MTYyNTIxNzQzM30.B0Q7vx1Ps7_Sna8tZjQwDRMSVomMYxrwtdGy9ySGCW0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/admin/product-gallery",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"product-gallery"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Gallery",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCJ9LCJpYXQiOjE2MjUyMTc0MTMsImV4cCI6MTYyNTIxNzQzM30.B0Q7vx1Ps7_Sna8tZjQwDRMSVomMYxrwtdGy9ySGCW0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/admin/product-gallery?page=1&size=10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"product-gallery"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Insert Product Gallery",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjF9LCJpYXQiOjE2MjUwMjU0NzksImV4cCI6MTYyNTAyOTA3OX0.q9bxJ69vj0AmO-UwuSqcb33r1TmFctrrJOeO8bY99_c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "many-files",
+							"type": "file",
+							"src": [
+								"/C:/Users/Admin/Desktop/91399369_2876410835753926_8603815410904596480_n.jpg",
+								"/C:/Users/Admin/Desktop/91399369-2876410835753926-8603815410904596480-n.jpg"
+							]
+						},
+						{
+							"key": "isMain",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/product-gallery/insert?name=Cá Rô tách xương",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"product-gallery",
+						"insert"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Cá Rô tách xương"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Insert Product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjF9LCJpYXQiOjE2MjUyMjA5MzEsImV4cCI6MTYyNTIyNDUzMX0.Aul1Ro4Y2KYNopZ-H_q79n6hMtBl3_xtM9OKGcMHov8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"albumImg\": {\r\n        \"createdAt\": \"2021-06-30T04:13:30.403Z\",\r\n        \"media\": [\r\n                    {\r\n                        \"isMain\": false,\r\n                        \"src\": \"/product/ca-ro-tach-xuong/1625026410369-ca-ro-tach-xuong-91399369_2876410835753926_8603815410904596480_n.jpg\",\r\n                        \"srcThumbnail\": \"/product/ca-ro-tach-xuong/1625026410369-ca-ro-tach-xuong-91399369_2876410835753926_8603815410904596480_n-thumbnail.jpg\",\r\n                        \"type\": \"image\",\r\n                        \"_id\": \"60dbef6a084421072cb94e94\"\r\n                    },\r\n                    {\r\n                        \"isMain\": true,\r\n                        \"src\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n.jpg\",\r\n                        \"srcThumbnail\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n-thumbnail.jpg\",\r\n                        \"type\": \"image\",\r\n                        \"_id\": \"60dbef6a084421072cb94e95\"\r\n                    }\r\n                ],\r\n        \"name\": \"ca-ro-tach-xuong\",\r\n        \"productName\": \"Cá Rô tách xương\",\r\n        \"src\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n.jpg\",\r\n        \"thumbnail\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n-thumbnail.jpg\",\r\n        \"updatedAt\": \"2021-06-30T04:13:30.403Z\",\r\n        \"_id\": \"60dbef6a084421072cb94e93\"\r\n    },\r\n    \"albumVideo\": null,\r\n    \"category\": {\r\n        \"createdAt\": \"2021-06-25T07:42:19.611Z\",\r\n        \"name\": \"Hải sản cá\",\r\n        \"route\": \"hai-san-ca\",\r\n        \"updatedAt\": \"2021-06-25T11:25:21.527Z\",\r\n        \"_id\": \"60d588db82130e434414e078\"\r\n    },\r\n    \"currencyUnit\": \"VND\",\r\n    \"highlight\": false,\r\n    \"imgBannerUrl\": \"\",\r\n    \"longDescription\": \"Bài viết này chắc lại phải tách riêng ra rồi. Mà dài thì tách ra cũng phí bộ nhớ lắm\",\r\n    \"name\": \"Mực một nắng\",\r\n    \"price\": \"350000\",\r\n    \"sortDescription\": \"gì cũng có thể mô tả được\",\r\n    \"supplier\": null,\r\n    \"theRemainingAmount\": \"50\",\r\n    \"thumbnailUrl\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n-thumbnail.jpg\",\r\n    \"unit\": \"kg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/product/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"product",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Product",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjF9LCJpYXQiOjE2MjUyMjM1MDcsImV4cCI6MTYyNTIyNzEwN30.NgJ2H7EwKL-L-2eeSR30LctLNJ7m1IfBXH7eB8-6lxc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"albumImg\": {\r\n        \"createdAt\": \"2021-06-30T04:13:30.403Z\",\r\n        \"media\": [\r\n                    {\r\n                        \"isMain\": false,\r\n                        \"src\": \"/product/ca-ro-tach-xuong/1625026410369-ca-ro-tach-xuong-91399369_2876410835753926_8603815410904596480_n.jpg\",\r\n                        \"srcThumbnail\": \"/product/ca-ro-tach-xuong/1625026410369-ca-ro-tach-xuong-91399369_2876410835753926_8603815410904596480_n-thumbnail.jpg\",\r\n                        \"type\": \"image\",\r\n                        \"_id\": \"60dbef6a084421072cb94e94\"\r\n                    },\r\n                    {\r\n                        \"isMain\": true,\r\n                        \"src\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n.jpg\",\r\n                        \"srcThumbnail\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n-thumbnail.jpg\",\r\n                        \"type\": \"image\",\r\n                        \"_id\": \"60dbef6a084421072cb94e95\"\r\n                    }\r\n                ],\r\n        \"name\": \"ca-ro-tach-xuong\",\r\n        \"productName\": \"Cá Rô tách xương\",\r\n        \"src\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n.jpg\",\r\n        \"thumbnail\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n-thumbnail.jpg\",\r\n        \"updatedAt\": \"2021-06-30T04:13:30.403Z\",\r\n        \"_id\": \"60dbef6a084421072cb94e93\"\r\n    },\r\n    \"albumVideo\": null,\r\n    \"category\": {\r\n        \"createdAt\": \"2021-06-25T07:42:19.611Z\",\r\n        \"name\": \"Hải sản cá\",\r\n        \"route\": \"hai-san-ca\",\r\n        \"updatedAt\": \"2021-06-25T11:25:21.527Z\",\r\n        \"_id\": \"60d588db82130e434414e078\"\r\n    },\r\n    \"currencyUnit\": \"VND\",\r\n    \"highlight\": false,\r\n    \"imgBannerUrl\": \"\",\r\n    \"longDescription\": \"Bài viết này chắc lại phải tách riêng ra rồi. Mà dài thì tách ra cũng phí bộ nhớ lắm\",\r\n    \"name\": \"Mực một nắng\",\r\n    \"price\": \"350000\",\r\n    \"sortDescription\": \"gì cũng có thể mô tả được\",\r\n    \"supplier\": null,\r\n    \"theRemainingAmount\": \"50\",\r\n    \"thumbnailUrl\": \"/product/ca-ro-tach-xuong/1625026410370-ca-ro-tach-xuong-91399369-2876410835753926-8603815410904596480-n-thumbnail.jpg\",\r\n    \"unit\": \"kg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\": \"vuankhanh\",\r\n    \"password\": \"asdASD123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userName\": \"vuankhanh\",\r\n  \"password\": \"123123\",\r\n  \"name\": \"Vũ An Khánh\",\r\n  \"email\": \"vuankhanh1229071992@gmail.com\",\r\n  \"phoneNumber\": \"0842415921\",\r\n  \"facebookId\": null,\r\n  \"googleId\": null,\r\n  \"zaloId\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Refresh Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmgiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwODQyNDE1OTIxIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjpmYWxzZSwiX2lkIjoiNjBjZjA2ZThmMGJkNzkxYjkwNWMzZGQzIiwic3RyZWV0IjoiMTgwMi1ISDRBLCBLxJBUIFTDonkgTmFtIExpbmggxJDDoG0iLCJyZXNwb25zaWJsZVBlcnNvbiI6IlbFqSBBbiBLaMOhbmgiLCJwaG9uZU51bWJlciI6IjA4NDI0MTU5MjEiLCJwcm92aW5jZSI6eyJfaWQiOiI2MGM4NTg0ZmYyNTJmODI3ZjRhMTQ4MGMiLCJuYW1lIjoiVGjDoG5oIHBo4buRIEjDoCBO4buZaSIsImNvZGUiOiIwMSJ9LCJkaXN0cmljdCI6eyJfaWQiOiI2MGM4NTgzY2YyNTJmODI3ZjRhMTQ1NTIiLCJwcm92aW5jZUNvZGUiOiIwMSIsIm5hbWUiOiJRdeG6rW4gSG_DoG5nIE1haSIsImNvZGUiOiIwMDgifSwid2FyZCI6eyJfaWQiOiI2MGM4NTg1N2YyNTJmODI3ZjRhMTQ4YmMiLCJkaXN0cmljdENvZGUiOiIwMDgiLCJuYW1lIjoiUGjGsOG7nW5nIEhvw6BuZyBMaeG7h3QiLCJjb2RlIjoiMDAzMzciLCJ0eXBlIjoiUGjGsOG7nW5nIn0sInBvc2l0aW9uIjp7Il9pZCI6IjYwY2YwNmU4ZjBiZDc5MWI5MDVjM2RkNyIsImxhdCI6bnVsbCwibG5nIjpudWxsfSwidXBkYXRlZEF0IjoiMjAyMS0wNi0yMFQwOToxNDoxNi40MDNaIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0yMFQwOToxNDoxNi40MDNaIn1dLCJjcmVhdGVkQXQiOiIyMDIxLTA2LTEzVDA4OjEwOjQ3LjI5N1oiLCJ1cGRhdGVkQXQiOiIyMDIxLTA2LTIwVDA5OjE0OjE2LjQwM1oifSwiaWF0IjoxNjI1MjE4MDA1LCJleHAiOjE2Mjc4MTAwMDV9.-Y8qG9FAgUS5AFIsWvzMzBB_lRF-qrL1Zbo3au8njnQ\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/refresh-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Update Customer",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmggMTIzMTIzIiwiZW1haWwiOiJ2dWFua2hhbmgxMjI5MDcxOTkyQGdtYWlsLmNvbSIsInBob25lTnVtYmVyIjoiMDg0MjQxNTkyMSIsImN1c3RvbWVyQ29kZSI6InR1dGhhbi0wMDAwMDEiLCJhZGRyZXNzIjpbXSwiY3JlYXRlZEF0IjoiMjAyMS0wNi0xM1QwODoxMDo0Ny4yOTdaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0xM1QwODoyOToyOC41NTNaIn0sImlhdCI6MTYyMzU3MzEyMywiZXhwIjoxNjIzNTc2NzIzfQ.xKhWwJIH4sjpu82O9wCuhTBmu1M4GHjvrodv9TPjTN4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName222\": \"Vũ An Khánh 99999\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/update-customer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"update-customer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Check Exist User Name",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"userName\": \"vuankanh\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/check-user-name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"check-user-name"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Check Email",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"email\": \"vuankanh19071992@gmail.com12\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/check-email",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"check-email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Insert Address",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmggMTIyMjIiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTc0MDE3MDMwIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjp0cnVlLCJfaWQiOiI2MGM4OGU3MzViZGI4ZDRhM2NkYjg4NjkiLCJkaXN0cmljdCI6IlRow6BuaCBwaOG7kSBDYW8gQuG6sW5nIiwicG9zaXRpb24iOnsiX2lkIjoiNjBjODhlNzM1YmRiOGQ0YTNjZGI4ODZhIiwibGF0IjpudWxsLCJsbmciOm51bGx9LCJwcm92aW5jZSI6IlThu4luaCBDYW8gQuG6sW5nIiwic3RyZWV0IjoiVsWpIEFuIEtow6FuaCIsIndhcmQiOiJQaMaw4budbmcgVMOibiBHaWFuZyIsInVwZGF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiIsImNyZWF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiJ9XSwiY3JlYXRlZEF0IjoiMjAyMS0wNi0xM1QwODoxMDo0Ny4yOTdaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0xNVQxMTo0MjoyOS4xNThaIn0sImlhdCI6MTYyMzgxNjU2OCwiZXhwIjoxNjIzODIwMTY4fQ.-jjGU_f6dO_wn3Gf5iUMPh81ax6i9vFaKd5sXv9jBsI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"address\": {\r\n        \"district\": \"Thành phố Cao Bằng\",\r\n        \"isHeadquarters\": true,\r\n        \"position\": {\"lat\": null, \"lng\": null},\r\n        \"province\": \"Tỉnh Cao Bằng\",\r\n        \"street\": \"Vũ An Khánh\",\r\n        \"ward\": \"Phường Tân Giang\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/customer/address/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"customer",
+						"address",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Update Address",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmggMTIyMjIiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTc0MDE3MDMwIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjpmYWxzZSwiX2lkIjoiNjBjODdhODJiMTEwZGE0MTQ0Y2NjMDgzIiwic3RyZWV0IjoiMjIyMjIiLCJ3YXJkIjoiVGjhu4sgdHLhuqVuIFBow7MgQuG6o25nIiwiZGlzdHJpY3QiOiJIdXnhu4duIMSQ4buTbmcgVsSDbiIsInByb3ZpbmNlIjoiVOG7iW5oIEjDoCBHaWFuZyIsInBvc2l0aW9uIjp7Il9pZCI6IjYwYzg3YTgyYjExMGRhNDE0NGNjYzA4NCIsImxhdCI6bnVsbCwibG5nIjpudWxsfSwidXBkYXRlZEF0IjoiMjAyMS0wNi0xNVQxMDowMTozOC4zMDRaIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0xNVQxMDowMTozOC4zMDRaIn1dLCJjcmVhdGVkQXQiOiIyMDIxLTA2LTEzVDA4OjEwOjQ3LjI5N1oiLCJ1cGRhdGVkQXQiOiIyMDIxLTA2LTE1VDEwOjI5OjAxLjEyMVoifSwiaWF0IjoxNjIzNzU0MDUzLCJleHAiOjE2MjM3NTc2NTN9.8X5hyTDmAgPWYLbjSghhZ6Fc0W4V6d6zrY3GNHFpHMc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"address\": {\r\n        \"_id\": \"60c88e745bdb8d4adb8872\",\r\n        \"district\": \"Thành phố Cao Bằng\",\r\n        \"isHeadquarters\": true,\r\n        \"position\": {\"lat\": null, \"lng\": null},\r\n        \"province\": \"Tỉnh Cao Bằng\",\r\n        \"street\": \"Hiền Lương... 34234\",\r\n        \"ward\": \"Phường Tân Giang\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/customer/address/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"customer",
+						"address",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Remove Address",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmggMTIyMjIiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTc0MDE3MDMwIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjpmYWxzZSwiX2lkIjoiNjBjODdhODJiMTEwZGE0MTQ0Y2NjMDgzIiwic3RyZWV0IjoiMjIyMjIiLCJ3YXJkIjoiVGjhu4sgdHLhuqVuIFBow7MgQuG6o25nIiwiZGlzdHJpY3QiOiJIdXnhu4duIMSQ4buTbmcgVsSDbiIsInByb3ZpbmNlIjoiVOG7iW5oIEjDoCBHaWFuZyIsInBvc2l0aW9uIjp7Il9pZCI6IjYwYzg3YTgyYjExMGRhNDE0NGNjYzA4NCIsImxhdCI6bnVsbCwibG5nIjpudWxsfSwidXBkYXRlZEF0IjoiMjAyMS0wNi0xNVQxMDowMTozOC4zMDRaIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0xNVQxMDowMTozOC4zMDRaIn1dLCJjcmVhdGVkQXQiOiIyMDIxLTA2LTEzVDA4OjEwOjQ3LjI5N1oiLCJ1cGRhdGVkQXQiOiIyMDIxLTA2LTE1VDEwOjI5OjAxLjEyMVoifSwiaWF0IjoxNjIzNzU0MDUzLCJleHAiOjE2MjM3NTc2NTN9.8X5hyTDmAgPWYLbjSghhZ6Fc0W4V6d6zrY3GNHFpHMc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"address\": {\r\n        \"_id\": \"60c88cc9ad237421747597f5\",\r\n        \"district\": \"Thành phố Cao Bằng\",\r\n        \"isHeadquarters\": true,\r\n        \"position\": {\"lat\": null, \"lng\": null},\r\n        \"province\": \"Tỉnh Cao Bằng\",\r\n        \"street\": \"Nhà quê 12312322222222\",\r\n        \"ward\": \"Phường Tân Giang\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/client/customer/address/remove",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"customer",
+						"address",
+						"remove"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Administrative Units Province",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmgiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwODQyNDE1OTIxIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjpmYWxzZSwiX2lkIjoiNjBjZjA2ZThmMGJkNzkxYjkwNWMzZGQzIiwic3RyZWV0IjoiMTgwMi1ISDRBLCBLxJBUIFTDonkgTmFtIExpbmggxJDDoG0iLCJyZXNwb25zaWJsZVBlcnNvbiI6IlbFqSBBbiBLaMOhbmgiLCJwaG9uZU51bWJlciI6IjA4NDI0MTU5MjEiLCJwcm92aW5jZSI6eyJfaWQiOiI2MGM4NTg0ZmYyNTJmODI3ZjRhMTQ4MGMiLCJuYW1lIjoiVGjDoG5oIHBo4buRIEjDoCBO4buZaSIsImNvZGUiOiIwMSJ9LCJkaXN0cmljdCI6eyJfaWQiOiI2MGM4NTgzY2YyNTJmODI3ZjRhMTQ1NTIiLCJwcm92aW5jZUNvZGUiOiIwMSIsIm5hbWUiOiJRdeG6rW4gSG_DoG5nIE1haSIsImNvZGUiOiIwMDgifSwid2FyZCI6eyJfaWQiOiI2MGM4NTg1N2YyNTJmODI3ZjRhMTQ4YmMiLCJkaXN0cmljdENvZGUiOiIwMDgiLCJuYW1lIjoiUGjGsOG7nW5nIEhvw6BuZyBMaeG7h3QiLCJjb2RlIjoiMDAzMzciLCJ0eXBlIjoiUGjGsOG7nW5nIn0sInBvc2l0aW9uIjp7Il9pZCI6IjYwY2YwNmU4ZjBiZDc5MWI5MDVjM2RkNyIsImxhdCI6bnVsbCwibG5nIjpudWxsfSwidXBkYXRlZEF0IjoiMjAyMS0wNi0yMFQwOToxNDoxNi40MDNaIiwiY3JlYXRlZEF0IjoiMjAyMS0wNi0yMFQwOToxNDoxNi40MDNaIn1dLCJjcmVhdGVkQXQiOiIyMDIxLTA2LTEzVDA4OjEwOjQ3LjI5N1oiLCJ1cGRhdGVkQXQiOiIyMDIxLTA2LTIwVDA5OjE0OjE2LjQwM1oifSwiaWF0IjoxNjI1MjE4MDI0LCJleHAiOjE2MjUyMjE2MjR9.wk7_dx0rvmGQ3l7ZzJl1rvxyLtsdveEt60qpIsv9gxY",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/client/administrative-units?province=all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"administrative-units"
+					],
+					"query": [
+						{
+							"key": "province",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Administrative Units District",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmggMTIyMjIiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTc0MDE3MDMwIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjp0cnVlLCJfaWQiOiI2MGM4OGU3MzViZGI4ZDRhM2NkYjg4NjkiLCJkaXN0cmljdCI6IlRow6BuaCBwaOG7kSBDYW8gQuG6sW5nIiwicG9zaXRpb24iOnsiX2lkIjoiNjBjODhlNzM1YmRiOGQ0YTNjZGI4ODZhIiwibGF0IjpudWxsLCJsbmciOm51bGx9LCJwcm92aW5jZSI6IlThu4luaCBDYW8gQuG6sW5nIiwic3RyZWV0IjoiVsWpIEFuIEtow6FuaCIsIndhcmQiOiJQaMaw4budbmcgVMOibiBHaWFuZyIsInVwZGF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiIsImNyZWF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiJ9XSwiY3JlYXRlZEF0IjoiMjAyMS0wNi0xM1QwODoxMDo0Ny4yOTdaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0xNVQxMTo0MjoyOS4xNThaIn0sImlhdCI6MTYyMzgxNjU2OCwiZXhwIjoxNjIzODIwMTY4fQ.-jjGU_f6dO_wn3Gf5iUMPh81ax6i9vFaKd5sXv9jBsI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/client/administrative-units/10/district",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"administrative-units",
+						"10",
+						"district"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Client Administrative Units Ward",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoidnVhbmtoYW5oIiwibmFtZSI6IlbFqSBBbiBLaMOhbmggMTIyMjIiLCJlbWFpbCI6InZ1YW5raGFuaDEyMjkwNzE5OTJAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTc0MDE3MDMwIiwiY3VzdG9tZXJDb2RlIjoidHV0aGFuLTAwMDAwMSIsImFkZHJlc3MiOlt7ImlzSGVhZHF1YXJ0ZXJzIjp0cnVlLCJfaWQiOiI2MGM4OGU3MzViZGI4ZDRhM2NkYjg4NjkiLCJkaXN0cmljdCI6IlRow6BuaCBwaOG7kSBDYW8gQuG6sW5nIiwicG9zaXRpb24iOnsiX2lkIjoiNjBjODhlNzM1YmRiOGQ0YTNjZGI4ODZhIiwibGF0IjpudWxsLCJsbmciOm51bGx9LCJwcm92aW5jZSI6IlThu4luaCBDYW8gQuG6sW5nIiwic3RyZWV0IjoiVsWpIEFuIEtow6FuaCIsIndhcmQiOiJQaMaw4budbmcgVMOibiBHaWFuZyIsInVwZGF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiIsImNyZWF0ZWRBdCI6IjIwMjEtMDYtMTVUMTE6MjY6NDMuNzA2WiJ9XSwiY3JlYXRlZEF0IjoiMjAyMS0wNi0xM1QwODoxMDo0Ny4yOTdaIiwidXBkYXRlZEF0IjoiMjAyMS0wNi0xNVQxMTo0MjoyOS4xNThaIn0sImlhdCI6MTYyMzgxNjU2OCwiZXhwIjoxNjIzODIwMTY4fQ.-jjGU_f6dO_wn3Gf5iUMPh81ax6i9vFaKd5sXv9jBsI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/client/administrative-units/082/ward",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"client",
+						"administrative-units",
+						"082",
+						"ward"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

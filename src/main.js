@@ -16,6 +16,6 @@ app.use(cors());
 initRoutes(app);
 // chọn một port mà bạn muốn và sử dụng để chạy ứng dụng tại local
 let port = 3000;
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Server is running at localhost:${port}/`);
 });

@@ -18,6 +18,7 @@ let storage = multer.diskStorage({
         let galleryFolder;
         switch(urlRoute){
             case '/admin/product-gallery/insert':
+            case '/admin/product-gallery/update':
                 galleryFolder = 'product';
         }
 

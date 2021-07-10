@@ -29,7 +29,6 @@ async function insert(req, res){
 
 async function update(req, res){
     const formData = req.body;
-    console.log(formData);
     try {
         if(formData.name && formData.route){
             const result = await ProductCategory.model.ProductCategory.findByIdAndUpdate(
@@ -63,17 +62,17 @@ async function remove(req, res){
     const formData = req.body;
     try {
         if(formData._id){
-            const result = await await ProductCategory.model.ProductCategory.findByIdAndRemove(
-                { _id: formData._id },
-                {},
-                { new: true }
+            const result = await ProductCategory.model.ProductCategory.findOneAndRemove(
+                {_id: formData._id}
             );
+            console.log(result);
             return res.status(200).json(result);
         }else{
             console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
