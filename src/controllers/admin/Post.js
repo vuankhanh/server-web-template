@@ -1,4 +1,4 @@
-const DetailedArticleModel = require('../../models/DetailedArticle');
+const DetailedArticle = require('../../models/DetailedArticle');
 
 async function getAll(req, res){
     let size = parseInt(req.query.size) || 10;
@@ -7,8 +7,8 @@ async function getAll(req, res){
     try {
         const condition = { type: query };
         console.log(condition)
-        const countTotalPosts = await DetailedArticleModel.countDocuments(condition);
-        const filterPagePosts = await DetailedArticleModel.find(condition)
+        const countTotalPosts = await DetailedArticle.model.DetailedArticle.countDocuments(condition);
+        const filterPagePosts = await DetailedArticle.model.DetailedArticle.find(condition)
         .skip((size * page) - size) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
         .limit(size);
 
@@ -29,7 +29,7 @@ async function insert(req, res){
     try {
         if(formData){
             formData.data = JSON.stringify(formData.data);
-            const detailedArticle = new DetailedArticleModel(formData);
+            const detailedArticle = new DetailedArticle.model.DetailedArticle(formData);
             await detailedArticle.save();
             return res.status(200).json(detailedArticle);
         }else{
@@ -47,7 +47,7 @@ async function update(req, res){
     try {
         if(formData){
             formData.data = JSON.stringify(formData.data);
-            const result = await DetailedArticleModel.findByIdAndUpdate(
+            const result = await DetailedArticle.model.DetailedArticle.findByIdAndUpdate(
                 { _id: formData._id },
                 {
                     $set:{
@@ -73,7 +73,7 @@ async function remove(req, res){
     const formData = req.body;
     try {
         if(formData._id){
-            const result = await DetailedArticleModel.findOneAndRemove(
+            const result = await DetailedArticle.model.DetailedArticle.findOneAndRemove(
                 {_id: formData._id}
             );
             console.log(result);

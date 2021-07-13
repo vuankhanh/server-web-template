@@ -63,5 +63,5 @@ module.exports= {
     get,
     insert,
     update,
-    remove,
+    remove
 }

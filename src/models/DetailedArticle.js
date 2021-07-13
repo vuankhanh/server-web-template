@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const detailedArticleSchema = new Schema({
+const DetailedArticleSchema = new Schema({
     type: { type: String, require: true },
     name: { type: String, require: true },
     data: { type: String, require: true }
@@ -9,6 +9,13 @@ const detailedArticleSchema = new Schema({
     timestamps: true,
 });
 
-var DetailedArticle = mongoose.model('DetailedArticle', detailedArticleSchema, 'detailed_article')
+const DetailedArticle = mongoose.model('DetailedArticle', DetailedArticleSchema, 'detailed_article')
 
-module.exports = DetailedArticle;
+module.exports = {
+    scheme: {
+        DetailedArticleSchema
+    },
+    model:{
+        DetailedArticle
+    }
+}

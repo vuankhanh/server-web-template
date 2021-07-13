@@ -6,11 +6,11 @@ const localPathConfig = require('../../config/local-path');
 const Auth = require('../../controllers/Authentication');
 const Config = require('../../controllers/Config');
 const ProductCategory = require('../../controllers/admin/ProductCategory');
+const BannerGallery = require('../../controllers/admin/BannerGallery');
 const ProductGallery = require('../../controllers/admin/ProductGallery');
 const Product = require('../../controllers/admin/Product');
 const Post = require('../../controllers/admin/Post');
 
-router.get("/", Config.friendLists);
 router.post("/login", Auth.login);
 router.post("/refresh-token", Auth.refreshToken);
 
@@ -18,7 +18,7 @@ router.post("/refresh-token", Auth.refreshToken);
 router.use(AuthMiddleWare.isAuth);
 
 // List Protect APIs:
-router.get("/config", Config.friendLists);
+router.get("/config", Config);
 router.get('/product-category', ProductCategory.getAll);
 router.post('/product-category/insert', ProductCategory.insert);
 router.put('/product-category/update', ProductCategory.update);
@@ -28,12 +28,16 @@ router.get('/product-gallery', ProductGallery.getAll);
 router.post('/product-gallery/insert', ProductGallery.insert);
 router.put('/product-gallery/update', ProductGallery.update);
 router.post('/product-gallery/remove', ProductGallery.remove);
-// router.post('/product-gallery//remove', ProductGallery.remove)
+
+router.get('/banner-gallery', BannerGallery.getAll);
+router.post('/banner-gallery/insert', BannerGallery.insert);
+router.put('/banner-gallery/update', BannerGallery.update);
+router.post('/banner-gallery/remove', BannerGallery.remove);
 
 router.get('/product', Product.getAll);
 router.post('/product/insert', Product.insert);
 router.put('/product/update', Product.update);
-// router.post('/product/remove', Product.remove);
+router.post('/product/remove', Product.remove);
 
 router.get('/posts', Post.getAll);
 router.post('/posts/insert', Post.insert);

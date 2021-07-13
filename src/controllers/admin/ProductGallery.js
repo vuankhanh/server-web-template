@@ -81,7 +81,6 @@ async function insert(req, res){
 async function update(req, res){
     try {
         let query = req.query;
-        
         if(query && query.name && query._id){
             // thực hiện upload
             await multipleUploadMiddleware(req, res);
@@ -89,16 +88,20 @@ async function update(req, res){
             // // Nếu upload thành công, không lỗi thì tất cả các file của bạn sẽ được lưu trong biến req.files
             // debug(req.files);
             // Mình kiểm tra thêm một bước nữa, nếu như không có file nào được gửi lên thì trả về thông báo cho client
-            if (req.files.length <= 0) {
+            // console.log(req.files.length);
+            // console.log(req.body.oldMedia);
+            if ((req.files.length <= 0) && !req.body.oldMedia) {
                 return res.status(400).json({message: 'Missing parameter'})
             }
 
+            let oldMedia = JSON.parse(req.body.oldMedia);
             let objGallery = {
                 name: convertVie(query.name),
                 productName: query.name,
-                media: []
+                media: oldMedia ? oldMedia : []
             }
             let isMain = parseInt(req.body.isMain);
+            console.log(isMain);
 
             for(let [index, file] of req.files.entries()){
                 let absoluteUrlPath = file.path.replace(/\\/g,"/");
@@ -109,13 +112,16 @@ async function update(req, res){
                 let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
                 let relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.gallery, '');
 
-                let objMedia = {
+                let objWillUpload = {
                     type: file.mimetype.split('/')[0],
                     src: relativeUrlPath,
                     srcThumbnail: relativeUrlThumbnail,
-                    isMain: index === isMain ? true : false
                 }
-                objGallery.media.push(objMedia);
+                objGallery.media.push(objWillUpload);
+            }
+
+            for(let [index, media] of objGallery.media.entries()){
+                media.isMain = (isMain === index) ? true : false;
             }
 
             const productCategory = await productGalleryDb.update(query._id, objGallery);
@@ -124,7 +130,6 @@ async function update(req, res){
         }else{
             return res.status(400).json({message: 'Missing parameter'})
         }
-        
     } catch (error) {
         // Nếu có lỗi thì debug lỗi xem là gì ở đây
         debug(error);

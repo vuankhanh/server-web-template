@@ -1,22 +1,25 @@
-const debug = console.log.bind(console);
+const ProductCategory = require('../models/ProductCategory');
 
-let friendLists = (req, res) => {
-    debug(`Xác thực token hợp lệ, thực hiện giả lập lấy danh sách bạn bè của user và trả về cho người dùng...`);
-    // Lưu ý khi làm thực tế thì việc lấy danh sách này là query tới DB để lấy nhé. Ở đây mình chỉ mock thôi.
-    const friends = [
-        {
-            name: "Cat: Russian Blue",
-        },
-        {
-            name: "Cat: Maine Coon",
-        },
-        {
-            name: "Cat: Balinese",
-        },
-    ];
-    return res.status(200).json(friends);
+async function getAll(req, res){
+    try {
+        let productCategorys = await ProductCategory.model.ProductCategory.find({});
+        res.status(200).json(productCategorys);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+}
+async function getConfig(req, res){
+    let configuration = {
+        categorys: null
+    }
+    try {
+        let productCategorys = await ProductCategory.model.ProductCategory.find({});
+        configuration.categorys = productCategorys;
+        res.status(200).json(configuration)
+    } catch (error) {
+        
+    }
 }
 
-module.exports = {
-    friendLists
-};
+module.exports = getConfig;

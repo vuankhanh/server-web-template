@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const ProductGallerySchema = require('./ProductGallery');
 const ProductCategory = require('./ProductCategory');
 const Supplier = require('./Supplier');
+const DetailedArticle = require('./DetailedArticle');
 
 const ProductShema = new Schema({
     code: { type: String, required: true },
@@ -17,8 +18,8 @@ const ProductShema = new Schema({
     sortDescription: { type: String, required: true },
     highlight: { type: Boolean, required: true },
     theRemainingAmount: { type: Number, required: true },
-    longDescription: { type: String, required: true },
-    supplier: { type: Supplier.schema, required: false },
+    longDescription: { type: DetailedArticle, required: true },
+    supplier: { type: Supplier, required: false },
     albumImg: { type: ProductGallerySchema, required: false },
     albumVideo: { type: ProductGallerySchema, required: false }
 },{
