@@ -1,7 +1,7 @@
 const ClientAccount = require('../models/ClientAccount');
 const bcrypt = require("./bcrypt");
 
-async function getAccount(account){
+async function checkAccount(account){
     const query = ClientAccount.where({ userName: account.userName });
     try {
         const result = await query.findOne().map(res=> res ? res.toObject() : res);
@@ -16,4 +16,20 @@ async function getAccount(account){
     }
 }
 
-module.exports = getAccount
+async function getAccountId(userName){
+    try {
+        const accountId = await ClientAccount.findOne(
+            { userName: userName },
+            { _id: 1 }
+        );
+        return accountId;
+    } catch (error) {
+        return error;
+    }
+}
+
+
+module.exports = {
+    checkAccount,
+    getAccountId
+}

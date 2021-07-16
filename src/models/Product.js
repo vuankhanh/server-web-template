@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ProductGallerySchema = require('./ProductGallery');
+const BannerGallery = require('./BannerGallery');
 const ProductCategory = require('./ProductCategory');
 const Supplier = require('./Supplier');
 const DetailedArticle = require('./DetailedArticle');
@@ -14,7 +15,7 @@ const ProductShema = new Schema({
     currencyUnit: { type: String, required: true },
     unit: { type: String, required: true },
     thumbnailUrl: { type: String, required: true },
-    imgBannerUrl: { type: String, required: false },
+    albumBanner: { type: BannerGallery, required: false },
     sortDescription: { type: String, required: true },
     highlight: { type: Boolean, required: true },
     theRemainingAmount: { type: Number, required: true },

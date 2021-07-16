@@ -33,7 +33,7 @@ let login = async (req, res) => {
             if(typeOfAccount[1]==='admin'){
                 matchedAccount = await adminAccount(req.body);
             }else if(typeOfAccount[1]==='client'){
-                matchedAccount = await clientAccount(req.body);
+                matchedAccount = await clientAccount.checkAccount(req.body);
             }
         }
         if(matchedAccount){

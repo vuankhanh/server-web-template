@@ -57,7 +57,7 @@ async function update(req, res){
                         'thumbnailUrl': formData.albumImg.thumbnail,
                         'sortDescription': formData.sortDescription,
                         'highlight': formData.highlight,
-                        'imgBannerUrl': formData.imgBannerUrl,
+                        'albumBanner': formData.albumBanner,
                         'theRemainingAmount': formData.theRemainingAmount,
                         'longDescription': formData.longDescription,
                         'albumImg': formData.albumImg,

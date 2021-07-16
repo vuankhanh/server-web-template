@@ -8,6 +8,7 @@ const Register = require('../../controllers/client/Register');
 
 const ProductCategory = require('../../controllers/client/ProductCategory');
 const Product = require('../../controllers/client/Product');
+const Order = require('../../controllers/client/Order');
 
 const CheckExistsUserName = require('../../controllers/client/CheckExistsAccount');
 const UpdateInformation = require('../../controllers/client/UpdateInformation');
@@ -22,6 +23,7 @@ router.post("/check-email", CheckExistsUserName.checkExistsEmail);
 router.post('/register', Register);
 
 router.get("/product-category", ProductCategory);
+router.get("/product-hightlight", Product.getProductHightlight);
 router.get("/product", Product.getAll);
 router.get("/product/:_id", Product.getDetail);
 
@@ -30,13 +32,21 @@ router.use(AuthMiddleWare.isAuth);
 
 // List Protect APIs:
 router.get("/config", Config);
+
+router.put("/update-customer", UpdateInformation);
+
 router.get("/administrative-units", AdministrativeUnits.province);
 router.get("/administrative-units/:provinceCode/district", AdministrativeUnits.district);
 router.get("/administrative-units/:districtCode/ward", AdministrativeUnits.ward);
+
 router.post("/customer/address/insert", CustomerAddress.insert);
 router.put("/customer/address/update", CustomerAddress.update);
 router.put("/customer/address/update", CustomerAddress.update);
 router.put("/customer/address/remove", CustomerAddress.remove);
-router.put("/update-customer", UpdateInformation);
+
+router.get('/order', Order.getAll);
+router.post('/order/insert', Order.insert);
+router.put('/order/update', Order.update);
+router.post('/order/revoke', Order.revoke);
 
 module.exports = router;

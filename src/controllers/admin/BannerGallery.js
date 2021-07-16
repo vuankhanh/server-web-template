@@ -1,6 +1,8 @@
 const BannerGallery = require('../../models/BannerGallery');
 const localPathConfig = require('../../config/local-path');
 const singleUploadMiddleware = require("../../middleware/SingleUploadMiddleware");
+const proccessImage = require('../../services/proccess-image');
+const writeBufferToFile = require('../../services/write-buffer-to-file');
 const convertVie = require('../../services/convert-Vie');
 let debug = console.log.bind(console);
 
@@ -25,14 +27,27 @@ async function insert(req, res){
             if (!file) {
                 return res.status(400).json({message: 'Missing parameter'})
             }else{
-                let absoluteUrlPath = file.path.replace(/\\/g,"/");
                     
-                let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
                 let objGallery = {
                     name: convertVie(query.name),
                     bannerName: query.name,
-                    src: relativeUrlPath
+                    media: []
                 }
+
+                let absoluteUrlPath = file.path.replace(/\\/g,"/");
+
+                let buffer = await proccessImage.thumbnail(file.path);
+                let absoluteUrlThumbnail = writeBufferToFile.thumbnail(file.path, buffer).replace(/\\/g,"/");
+
+                let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
+                let relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.gallery, '');
+
+                let objWillUpload = {
+                    type: file.mimetype.split('/')[0],
+                    src: relativeUrlPath,
+                    srcThumbnail: relativeUrlThumbnail,
+                }
+                objGallery.media.push(objWillUpload);
     
                 const bannerGallery = await BannerGallery.model.BannerGallery(objGallery);
                 bannerGallery.save()
@@ -55,34 +70,49 @@ async function update(req, res){
         if(query && query.name && query._id){
             // thực hiện upload
             await singleUploadMiddleware(req, res);
-            
+
             let file = req.file;
-            if (!file) {
+            if (!file  && !req.body.oldMedia) {
                 return res.status(400).json({message: 'Missing parameter'})
-            }else{
-                let absoluteUrlPath = file.path.replace(/\\/g,"/");
-                    
-                let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
-                let objGallery = {
-                    name: convertVie(query.name),
-                    bannerName: query.name,
-                    src: relativeUrlPath
-                }
-    
-                const bannerGallery = await BannerGallery.model.BannerGallery.findByIdAndUpdate(
-                    { _id: query._id },
-                    {
-                        $set:{
-                            'name': objGallery.name,
-                            'bannerName': objGallery.bannerName,
-                            'src': objGallery.src
-                        }
-                    },
-                    { 'new': true }
-                );
-                // trả về cho người dùng cái thông báo đơn giản.
-                return res.status(200).json(bannerGallery);
             }
+            let oldMedia = JSON.parse(req.body.oldMedia);
+
+            let objGallery = {
+                name: convertVie(query.name),
+                bannerName: query.name,
+                media: oldMedia ? oldMedia : []
+            }
+
+            if(file){
+                let absoluteUrlPath = file.path.replace(/\\/g,"/");
+    
+                let buffer = await proccessImage.thumbnail(file.path);
+                let absoluteUrlThumbnail = writeBufferToFile.thumbnail(file.path, buffer).replace(/\\/g,"/");
+    
+                let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
+                let relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.gallery, '');
+    
+                let objWillUpload = {
+                    type: file.mimetype.split('/')[0],
+                    src: relativeUrlPath,
+                    srcThumbnail: relativeUrlThumbnail,
+                }
+                objGallery.media = [objWillUpload];
+            }
+
+            const bannerGallery = await BannerGallery.model.BannerGallery.findByIdAndUpdate(
+                { _id: query._id },
+                {
+                    $set:{
+                        'name': objGallery.name,
+                        'bannerName': objGallery.bannerName,
+                        'media': objGallery.media
+                    }
+                },
+                { 'new': true }
+            );
+            // trả về cho người dùng cái thông báo đơn giản.
+            return res.status(200).json(bannerGallery);
         }else{
             return res.status(400).json({message: 'Missing parameter'})
         }

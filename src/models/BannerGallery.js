@@ -4,7 +4,14 @@ const Schema = mongoose.Schema;
 const BannerGalleryShema = new Schema({
     name: { type: String, required: true, unique: false },
     bannerName: { type: String, required: true, unique: false },
-    src: { type: String, required: true }
+    media: [
+        {
+            type: { type: String, required: true },
+            src: { type: String, required: true },
+            srcThumbnail: { type: String, required: false, default: null },
+            isMain: { type: Boolean, required: true, default: false },
+        }
+    ]
 },{
     timestamps: true,
 });
