@@ -1,24 +1,13 @@
-const ProductCategory = require('../models/ProductCategory');
+const config = require('../config/evironment');
 
-async function getAll(req, res){
-    try {
-        let productCategorys = await ProductCategory.model.ProductCategory.find({});
-        res.status(200).json(productCategorys);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ message: 'Something went wrong' });
-    }
-}
 async function getConfig(req, res){
     let configuration = {
-        categorys: null
+        orderStatus: config.order.orderStatus
     }
     try {
-        let productCategorys = await ProductCategory.model.ProductCategory.find({});
-        configuration.categorys = productCategorys;
-        res.status(200).json(configuration)
+        return res.status(200).json(configuration);
     } catch (error) {
-        
+        return res.status(500).json({ message: 'Something went wrong' });
     }
 }
 

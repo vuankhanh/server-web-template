@@ -45,8 +45,9 @@ router.put("/customer/address/update", CustomerAddress.update);
 router.put("/customer/address/remove", CustomerAddress.remove);
 
 router.get('/order', Order.getAll);
+router.get('/order/:_id', Order.getDetail);
 router.post('/order/insert', Order.insert);
-router.put('/order/update', Order.update);
+// router.put('/order/update', Order.update);
 router.post('/order/revoke', Order.revoke);
 
 module.exports = router;

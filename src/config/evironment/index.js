@@ -1,9 +1,25 @@
-const deliveryStatus = [
-    'pending',
-    'confirmed',
-    'isComing',
-    'done',
-    'revoke'
+const orderStatus = [
+    {
+        numericalOrder: 1,
+        code: 'pending',
+        name: 'Chờ xác nhận'
+    },{
+        numericalOrder: 2,
+        code: 'confirmed',
+        name: 'Đang xử lý'
+    },{
+        numericalOrder: 3,
+        code: 'isComing',
+        name: 'Đang vận chuyển'
+    },{
+        numericalOrder: 4,
+        code: 'done',
+        name: 'Giao hàng thành công'
+    },{
+        numericalOrder: 5,
+        code: 'revoke',
+        name: 'Đã hủy'
+    }
 ]
 
 module.exports = {
@@ -14,6 +30,6 @@ module.exports = {
         REFRESH_TOKEN_LIFE: 2592000,
     },
     order: {
-        deliveryStatus
+        orderStatus
     }
 }
