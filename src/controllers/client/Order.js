@@ -29,9 +29,9 @@ async function getAll(req, res){
                     updatedAt: 1
                 }
             )
-            .sort({createdAt: -1})
             .skip((size * page) - size) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
-            .limit(size).populate(
+            .limit(size)
+            .populate(
                 {
                     path: 'products.productId',
                     select: {
@@ -146,32 +146,41 @@ async function insert(req, res){
     }
 }
 
-async function update(req, res){
-    try {
-        console.log(req.jwtDecoded);
-        let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.userName);
-        if(!accountId._id){
-            res.status(400).json({message: 'Account not found'});
-        }else{
-            res.status(200).json(accountId);
-
-        }
-    } catch (error) {
-        return res.status(500).json({ message: 'Something went wrong' });
-    }
-}
-
 async function revoke(req, res){
+    let formData = req.body;
     try {
-        console.log(req.jwtDecoded);
         let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.userName);
         if(!accountId._id){
             res.status(400).json({message: 'Account not found'});
         }else{
-            res.status(200).json(accountId);
-
+            if(!formData || !formData._id){
+                return res.status(400).json({message: 'Missing parameter'});
+            }else{
+                let conditional = { _id: formData._id };
+                const order = await Order.model.Order.findByIdAndUpdate(
+                    conditional,
+                    {
+                        $set:{
+                            'status': 'revoke',
+                        }
+                    },
+                    { 'new': true }
+                ).populate(
+                    {
+                        path: 'products.productId',
+                        select: {
+                            name: 1,
+                            price: 1,
+                            thumbnailUrl: 1,
+                            category: 1
+                        }
+                    }
+                );
+                return res.status(200).json(order);
+            }
         }
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -180,6 +189,5 @@ module.exports = {
     getAll,
     getDetail,
     insert,
-    update,
     revoke,
 }

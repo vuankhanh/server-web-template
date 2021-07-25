@@ -23,6 +23,11 @@ const orderStatus = [
 ]
 
 module.exports = {
+    giahangtietkiem: {
+        token: "350CCd53B334686f26EC0A6f350C7471B78bcE5f",
+        env: "https://services.giaohangtietkiem.vn",
+        port: 443
+    },
     env: {
         ACCESS_TOKEN_SECRET: "access-token-secret-example-trungquandev.com-green-cat-a@",
         ACCESS_TOKEN_LIFE: 3600,

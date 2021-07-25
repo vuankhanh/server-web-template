@@ -8,7 +8,6 @@ const jwt = require("jsonwebtoken");
  */
 let generateToken = (accountType, userInfor, secretSignature, tokenLife) => {
     return new Promise((resolve, reject) => {
-        console.log(accountType);
         // Định nghĩa những thông tin của user mà bạn muốn lưu vào token ở đây
         const userData = (accountType === 'admin') ?
             {
