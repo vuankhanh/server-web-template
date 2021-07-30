@@ -105,15 +105,16 @@ async function updatePhoneNumber(req, res){
 
 async function updateSocialNetwork(req, res){
     const formData = req.body;
+    console.log(formData);
     try {
-        if(!formData.socialNetWork){
+        if(!formData.socialNetwork){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
             const identification = await Identification.model.Identification.findOneAndUpdate(
                 {},
                 {
                     $set: {
-                        'social': formData.socialNetWork
+                        'social': formData.socialNetwork
                     }
                 },
                 { new: true }
@@ -129,7 +130,7 @@ async function updateSocialNetwork(req, res){
 async function updateAddress(req, res){
     const formData = req.body;
     try {
-        if(!formData.phoneNumber){
+        if(!formData.addresses){
             return res.status(400).json({message: 'Missing parameter'})
         }else{
             const identification = await Identification.model.Identification.findOneAndUpdate(
@@ -144,7 +145,8 @@ async function updateAddress(req, res){
             return res.status(200).json(identification);
         }
     } catch (error) {
-        
+        console.log(error);
+        return res.status(500).json({ message: 'Something went wrong' });
     }
 }
 

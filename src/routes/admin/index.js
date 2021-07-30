@@ -11,6 +11,7 @@ const ProductGallery = require('../../controllers/admin/ProductGallery');
 const Product = require('../../controllers/admin/Product');
 const Post = require('../../controllers/admin/Post');
 const Identification = require('../../controllers/admin/Identification');
+const AdministrativeUnits = require('../../controllers/client/AdministrativeUnits');
 
 router.post("/login", Auth.login);
 router.post("/refresh-token", Auth.refreshToken);
@@ -51,5 +52,9 @@ router.put('/identification/logo/update', Identification.updateLogo);
 router.put('/identification/phone-number/update', Identification.updatePhoneNumber);
 router.put('/identification/social-networking/update', Identification.updateSocialNetwork);
 router.put('/identification/address/update', Identification.updateAddress);
+
+router.get("/administrative-units", AdministrativeUnits.province);
+router.get("/administrative-units/:provinceCode/district", AdministrativeUnits.district);
+router.get("/administrative-units/:districtCode/ward", AdministrativeUnits.ward);
 
 module.exports = router;

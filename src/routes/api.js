@@ -12,8 +12,9 @@ const clientRoutes = require('../routes/client');
  * @param {*} app from express
  */
 let initRoutes = (app) => {
-    
+    console.log(path.join(__dirname, '../assets/icon/svg/facebook.svg'));
     app.use('/gallery', express.static(localPathConfig.gallery));
+    app.use('/icon', express.static(path.join(__dirname,'../assets/icon/svg')));
     app.use('/admin', adminRoutes);
     app.use('/client', clientRoutes);
 

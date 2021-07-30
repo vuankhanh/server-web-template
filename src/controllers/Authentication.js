@@ -46,7 +46,6 @@ let login = async (req, res) => {
             // lưu ý trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
             tokenList[refreshToken] = { accessToken, refreshToken };
             
-            debug(`Gửi Token và Refresh Token về cho client...`);
             return res.status(200).json({accessToken, refreshToken, message: 'successfully'});
         }else{
             return res.status(403).json({message: 'Sai tên đăng nhập hoặc mật khẩu'});

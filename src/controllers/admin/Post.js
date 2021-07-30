@@ -6,7 +6,6 @@ async function getAll(req, res){
     let query = req.query.type || "product";
     try {
         const condition = { type: query };
-        console.log(condition)
         const countTotalPosts = await DetailedArticle.model.DetailedArticle.countDocuments(condition);
         const filterPagePosts = await DetailedArticle.model.DetailedArticle.find(condition)
         .skip((size * page) - size) // Trong page đầu tiên sẽ bỏ qua giá trị là 0

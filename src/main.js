@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 const initRoutes = require("./routes/api");
 const db = require('./config/db');
+const envConfig = require('./config/evironment');
 
 
 //Connect to Mongodb
@@ -15,7 +16,7 @@ app.use(cors());
 // Khởi tạo các routes cho ứng dụng
 initRoutes(app);
 // chọn một port mà bạn muốn và sử dụng để chạy ứng dụng tại local
-let port = 3000;
-app.listen(port, '0.0.0.0', () => {
-    console.log(`Server is running at localhost:${port}/`);
+
+app.listen(envConfig.host.backEnd.port, envConfig.host.backEnd.domain, () => {
+    console.log(`Server is running at ${envConfig.host.backEnd.domain}:${envConfig.host.backEnd.port}/`);
 });

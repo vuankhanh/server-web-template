@@ -28,6 +28,18 @@ module.exports = {
         env: "https://services.giaohangtietkiem.vn",
         port: 443
     },
+    host: {
+        backEnd:{
+            protocol: 'http',
+            domain: 'localhost',
+            port: 3000
+        },
+        frontEnd: {
+            protocol: 'http',
+            domain: 'localhost',
+            port: 4200
+        }
+    },
     env: {
         ACCESS_TOKEN_SECRET: "access-token-secret-example-trungquandev.com-green-cat-a@",
         ACCESS_TOKEN_LIFE: 3600,

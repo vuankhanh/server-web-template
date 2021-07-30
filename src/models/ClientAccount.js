@@ -19,6 +19,8 @@ const clientAccountSchema = new Schema({
         required: true,
         immutable: true
     },
+    emailToken: { type: String },
+    isVerified: { type: Boolean, require: true, default: false },
     phoneNumber: { type: String, required: true },
     address: { type:[AddressSchema], default: [] },
     facebookId: { type: String },

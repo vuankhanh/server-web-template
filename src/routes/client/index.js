@@ -5,6 +5,7 @@ const AuthMiddleWare = require("../../middleware/AuthMiddleware");
 const Auth = require('../../controllers/Authentication');
 const Config = require("../../controllers/Config");
 const Register = require('../../controllers/client/Register');
+const SendEmail = require('../../controllers/email/SendEmail');
 
 const ProductCategory = require('../../controllers/client/ProductCategory');
 const Product = require('../../controllers/client/Product');
@@ -17,11 +18,16 @@ const AdministrativeUnits = require('../../controllers/client/AdministrativeUnit
 const CustomerAddress = require('../../controllers/client/CustomerAddress');
 
 router.get("/");
+
+router.get("/config", Config);
+
 router.post("/login", Auth.login);
 router.post("/refresh-token", Auth.refreshToken);
 router.post("/check-user-name", CheckExistsUserName.checkExistsUserName);
 router.post("/check-email", CheckExistsUserName.checkExistsEmail);
-router.post('/register', Register);
+router.post('/register', Register.register);
+router.get('/verify-email', Register.verifyEmail);
+router.post('/sendEmail', SendEmail.sendEmail)
 
 router.get("/product-category", ProductCategory);
 router.get("/product-hightlight", Product.getProductHightlight);
@@ -32,7 +38,10 @@ router.get("/product/:_id", Product.getDetail);
 router.use(AuthMiddleWare.isAuth);
 
 // List Protect APIs:
-router.get("/config", Config);
+router.get("/check", (req, res)=>{
+    return res.status(200).json({message: 'success'});
+});
+
 
 router.put("/update-customer", UpdateInformation);
 
