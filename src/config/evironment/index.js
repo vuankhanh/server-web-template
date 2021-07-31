@@ -40,11 +40,17 @@ module.exports = {
             port: 4200
         }
     },
-    env: {
-        ACCESS_TOKEN_SECRET: "access-token-secret-example-trungquandev.com-green-cat-a@",
-        ACCESS_TOKEN_LIFE: 3600,
-        REFRESH_TOKEN_SECRET: "refresh-token-secret-example-trungquandev.com-green-cat-a@",
-        REFRESH_TOKEN_LIFE: 2592000,
+    token: {
+        authentication:{
+            ACCESS_TOKEN_SECRET: "access-token-secret-vak-tuthan-carota-68-92-1@#",
+            ACCESS_TOKEN_LIFE: '3d',
+            REFRESH_TOKEN_SECRET: "refresh-token-secret-vak-tuthan-carota-68-92-1@#",
+            REFRESH_TOKEN_LIFE: '30d',
+        },
+        forgotPassword: {
+            FORGOT_PASSWORD_TOKEN_SECRET: "forgot-password-token-secret-vak-tuthan-carota-68-92-1@#",
+            FORGOT_PASSWORD_TOKEN_LIFE: '3d',
+        }
     },
     order: {
         orderStatus

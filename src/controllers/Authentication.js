@@ -9,14 +9,14 @@ const debug = console.log.bind(console);
 let tokenList = {};
 
 // Thời gian sống của token
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
+const accessTokenLife = process.token.authentication.REFRESH_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = process.token.authentication.ACCESS_TOKEN_SECRET;
 
 // Thời gian sống của refreshToken
-const refreshTokenLife = process.env.REFRESH_TOKEN_LIFE;
+const refreshTokenLife = process.token.authentication.REFRESH_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+const refreshTokenSecret = process.token.authentication.REFRESH_TOKEN_SECRET;
 
 /**
  * controller login
@@ -37,6 +37,10 @@ let login = async (req, res) => {
             }
         }
         if(matchedAccount){
+            if(matchedAccount.isVerified != undefined && matchedAccount.isVerified === false){
+                return res.status(205).json({message: 'this account is not activated yet'});
+            }
+
             debug(`Thực hiện tạo mã Token, [thời gian sống 30 ngày.]`);
             const accessToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, accessTokenSecret, accessTokenLife);
             

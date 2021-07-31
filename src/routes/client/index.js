@@ -6,6 +6,7 @@ const Auth = require('../../controllers/Authentication');
 const Config = require("../../controllers/Config");
 const Register = require('../../controllers/client/Register');
 const SendEmail = require('../../controllers/email/SendEmail');
+const ForgotPassword = require('../../controllers/client/ForgotPassword');
 
 const ProductCategory = require('../../controllers/client/ProductCategory');
 const Product = require('../../controllers/client/Product');
@@ -27,7 +28,9 @@ router.post("/check-user-name", CheckExistsUserName.checkExistsUserName);
 router.post("/check-email", CheckExistsUserName.checkExistsEmail);
 router.post('/register', Register.register);
 router.get('/verify-email', Register.verifyEmail);
-router.post('/sendEmail', SendEmail.sendEmail)
+router.post('/forgot-password/check-email', ForgotPassword.checkEmail);
+router.get('/forgot-password/check-token', ForgotPassword.checkToken);
+router.post('/forgot-password/new-password', ForgotPassword.createNewPassword);
 
 router.get("/product-category", ProductCategory);
 router.get("/product-hightlight", Product.getProductHightlight);

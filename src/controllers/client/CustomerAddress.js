@@ -3,9 +3,9 @@ const jwtHelper = require('../../helpers/jwt.helper');
 const ClientAccount = require('../../models/ClientAccount');
 
 // Thời gian sống của token
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
+const accessTokenLife = process.token.authentication.ACCESS_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = process.token.authentication.ACCESS_TOKEN_SECRET;
 
 async function insert(req, res){
     const formData = req.body;

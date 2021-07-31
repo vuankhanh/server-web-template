@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const ClientAccount = require('../../models/ClientAccount');
-const VerificationEmail = require('../email/VerificationEmail');
+const VerificationEmail = require('./VerificationEmail');
 const bcrypt = require('../../services/bcrypt');
 
 async function register(req, res){
@@ -19,8 +19,6 @@ async function register(req, res){
             emailToken: clientAccount.emailToken
         };
         let result = await VerificationEmail.verificationEmail(userInfo);
-        console.log(clientAccount);
-        console.log(result);
         return res.status(200).json({ message: 'successfully' });
     } catch (error) {
         if(error.code===11000){

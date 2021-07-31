@@ -1,8 +1,8 @@
 const path = require('path');
 const handlebars = require('handlebars');
 const fse = require('fs-extra');
-const SendEmail = require('./SendEmail');
-const templateUrl = path.join(__dirname, './template/VerifyEmail.html');
+const SendEmail = require('../email/SendEmail');
+const templateUrl = path.join(__dirname, '../email/template/VerifyEmail.html');
 const envConfig = require('../../config/evironment');
 
 async function verificationEmail(clientInfo){

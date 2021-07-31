@@ -5,9 +5,9 @@ const matchClientAccount = require('../../services/matchClientAccount');
 const bcrypt = require("../../services/bcrypt");
 
 // Thời gian sống của token
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE;
+const accessTokenLife = process.token.authentication.ACCESS_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = process.token.authentication.ACCESS_TOKEN_SECRET;
 
 async function update(req, res){
     const formData = req.body;
@@ -15,7 +15,7 @@ async function update(req, res){
     try {
         if(formData.oldPassword){
             customerInfo.password = formData.oldPassword;
-            let matchedAccount = await matchClientAccount(customerInfo);
+            let matchedAccount = await matchClientAccount.checkAccount(customerInfo);
             if(matchedAccount){
                 formData.password = bcrypt.hashPassword(formData.password);
                 let accessToken = await findOneAndUpdateAndGenNewtoken(customerInfo, formData);
