@@ -6,7 +6,7 @@ const debug = console.log.bind(console);
 
 // Biến cục bộ trên server này sẽ lưu trữ tạm danh sách token
 // Trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
-let tokenList = {};
+// let tokenList = {};
 
 // Thời gian sống của token
 const accessTokenLife = process.token.authentication.REFRESH_TOKEN_LIFE;
@@ -36,6 +36,7 @@ let login = async (req, res) => {
                 matchedAccount = await clientAccount.checkAccount(req.body);
             }
         }
+        console.log(matchedAccount);
         if(matchedAccount){
             if(matchedAccount.isVerified != undefined && matchedAccount.isVerified === false){
                 return res.status(205).json({message: 'this account is not activated yet'});
@@ -46,9 +47,9 @@ let login = async (req, res) => {
             
             const refreshToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, refreshTokenSecret, refreshTokenLife);
     
-            // Lưu lại 2 mã access & Refresh token, với key chính là cái refreshToken để đảm bảo unique và không sợ hacker sửa đổi dữ liệu truyền lên.
-            // lưu ý trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
-            tokenList[refreshToken] = { accessToken, refreshToken };
+            // // Lưu lại 2 mã access & Refresh token, với key chính là cái refreshToken để đảm bảo unique và không sợ hacker sửa đổi dữ liệu truyền lên.
+            // // lưu ý trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
+            // tokenList[refreshToken] = { accessToken, refreshToken };
             
             return res.status(200).json({accessToken, refreshToken, message: 'successfully'});
         }else{
@@ -72,7 +73,8 @@ let refreshToken = async (req, res) => {
     // debug("tokenList: ", tokenList);
 
     // Nếu như tồn tại refreshToken truyền lên và nó cũng nằm trong tokenList của chúng ta
-    if (refreshTokenFromClient && (tokenList[refreshTokenFromClient])) {
+    // if (refreshTokenFromClient && (tokenList[refreshTokenFromClient])) {
+    if (refreshTokenFromClient) {
         const originalUrl = req.originalUrl;
         let typeOfAccount = originalUrl.split("/");
         console.log(typeOfAccount);
