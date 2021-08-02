@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const AuthMiddleWare = require("../../middleware/AuthMiddleware");
-const localPathConfig = require('../../config/local-path');
 
 const Auth = require('../../controllers/Authentication');
 const Config = require('../../controllers/Config');

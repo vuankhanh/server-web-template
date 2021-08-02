@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
-const AuthMiddleWare = require("../middleware/AuthMiddleware");
 const localPathConfig = require('../config/local-path');
 
 const adminRoutes = require("../routes/admin");
@@ -13,7 +11,7 @@ const clientRoutes = require('../routes/client');
  */
 let initRoutes = (app) => {
     app.use('/gallery', express.static(localPathConfig.gallery));
-    app.use('/icon', express.static(path.join(__dirname,'../assets/icon/svg')));
+    app.use('/icon', express.static(localPathConfig.icon));
     app.use('/admin', adminRoutes);
     app.use('/client', clientRoutes);
 

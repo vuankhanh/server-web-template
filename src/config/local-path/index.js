@@ -1,3 +1,7 @@
+const path = require('path');
+
+console.log(path.join(__dirname,'../../assets/icon/svg'));
 module.exports = {
-    gallery: 'D:/Data-server'
+    gallery: path.join(__dirname+'../../../assets/Gallery'),
+    icon: path.join(__dirname,'../../assets/icon/svg')
 }
