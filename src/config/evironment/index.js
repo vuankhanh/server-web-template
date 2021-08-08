@@ -36,8 +36,7 @@ module.exports = {
         },
         frontEnd: {
             protocol: 'http',
-            domain: 'localhost',
-            port: 4200
+            domain: 'carota.vn'
         }
     },
     token: {

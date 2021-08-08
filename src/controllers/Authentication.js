@@ -29,14 +29,12 @@ let login = async (req, res) => {
         let typeOfAccount = originalUrl.split("/");
         let matchedAccount;
         if(typeOfAccount.length>0 && typeOfAccount[1]){
-            console.log(typeOfAccount[1]);
             if(typeOfAccount[1]==='admin'){
                 matchedAccount = await adminAccount(req.body);
             }else if(typeOfAccount[1]==='client'){
                 matchedAccount = await clientAccount.checkAccount(req.body);
             }
         }
-        console.log(matchedAccount);
         if(matchedAccount){
             if(matchedAccount.isVerified != undefined && matchedAccount.isVerified === false){
                 return res.status(205).json({message: 'this account is not activated yet'});
@@ -77,8 +75,6 @@ let refreshToken = async (req, res) => {
     if (refreshTokenFromClient) {
         const originalUrl = req.originalUrl;
         let typeOfAccount = originalUrl.split("/");
-        console.log(typeOfAccount);
-        console.log(originalUrl);
         try {
             // Verify kiểm tra tính hợp lệ của cái refreshToken và lấy dữ liệu giải mã decoded 
             const decoded = await jwtHelper.verifyToken(originalUrl, refreshTokenFromClient, refreshTokenSecret);
