@@ -11,22 +11,22 @@ async function chargeShipping(destination, orderInfo, options){
             ...orderInfo,
             ...options
         };
-            let addressRequest = await warehouseAddresses();
-            if(addressRequest.success){
-                body.pick_address_id = addressRequest.data[0].pick_address_id;
-            }
-            const params = new url.URLSearchParams(body);
-            const option = {
-                url: config.giahangtietkiem.env+'/services/shipment/fee?'+`${params}`,
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'token': config.giahangtietkiem.token
-                },
-            }
-            
-            let result = await axios(option);
-            return result.data;
+        let addressRequest = await warehouseAddresses();
+        if(addressRequest.success){
+            body.pick_address_id = addressRequest.data[0].pick_address_id;
+        }
+        const params = new url.URLSearchParams(body);
+        const option = {
+            url: config.giahangtietkiem.env+'/services/shipment/fee?'+`${params}`,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'token': config.giahangtietkiem.token
+            },
+        }
+        
+        let result = await axios(option);
+        return result.data;
     } catch (error) {
         console.log(error);
         console.log("lõi");
