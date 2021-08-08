@@ -29,11 +29,6 @@ module.exports = {
         port: 443
     },
     host: {
-        backEnd:{
-            protocol: 'http',
-            domain: 'localhost',
-            port: 3000
-        },
         frontEnd: {
             protocol: 'http',
             domain: 'carota.vn'
