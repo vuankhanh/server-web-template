@@ -6,6 +6,7 @@ function thumbnail(destination, buffer){
         fse.writeFileSync(thumbnailName, buffer);
         return thumbnailName;
     } catch (error) {
+        
         return error;
     }
 }

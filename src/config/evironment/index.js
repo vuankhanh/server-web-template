@@ -28,6 +28,11 @@ module.exports = {
         env: "https://services.giaohangtietkiem.vn",
         port: 443
     },
+    ghn: {
+        token: "9375af52-f8e5-11eb-bfef-86bbb1a09031",
+        env: "https://dev-online-gateway.ghn.vn",
+    }
+    ,
     host: {
         frontEnd: {
             protocol: 'http',

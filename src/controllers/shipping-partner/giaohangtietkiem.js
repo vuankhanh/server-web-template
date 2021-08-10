@@ -1,5 +1,4 @@
 const config = require('../../config/evironment');
-const https = require('https');
 
 const axios = require('axios');
 const url = require('url');
