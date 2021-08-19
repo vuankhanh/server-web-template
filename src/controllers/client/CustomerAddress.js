@@ -1,31 +1,43 @@
-const process = require('../../config/evironment');
-const jwtHelper = require('../../helpers/jwt.helper');
-const ClientAccount = require('../../models/ClientAccount');
+const ClientAuthentication = require('../../models/ClientAuthentication');
 
-// Thời gian sống của token
-const accessTokenLife = process.token.authentication.ACCESS_TOKEN_LIFE;
-// Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.token.authentication.ACCESS_TOKEN_SECRET;
+async function address(req, res){
+    const customerInfo = req.jwtDecoded.data;
+    try {
+        const addresses = await ClientAuthentication.findOne(
+            { email: customerInfo.email },
+            { address: 1 }
+        );
+        return res.status(200).json(addresses);
+    } catch (error) {
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+}
 
 async function insert(req, res){
     const formData = req.body;
     const customerInfo = req.jwtDecoded.data;
-
     try {
         if(formData.address){
             if(formData.address.isHeadquarters){
                 await refreshDefault(customerInfo);
             }
-            let accessToken = await insertAddress(customerInfo, formData.address);
-            
-            if(accessToken){
-                return res.status(200).json({ message: 'successfully', accessToken: accessToken });
-            }else{
-                return res.status(204).json({ message: 'Nothing changes' });
-            }
+            const result = await ClientAuthentication.findOneAndUpdate(
+                { email: customerInfo.email },
+                {
+                    $push: {
+                        address: formData.address 
+                    }
+                },
+                {
+                    new: true,
+                    select: {
+                        address: 1
+                    }
+                }
+            );
+            return res.status(200).json(result);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -35,17 +47,40 @@ async function update(req, res){
     const customerInfo = req.jwtDecoded.data;
     try {
         if(formData.address){
-            console.log(formData.address.isHeadquarters)
             if(formData.address.isHeadquarters){
                 await refreshDefault(customerInfo);
             }
-            let accessToken = await updateAddress(customerInfo, formData.address);
-
-            if(accessToken){
-                return res.status(200).json({ message: 'successfully', accessToken: accessToken });
-            }else{
-                return res.status(204).json({ message: 'Nothing changes' });
-            }
+            const result = await ClientAuthentication.findOneAndUpdate(
+                {
+                    email: customerInfo.email,
+                    address: {
+                        $elemMatch: {
+                            '_id': formData.address._id
+                        }
+                    }
+                },
+                {
+                    $set: {
+                        'address.$.responsiblePerson': formData.address.responsiblePerson,
+                        'address.$.phoneNumber': formData.address.phoneNumber,
+                        'address.$.district': formData.address.district,
+                        'address.$.isHeadquarters': formData.address.isHeadquarters,
+                        'address.$.position': formData.address.position,
+                        'address.$.province': formData.address.province,
+                        'address.$.street': formData.address.street,
+                        'address.$.ward': formData.address.ward,
+                    }
+                },
+                {
+                    new: true,
+                    safe: true,
+                    upsert: true,
+                    select: {
+                        address: 1
+                    }
+                }
+            );
+            return res.status(200).json(result);
         }
     } catch (error) {
         console.log(error);
@@ -59,13 +94,26 @@ async function remove(req, res){
     const customerInfo = req.jwtDecoded.data;
     try {
         if(formData.address){
-            let accessToken = await removeAddress(customerInfo, formData.address);
-            
-            if(accessToken){
-                return res.status(200).json({ message: 'successfully', accessToken: accessToken });
-            }else{
-                return res.status(204).json({ message: 'Nothing changes' });
-            }
+            const result = await ClientAuthentication.findOneAndUpdate(
+                {
+                    email: customerInfo.email
+                },
+                {
+                    '$pull': {
+                        'address': { "_id": formData.address._id }
+                    }
+                },
+                {
+                    new: true,
+                    safe: true,
+                    upsert: true,
+                    select: {
+                        address: 1
+                    }
+                }
+            );
+
+            return res.status(200).json(result);
         }
     } catch (error) {
         console.log(error);
@@ -73,65 +121,10 @@ async function remove(req, res){
     }
 }
 
-async function insertAddress(customerInfo, address){
-    const result = await ClientAccount.findOneAndUpdate(
-        { userName: customerInfo.userName },
-        { $push: {address}},
-        { new: true }
-    );
-    if(result){
-        return await jwtHelper.generateToken('client', result, accessTokenSecret, accessTokenLife);
-    }return null;
-}
-
-async function updateAddress(customerInfo, newAddress){
-    const result = await ClientAccount.findOneAndUpdate(
-        {
-            userName: customerInfo.userName,
-            address: {
-                $elemMatch: {_id: newAddress._id}
-            }
-        },
-        {
-            $set: {
-                'address.$.responsiblePerson': newAddress.responsiblePerson,
-                'address.$.phoneNumber': newAddress.phoneNumber,
-                'address.$.district': newAddress.district,
-                'address.$.isHeadquarters': newAddress.isHeadquarters,
-                'address.$.position': newAddress.position,
-                'address.$.province': newAddress.province,
-                'address.$.street': newAddress.street,
-                'address.$.ward': newAddress.ward,
-            }
-        },
-        {'new': true, 'safe': true, 'upsert': true}
-    );
-    if(result){
-        return await jwtHelper.generateToken('client', result, accessTokenSecret, accessTokenLife);
-    }return null;
-}
-
-async function removeAddress(customerInfo, newAddress){
-    const result = await ClientAccount.findOneAndUpdate(
-        {
-            userName: customerInfo.userName
-        },
-        {
-            '$pull': {
-                'address': { "_id": newAddress._id }
-            }
-        },
-        {'new': true, 'safe': true, 'upsert': true}
-    );
-    if(result){
-        return await jwtHelper.generateToken('client', result, accessTokenSecret, accessTokenLife);
-    }return null;
-}
-
 async function refreshDefault(customerInfo){
-    return await ClientAccount.findOneAndUpdate(
+    return await ClientAuthentication.findOneAndUpdate(
         {
-            userName: customerInfo.userName,
+            email: customerInfo.email,
             'address.isHeadquarters': true
         },
         {
@@ -144,6 +137,7 @@ async function refreshDefault(customerInfo){
 }
 
 module.exports = {
+    address,
     insert,
     update,
     remove

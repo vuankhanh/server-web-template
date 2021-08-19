@@ -1,9 +1,9 @@
-const ClientAccount = require('../../models/ClientAccount'); 
+const ClientAuthentication = require('../../models/ClientAuthentication');
 
 async function checkExistsUserName(req, res){
     const formData = req.body;
     if(!formData.userName) return res.status(401).json({ message: 'userName field is not found' });
-    const query = ClientAccount.where({ userName: formData.userName });
+    const query = ClientAuthentication.where({ 'account.userName': formData.userName });
     try {
         const result = await query.findOne().map(res=> res ? res.toObject() : res);
         if(result){
@@ -19,7 +19,7 @@ async function checkExistsUserName(req, res){
 async function checkExistsEmail(req, res){
     const formData = req.body;
     if(!formData.email) return res.status(401).json({ message: 'userName field is not found' });
-    const query = ClientAccount.where({ email: formData.email });
+    const query = ClientAuthentication.where({ email: formData.email });
     try {
         const result = await query.findOne().map(res=> res ? res.toObject() : res);
         if(result){

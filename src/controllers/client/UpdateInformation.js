@@ -1,6 +1,7 @@
 const process = require('../../config/evironment');
 const jwtHelper = require('../../helpers/jwt.helper');
-const ClientAccount = require('../../models/ClientAccount');
+const ClientAuthentication = require('../../models/ClientAuthentication');
+
 const matchClientAccount = require('../../services/matchClientAccount');
 const bcrypt = require("../../services/bcrypt");
 
@@ -42,8 +43,8 @@ async function update(req, res){
 }
 
 async function findOneAndUpdateAndGenNewtoken(customerInfo, dataWillUpdate){
-    const result = await ClientAccount.findOneAndUpdate(
-        { userName: customerInfo.userName },
+    const result = await ClientAuthentication.findOneAndUpdate(
+        { email: customerInfo.email },
         { $set: dataWillUpdate},
         { new: true }
     );

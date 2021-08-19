@@ -23,6 +23,7 @@ async function getAll(req, res){
             let filterPage = await Product.model.Product.find(
                 conditional,
                 {
+                    category: 1,
                     name: 1,
                     code: 1,
                     sortDescription: 1,

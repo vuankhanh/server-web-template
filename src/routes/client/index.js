@@ -3,6 +3,8 @@ const router = express.Router();
 const AuthMiddleWare = require("../../middleware/AuthMiddleware");
 
 const Auth = require('../../controllers/Authentication');
+const PassportFacebook = require('../../controllers/client/FacebookPassport');
+const PassportGoogle = require('../../controllers/client/GooglePassport');
 const Config = require("../../controllers/Config");
 const Register = require('../../controllers/client/Register');
 const SendEmail = require('../../controllers/email/SendEmail');
@@ -17,12 +19,15 @@ const CheckExistsUserName = require('../../controllers/client/CheckExistsAccount
 const UpdateInformation = require('../../controllers/client/UpdateInformation');
 const AdministrativeUnits = require('../../controllers/client/AdministrativeUnits');
 const CustomerAddress = require('../../controllers/client/CustomerAddress');
+const EstimateShippingFee = require('../../controllers/shipping-partner/ahamove/estimate-fee');
 
 router.get("/");
 
 router.get("/config", Config);
 
 router.post("/login", Auth.login);
+router.post('/auth-facebook', PassportFacebook.auth);
+router.post('/auth-google', PassportGoogle.auth);
 router.post("/refresh-token", Auth.refreshToken);
 router.post("/check-user-name", CheckExistsUserName.checkExistsUserName);
 router.post("/check-email", CheckExistsUserName.checkExistsEmail);
@@ -52,10 +57,12 @@ router.get("/administrative-units", AdministrativeUnits.province);
 router.get("/administrative-units/:provinceCode/district", AdministrativeUnits.district);
 router.get("/administrative-units/:districtCode/ward", AdministrativeUnits.ward);
 
+router.get("/customer/address", CustomerAddress.address);
 router.post("/customer/address/insert", CustomerAddress.insert);
 router.put("/customer/address/update", CustomerAddress.update);
-router.put("/customer/address/update", CustomerAddress.update);
 router.put("/customer/address/remove", CustomerAddress.remove);
+
+router.post('/customer/esimate-shipping-fee', EstimateShippingFee.estimateFee);
 
 router.get('/order', Order.getAll);
 router.get('/order/:_id', Order.getDetail);

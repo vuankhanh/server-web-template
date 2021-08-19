@@ -1,14 +1,13 @@
-const ClientAccount = require('../models/ClientAccount');
+
+const ClientAuthentication = require('../models/ClientAuthentication');
 const bcrypt = require("./bcrypt");
 
 async function checkAccount(account){
-    const query = ClientAccount.where({ userName: account.userName });
+    const query = ClientAuthentication.where({ 'account.userName': account.userName });
     try {
         const result = await query.findOne().map(res=> res ? res.toObject() : res);
-        console.log(result);
         if(result){
-            const isRight = await bcrypt.checkCompare(account.password, result.password);
-            console.log(isRight);
+            const isRight = await bcrypt.checkCompare(account.password, result.account.password);
             if(isRight){
                 return result;
             }else return null;
@@ -20,8 +19,8 @@ async function checkAccount(account){
 
 async function getAccountId(userName){
     try {
-        const accountId = await ClientAccount.findOne(
-            { userName: userName },
+        const accountId = await ClientAuthentication.findOne(
+            { 'account.userName': userName },
             { _id: 1 }
         );
         return accountId;

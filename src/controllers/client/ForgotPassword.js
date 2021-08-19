@@ -4,9 +4,9 @@ const path = require('path');
 const handlebars = require('handlebars');
 const fse = require('fs-extra');
 const bcrypt = require("../../services/bcrypt");
-const ClientAccount = require('../../models/ClientAccount');
+const ClientAuthentication = require('../../models/ClientAuthentication');
+
 const SendEmail = require('../email/SendEmail');
-const matchClientAccount = require('../../services/matchClientAccount');
 const templateUrl = path.join(__dirname, '../email/template/ForgotPassword.html');
 
 // Thời gian sống của token
@@ -21,21 +21,21 @@ async function checkEmail(req, res){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
             let condition = { email: formData.email };
-            const clientInfo = await ClientAccount.findOne(condition);
+            const clientInfo = await ClientAuthentication.findOne(condition);
 
             if(clientInfo){
                 if(clientInfo.isVerified != undefined && clientInfo.isVerified === false){
                     return res.status(205).json({message: 'this account is not activated yet'});
                 }
                 let tokenData = {
-                    userName: clientInfo.userName,
+                    userName: clientInfo.account.userName,
                     email: clientInfo.email
                 };
 
                 let token = await generateToken(tokenData);
 
                 userData = {
-                    userName: clientInfo.userName,
+                    userName: clientInfo.account.userName,
                     name: clientInfo.name,
                     email: clientInfo.email,
                     passwordToken: token
@@ -91,9 +91,9 @@ async function createNewPassword(req, res){
                 return res.status(400).json({message: 'Missing parameter'});
             }else{
                 let condition = {
-                    userName: decoded.data.userName
+                    'account.userName': decoded.data.userName
                 }
-                const account = await ClientAccount.findOneAndUpdate(
+                const account = await ClientAuthentication.findOneAndUpdate(
                     condition,
                     {
                         $set: {
