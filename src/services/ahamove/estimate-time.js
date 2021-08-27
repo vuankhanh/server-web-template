@@ -14,6 +14,7 @@ function estimateTime(){
     let formatTodayOrderTime = dateFormat(todayOrderTime);
   
     let todayDeliveryToTime = new Date();
+    todayDeliveryToTime.setDate(todayOrderTime.getDate());
     todayDeliveryToTime.setHours(todayOrderTime.getHours()+2);
   
     let formatTodatDeliveryToTime = dateFormat(todayDeliveryToTime);
@@ -68,6 +69,6 @@ function checkTimeInWorks(){
 
 module.exports = {
     timeUntilOrderTime,
-    orderTime: estimateTime.orderTime,
-    deliveryTo: estimateTime.deliveryTo,
+    orderTime: estimateTime().orderTime,
+    deliveryTo: estimateTime().deliveryTo,
 }

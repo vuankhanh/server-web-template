@@ -136,9 +136,35 @@ async function refreshDefault(customerInfo){
     );
 }
 
+async function getAddressById(email, id){
+    try {
+        let result = await ClientAuthentication.findOne(
+            {
+                email: email
+            },
+            {
+                _id: 0,
+                address: {
+                    $elemMatch: {
+                        _id: id
+                    }
+                }
+            }
+        )
+        if(result.address[0]){
+            return result.address[0];
+        }else{
+            return null;
+        }
+    } catch (error) {
+        return null;
+    }
+}
+
 module.exports = {
     address,
     insert,
     update,
-    remove
+    remove,
+    getAddressById
 };

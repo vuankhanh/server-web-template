@@ -98,7 +98,7 @@ async function insert(req, res){
             return res.status(400).json({message: 'Account not found'});
         }else{
             if(!formData.products || !formData.products.length>0){
-                res.status(400).json({message: 'Missing parameter'});
+                return res.status(400).json({message: 'Missing parameter'});
             }else{
                 let orderCode = ''
                 let nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');

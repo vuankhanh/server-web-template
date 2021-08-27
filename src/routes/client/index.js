@@ -12,6 +12,7 @@ const ForgotPassword = require('../../controllers/client/ForgotPassword');
 
 const ProductCategory = require('../../controllers/client/ProductCategory');
 const Product = require('../../controllers/client/Product');
+const Cart = require('../../controllers/client/Cart');
 const Order = require('../../controllers/client/Order');
 const ShippingPartner = require('../../controllers/client/ShippingPartner');
 
@@ -42,6 +43,8 @@ router.get("/product-hightlight", Product.getProductHightlight);
 router.get("/product", Product.getAll);
 router.get("/product/:_id", Product.getDetail);
 
+router.post('/cart/total-bill', Cart.totalBill);
+
 // Sử dụng authMiddleware.isAuth trước những api cần xác thực
 router.use(AuthMiddleWare.isAuth);
 
@@ -62,7 +65,9 @@ router.post("/customer/address/insert", CustomerAddress.insert);
 router.put("/customer/address/update", CustomerAddress.update);
 router.put("/customer/address/remove", CustomerAddress.remove);
 
-router.post('/customer/esimate-shipping-fee', EstimateShippingFee.estimateFee);
+router.post('/customer/estimate-shipping-fee', EstimateShippingFee.estimateFee);
+
+router.post('/cart/estimate-shipping-fee', Cart.estimateFee );
 
 router.get('/order', Order.getAll);
 router.get('/order/:_id', Order.getDetail);

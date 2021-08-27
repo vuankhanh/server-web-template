@@ -1,13 +1,66 @@
 const config = require('../../../config/evironment');
 const axios = require('axios');
-const qs = require('qs');
 
 //Schema
 const Identification = require('../../../models/Identification');
 
+//Controller
+let CustomerAddress = require('../../client/CustomerAddress');
+
 //Service
 const estimateTimeService = require('../../../services/ahamove/estimate-time');
 const addressService = require('../../../services/ahamove/address');
+const discountService = require('../../../services/discount');
+
+async function estimateFee(req, res){
+    const formData = req.body;
+
+    const userInfo = req.jwtDecoded;
+    const addressId = formData.addressId;
+    const totalValue = formData.totalValue;
+
+    calculator(res, userInfo, addressId, totalValue);
+}
+
+async function calculator(res, userInfo, addressId, totalValue){
+    try {
+        if(!addressId || isNaN(Math.sign(totalValue)) || Math.sign(totalValue)<0 ){
+            return res.status(400).json({message: 'Missing parameter'});
+        }else{
+            const customerAddress = await CustomerAddress.getAddressById(userInfo.data.email, addressId);
+            if(!customerAddress){
+                return res.status(404).json({message: 'Không tìm thấy địa chỉ này trong Sổ Địa Chỉ của khách hàng'});
+            }else{
+                const carotaBrandAddress = await nearestCarotaBranchAddress();
+                if(!carotaBrandAddress){
+                    return res.status(404).json({ message: 'Không tìm thấy địa chỉ Carota' });
+                }else{
+                    let carotaBrandAddressAhamoveFormat = addressService(carotaBrandAddress);
+                    let customerAddressAhamoveFormat = addressService(customerAddress);
+                    if(!customerAddressAhamoveFormat){
+                        return res.status(422).json({ message: 'Địa của khách hàng không đúng định dạng' });
+                    }else{
+                        let path = `[{"address":"${carotaBrandAddressAhamoveFormat}"},{"address":"${customerAddressAhamoveFormat}"}]`
+    
+                        let ahamoveResult = await callAhamoveApi(path);
+                        if(ahamoveResult.code === 200){
+                            let shippingFee = discountService.shippingFee(totalValue, ahamoveResult.data.distance, ahamoveResult.data.total_price);
+
+                            ahamoveResult.data = {
+                                ...ahamoveResult.data,
+                                shippingFee
+                            }
+                        }
+                        return res.status(ahamoveResult.code).json(ahamoveResult.data);
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+}
 
 async function nearestCarotaBranchAddress(){
     try {
@@ -28,38 +81,6 @@ async function nearestCarotaBranchAddress(){
     }
 }
 
-
-
-async function estimateFee(req, res){
-    const formData = req.body;
-    const customerAddress = formData.customerAddress;
-    const carotaBrandAddress = await nearestCarotaBranchAddress();
-
-    try {
-        if(!customerAddress){
-            return res.status(400).json({message: 'Missing parameter'});
-        }else{
-            if(!carotaBrandAddress){
-                return res.status(404).json({ message: 'Không tìm thấy địa chỉ Carota' });
-            }else{
-                let carotaBrandAddressAhamoveFormat = addressService(carotaBrandAddress);
-                let customerAddressAhamoveFormat = addressService(customerAddress);
-                if(!customerAddressAhamoveFormat){
-                    return res.status(422).json({ message: 'Địa của khách hàng không đúng định dạng' });
-                }else{
-                    let path = `[{"address":"${carotaBrandAddressAhamoveFormat}"},{"address":"${customerAddressAhamoveFormat}"}]`
-
-                    let ahamoveResult = await callAhamoveApi(path);
-                    return res.status(200).json(ahamoveResult);
-                }
-            }
-        }
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ message: 'Something went wrong' });
-    }
-}
-
 async function callAhamoveApi(path){
     try {
         let params = {
@@ -70,10 +91,6 @@ async function callAhamoveApi(path){
             payment_method: "CASH"
         }
 
-        // console.log(Object.keys(params)
-        // .map(key => `${key}=${params[key]}`)
-        // .join('&'));
-
         const qs = Object.keys(params)
         .map(key => `${key}=${params[key]}`)
         .join('&');
@@ -81,27 +98,43 @@ async function callAhamoveApi(path){
         let url = decodeURI(qs);
         url = encodeURI(url);
 
-        console.log(`/order/estimated_fee?${qs}`);
         const option = {
             url: `/order/estimated_fee?${url}`,
             method: 'GET',
             baseURL: config.ahamove.env
         }
-        let result = await axios(option);
-        return result.data;
+        let response = await axios(option);
+        let data = response.data;
+        if(response.status === 200){
+            data.deliveryTime = estimateTimeService.deliveryTo
+        }
+        return {
+            code: response.status,
+            data: data,
+        };
     } catch (error) {
         if(error.response){
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
+            return {
+                code: error.response.status,
+                data: error.response.data,
+            };
         }else{
             console.log(error);
+            if(error.errno === -4039){
+                return {
+                    code: 408,
+                    data: error.response.data,
+                };
+            }
+            return {
+                code: error.response.status,
+                data: error.response.data,
+            };
         }
-        return null;
     }
-    
 }
 
 module.exports = {
-    estimateFee
+    estimateFee,
+    calculator
 }
