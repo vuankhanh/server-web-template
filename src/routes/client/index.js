@@ -3,8 +3,7 @@ const router = express.Router();
 const AuthMiddleWare = require("../../middleware/AuthMiddleware");
 
 const Auth = require('../../controllers/Authentication');
-const PassportFacebook = require('../../controllers/client/FacebookPassport');
-const PassportGoogle = require('../../controllers/client/GooglePassport');
+const SocialAuthentication = require('../../controllers/client/SocialAuthentication');
 const Config = require("../../controllers/Config");
 const Register = require('../../controllers/client/Register');
 const SendEmail = require('../../controllers/email/SendEmail');
@@ -27,8 +26,8 @@ router.get("/");
 router.get("/config", Config);
 
 router.post("/login", Auth.login);
-router.post('/auth-facebook', PassportFacebook.auth);
-router.post('/auth-google', PassportGoogle.auth);
+router.post('/auth-facebook', SocialAuthentication.Facebook);
+router.post('/auth-google',  SocialAuthentication.Google);
 router.post("/refresh-token", Auth.refreshToken);
 router.post("/check-user-name", CheckExistsUserName.checkExistsUserName);
 router.post("/check-email", CheckExistsUserName.checkExistsEmail);

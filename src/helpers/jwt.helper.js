@@ -19,7 +19,6 @@ let generateToken = (accountType, userInfor, secretSignature, tokenLife) => {
                 updatedAt: userInfor.updatedAt,
             }:
             {
-                userName: userInfor.account.userName,
                 name: userInfor.name,
                 email: userInfor.email,
                 phoneNumber: userInfor.phoneNumber,

@@ -30,7 +30,10 @@
     "mongoose": "^5.12.12",
     "multer": "^1.4.2",
     "nodemailer": "^6.6.3",
-    "passport-facebook": "^3.0.0",
+    "passport": "^0.4.1",
+    "passport-facebook-token": "^4.0.0",
+    "passport-google-oauth-token": "^1.0.2",
+    "passport-jwt": "^4.0.0",
     "sharp": "^0.28.3",
     "xlsx": "^0.17.0"
   },

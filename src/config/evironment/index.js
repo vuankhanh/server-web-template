@@ -42,14 +42,14 @@ module.exports = {
         env: "https://apistg.ahamove.com/v1"
     },
     host: {
+        frontEnd: {
+            protocol: 'https',
+            domain: 'carota.vn'
+        },
         // frontEnd: {
         //     protocol: 'http',
-        //     domain: 'carota.vn'
+        //     domain: 'localhost:4200'
         // }
-        frontEnd: {
-            protocol: 'http',
-            domain: 'localhost:4200'
-        }
     },
     token: {
         authentication:{

@@ -1,4 +1,5 @@
 const process = require('../config/evironment/index');
+
 const jwtHelper = require("../helpers/jwt.helper");
 const adminAccount = require('../services/matchAdminAccount');
 const clientAccount = require('../services/matchClientAccount');
@@ -39,10 +40,11 @@ let login = async (req, res) => {
             if(matchedAccount.account.isVerified != undefined && matchedAccount.account.isVerified === false){
                 return res.status(205).json({message: 'this account is not activated yet'});
             }
+            let tokenGenerating = await generateToken(typeOfAccount[1], matchedAccount);
 
-            const accessToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, accessTokenSecret, accessTokenLife);
+            const accessToken = tokenGenerating.accessToken;
             
-            const refreshToken = await jwtHelper.generateToken(typeOfAccount[1], matchedAccount, refreshTokenSecret, refreshTokenLife);
+            const refreshToken = tokenGenerating.refreshToken;
     
             // // Lưu lại 2 mã access & Refresh token, với key chính là cái refreshToken để đảm bảo unique và không sợ hacker sửa đổi dữ liệu truyền lên.
             // // lưu ý trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
@@ -98,7 +100,15 @@ let refreshToken = async (req, res) => {
     }
 };
 
+async function generateToken(type, userInformation){
+    return {
+        accessToken: await jwtHelper.generateToken(type, userInformation, accessTokenSecret, accessTokenLife),
+        refreshToken: await jwtHelper.generateToken(type, userInformation, refreshTokenSecret, refreshTokenLife)
+    }
+}
+
 module.exports = {
-    login: login,
-    refreshToken: refreshToken,
+    login,
+    refreshToken,
+    generateToken
 }
