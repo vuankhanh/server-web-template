@@ -27,38 +27,42 @@ async function checkEmail(req, res){
             let condition = { email: formData.email };
             const clientInfo = await ClientAuthentication.findOne(condition);
 
-            if(clientInfo){
-                if(clientInfo.isVerified != undefined && clientInfo.isVerified === false){
-                    return res.status(205).json({message: 'this account is not activated yet'});
-                }
-                let tokenData = {
-                    userName: clientInfo.account.userName,
-                    email: clientInfo.email
-                };
-
-                let token = await generateToken(tokenData);
-
-                userData = {
-                    userName: clientInfo.account.userName,
-                    name: clientInfo.name,
-                    email: clientInfo.email,
-                    passwordToken: token
-                }
-
-                let templateData = {
-                    host: app,
-                    userInfo: userData
-                }
-                const html = await readHTMLFile(templateData);
-                if(!html){
-                    return res.status(500).json({ message: 'Something went wrong' });
-                }else{
-                    let result = await SendEmail.sendEmail(userData.email, "Đặt lại mật khẩu", html);
-                    return res.status(200).json({message: 'successfully'});
-                }
-                
-            }else{
+            if(!clientInfo){
                 return res.status(404).json({message: 'Not found email'});
+            }else{
+                if(clientInfo.account && clientInfo.account.userName){
+                    if(clientInfo.account.isVerified != undefined && clientInfo.account.isVerified === false){
+                        return res.status(205).json({message: 'this account is not activated yet'});
+                    }
+
+                    let tokenData = {
+                        userName: clientInfo.account.userName,
+                        email: clientInfo.email
+                    };
+    
+                    let token = await generateToken(tokenData);
+    
+                    userData = {
+                        userName: clientInfo.account.userName,
+                        name: clientInfo.name,
+                        email: clientInfo.email,
+                        passwordToken: token
+                    }
+    
+                    let templateData = {
+                        host: app,
+                        userInfo: userData
+                    }
+                    const html = await readHTMLFile(templateData);
+                    if(!html){
+                        return res.status(500).json({ message: 'Something went wrong' });
+                    }else{
+                        let result = await SendEmail.sendEmail(userData.email, "Đặt lại mật khẩu", html);
+                        return res.status(200).json({message: 'successfully'});
+                    }
+                }else{
+                    return res.status(404).json({message: 'Not found User Name'});
+                }
             }
         }
     } catch (error) {
