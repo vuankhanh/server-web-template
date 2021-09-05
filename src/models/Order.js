@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const AddressSchema = require('./Address');
-const config = require('../config/evironment');
 
-let enumOrderStatus = config.order.orderStatus.map(status=>status.code);
+let enumOrderStatus = orderStatus().map(status=>status.code);
 
 const ProductSchema = new Schema({
     productId: { type: Schema.Types.ObjectId, ref: 'Product' },
@@ -27,11 +26,38 @@ const OrderShema = new Schema({
  
 const Order = mongoose.model('Order', OrderShema, 'order');
 
+function orderStatus(){
+    return [
+        {
+            numericalOrder: 1,
+            code: 'pending',
+            name: 'Chờ xác nhận'
+        },{
+            numericalOrder: 2,
+            code: 'confirmed',
+            name: 'Đang xử lý'
+        },{
+            numericalOrder: 3,
+            code: 'isComing',
+            name: 'Đang vận chuyển'
+        },{
+            numericalOrder: 4,
+            code: 'done',
+            name: 'Giao hàng thành công'
+        },{
+            numericalOrder: 5,
+            code: 'revoke',
+            name: 'Đã hủy'
+        }
+    ]
+}
+
 module.exports = {
     scheme: {
         OrderShema
     },
     model:{
         Order
-    }
+    },
+    orderStatus: orderStatus()
 }

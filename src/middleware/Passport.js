@@ -6,8 +6,8 @@ module.exports = passport => {
     passport.use(
         new FacebookTokenStrategy(
             {
-                clientID: '583183603050614',
-                clientSecret: 'dd905d3e58640699fb0e0fcfd7df6540'
+                clientID: process.env.AUTH_FACEBOOK_CLIENT_ID,
+                clientSecret: process.env.AUTH_FACEBOOK_CLIENT_SECRET,
             },
             async (accessToken, refreshToken, profile, done)=>{
                 try {
@@ -61,8 +61,8 @@ module.exports = passport => {
     passport.use(
         new GoogleOauthTokenStrategy(
             {
-                clientID: '594503809918-0e4urn5uacs50j8ejbj0f887t76et12c.apps.googleusercontent.com',
-                clientSecret: 'xwVkjyuCB8XynB_czlAP4BHb',
+                clientID: process.env.AUTH_GOOGLE_CLIENT_ID,
+                clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET,
             },
             async (accessToken, refreshToken, profile, done)=>{
                 try {

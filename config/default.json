@@ -1,0 +1,21 @@
+{
+    "BackEnd": {
+        "app": {
+            "protocol": "http",
+            "domain": "localhost",
+            "port": 3000
+        },
+        "db": {
+            "domain": "localhost",
+            "port": "27017",
+            "name": "tu_than_dev"
+        }
+    },
+    "FrontEnd": {
+        "app": {
+            "protocol": "https",
+            "domain": "localhost",
+            "port": 4200
+        }
+    }
+}

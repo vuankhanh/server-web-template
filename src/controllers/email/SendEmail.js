@@ -1,8 +1,16 @@
 const nodemailer = require("nodemailer");
-const config = require('../../config/email');
 
 async function sendEmail(emailOfRecipient, subject, html){
     try {
+        let config = {
+            host: process.env.EMAIL_SERVICE_AUTH_HOST,
+            port: process.env.EMAIL_SERVICE_AUTH_PORT,
+            secure: true, // true for 465, false for other ports
+            auth: {
+                user: process.env.EMAIL_SERVICE_AUTH_NAME, // generated ethereal user
+                pass: process.env.EMAIL_SERVICE_AUTH_PASS, // generated ethereal password
+            }
+        }
         let transporter = nodemailer.createTransport(config);
 
         let info = await transporter.sendMail({

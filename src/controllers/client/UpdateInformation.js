@@ -1,4 +1,3 @@
-const process = require('../../config/evironment');
 const jwtHelper = require('../../helpers/jwt.helper');
 const ClientAuthentication = require('../../models/ClientAuthentication');
 
@@ -6,9 +5,9 @@ const matchClientAccount = require('../../services/matchClientAccount');
 const bcrypt = require("../../services/bcrypt");
 
 // Thời gian sống của token
-const accessTokenLife = process.token.authentication.ACCESS_TOKEN_LIFE;
+const accessTokenLife = process.env.JWT_ACCESS_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.token.authentication.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = process.env.JWT_ACCESS_TOKEN_SECRET;
 
 async function update(req, res){
     const formData = req.body;

@@ -1,15 +1,13 @@
-const config = require('../../config/evironment');
 const Order = require('../../models/Order');
 const matchClientAccount = require('../../services/matchClientAccount');
 
 const nextSequenceCode = require('../../services/nextSequenceCode');
 const productService = require('../../services/product');
 
-const deliveryStatus = config.order;
 
 async function getAll(req, res){
     try {
-        let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.userName);
+        let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
         if(!accountId._id){
             return res.status(400).json({message: 'Account not found'});
         }else{
@@ -60,7 +58,7 @@ async function getDetail(req, res){
     try {
         if(orderId){
             
-            let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.userName);
+            let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
             if(!accountId._id){
                 return res.status(400).json({message: 'Account not found'});
             }else{
@@ -93,7 +91,7 @@ async function getDetail(req, res){
 async function insert(req, res){
     let formData = req.body;
     try {
-        let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.userName);
+        let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
         if(!accountId._id){
             return res.status(400).json({message: 'Account not found'});
         }else{
@@ -149,7 +147,7 @@ async function insert(req, res){
 async function revoke(req, res){
     let formData = req.body;
     try {
-        let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.userName);
+        let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
         if(!accountId._id){
             res.status(400).json({message: 'Account not found'});
         }else{

@@ -1,4 +1,3 @@
-const config = require('../../../config/evironment');
 const axios = require('axios');
 
 //Schema
@@ -84,7 +83,7 @@ async function nearestCarotaBranchAddress(){
 async function callAhamoveApi(path){
     try {
         let params = {
-            token: config.ahamove.token,
+            token: process.env.AHAMOVE_API_TOKEN,
             order_time: estimateTimeService.timeUntilOrderTime(),
             path: path,
             service_id: "HAN-BIKE",
@@ -101,7 +100,7 @@ async function callAhamoveApi(path){
         const option = {
             url: `/order/estimated_fee?${url}`,
             method: 'GET',
-            baseURL: config.ahamove.env
+            baseURL: process.env.AHAMOVE_API_HOST
         }
         let response = await axios(option);
         let data = response.data;

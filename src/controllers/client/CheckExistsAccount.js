@@ -23,7 +23,11 @@ async function checkExistsEmail(req, res){
     try {
         const result = await query.findOne().map(res=> res ? res.toObject() : res);
         if(result){
-            return res.status(409).json({ message: 'This Email already exists' });
+            if(result.account && result.account.userName){
+                return res.status(409).json({ message: 'This Email already exists' });
+            }else{
+                return res.status(200).json({ message: 'This Email is available' });
+            }
         }else{
             return res.status(200).json({ message: 'This Email is available' });
         }

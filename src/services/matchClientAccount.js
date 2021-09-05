@@ -17,10 +17,10 @@ async function checkAccount(account){
     }
 }
 
-async function getAccountId(userName){
+async function getAccountId(email){
     try {
         const accountId = await ClientAuthentication.findOne(
-            { 'account.userName': userName },
+            { 'email': email },
             { _id: 1 }
         );
         return accountId;

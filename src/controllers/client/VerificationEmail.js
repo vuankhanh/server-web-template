@@ -3,7 +3,9 @@ const handlebars = require('handlebars');
 const fse = require('fs-extra');
 const SendEmail = require('../email/SendEmail');
 const templateUrl = path.join(__dirname, '../email/template/VerifyEmail.html');
-const envConfig = require('../../config/evironment');
+const config = require('config');
+const frontEndConfig = config.get('FrontEnd');
+const { app } = frontEndConfig;
 
 async function verificationEmail(clientInfo){
     try {
@@ -11,7 +13,7 @@ async function verificationEmail(clientInfo){
             return null;
         }else{
             let templateData = {
-                host: envConfig.host.frontEnd,
+                host: app,
                 userInfo: clientInfo
             }
             const html = await readHTMLFile(templateData);

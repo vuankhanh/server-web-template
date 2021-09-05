@@ -1,0 +1,21 @@
+{
+    "BackEnd": {
+        "app": {
+            "protocol": "http",
+            "domain": "localhost",
+            "port": 3000
+        },
+        "db": {
+            "domain": "localhost",
+            "port": "27017",
+            "name": "carota"
+        }
+    },
+    "FrontEnd": {
+        "app": {
+            "protocol": "https",
+            "domain": "carota.vn",
+            "port": 443
+        }
+    }
+}

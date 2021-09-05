@@ -1,8 +1,7 @@
-const process = require('../config/evironment');
 const jwtHelper = require("../helpers/jwt.helper");
 
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.token.authentication.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = process.env.JWT_ACCESS_TOKEN_SECRET;
 
 /**
  * Middleware: Authorization user by Token

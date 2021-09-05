@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const config = require('config');
 const dbConfig = config.get('BackEnd');
 const { db: { domain, port, name } } = dbConfig;
-const ClientAuthentication = require('./src/models/ClientAuthentication');
 
 async function connect(){
     try {
@@ -13,24 +12,11 @@ async function connect(){
             useCreateIndex: true
         });
         console.log("Connect Mongodb successfully!!!");
-        const result = await ClientAuthentication.findOne(
-            {
-                $or: [
-                    {
-                        email: 'vuankhan071992@gmail.com'
-                    },
-                    {
-                        'account.userName': 'vuankhanh'
-                    }
-                ]
-            }
-        );
-        console.log(result);
     } catch (error) {
         console.log("Connect Mongodb failure!!!");
     }
 }
 
-connect()
-
-
+module.exports = {
+    connect
+}

@@ -1,9 +1,9 @@
-const config = require('../config/evironment');
+const Order = require('../models/Order');
 const Identification = require('../models/Identification');
 
 async function getConfig(req, res){
     let configuration = {
-        orderStatus: config.order.orderStatus
+        orderStatus: Order.orderStatus
     }
 
     const identification = await Identification.model.Identification.findOne({});

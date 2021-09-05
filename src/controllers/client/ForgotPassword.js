@@ -1,18 +1,22 @@
-const process = require('../../config/evironment');
 const jwt = require("jsonwebtoken");
 const path = require('path');
 const handlebars = require('handlebars');
 const fse = require('fs-extra');
+const config = require('config');
+const frontEndConfig = config.get('FrontEnd');
+const { app } = frontEndConfig;
+
 const bcrypt = require("../../services/bcrypt");
+
 const ClientAuthentication = require('../../models/ClientAuthentication');
 
 const SendEmail = require('../email/SendEmail');
 const templateUrl = path.join(__dirname, '../email/template/ForgotPassword.html');
 
 // Thời gian sống của token
-const forgotPasswordTokenLife = process.token.forgotPassword.FORGOT_PASSWORD_TOKEN_LIFE;
+const forgotPasswordTokenLife = process.env.JWT_FORGOT_PASSWORD_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const forgotPasswordTokenSecret = process.token.forgotPassword.FORGOT_PASSWORD_TOKEN_SECRET;
+const forgotPasswordTokenSecret = process.env.JWT_FORGOT_PASSWORD_TOKEN_SECRET;
 
 async function checkEmail(req, res){
     const formData = req.body;
@@ -42,7 +46,7 @@ async function checkEmail(req, res){
                 }
 
                 let templateData = {
-                    host: process.host.frontEnd,
+                    host: app,
                     userInfo: userData
                 }
                 const html = await readHTMLFile(templateData);

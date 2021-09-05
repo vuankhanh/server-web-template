@@ -19,7 +19,37 @@ async function register(req, res){
             },
         }
         const authenticationResult = await ClientAuthentication.findOne({ email: object.email });
-        if(!authenticationResult){
+        if(authenticationResult){
+            if(authenticationResult.account && authenticationResult.account.userName){
+                return res.status(409).json({ message: 'Email and UserName already exists' });
+            }else{
+                const updateAuthentication = await ClientAuthentication.findOneAndUpdate(
+                    { email: object.email },
+                    {
+                        phoneNumber: formData.phoneNumber,
+                        name: formData.name,
+                        allowAccount: true,
+                        account: {
+                            userName: formData.userName,
+                            password: bcrypt.hashPassword(formData.password),
+                            emailToken: crypto.randomBytes(64).toString('hex')
+                        }
+                    },
+                    { new: true }
+                );
+
+                let userInfo = { 
+                    userId: updateAuthentication._id,
+                    name: updateAuthentication.name,
+                    email: updateAuthentication.email,
+                    userName: updateAuthentication.account.userName,
+                    emailToken: updateAuthentication.account.emailToken
+                };
+
+                let result = await VerificationEmail.verificationEmail(userInfo);
+                return res.status(200).json({ message: 'successfully' });
+            }
+        }else{
             const authentication = new ClientAuthentication(object);
             await authentication.save();
             let userInfo = { 
@@ -31,8 +61,6 @@ async function register(req, res){
             };
             let result = await VerificationEmail.verificationEmail(userInfo);
             return res.status(200).json({ message: 'successfully' });
-        }else{
-            return res.status(409).json({ message: 'Email or userName already exists' });
         }
     } catch (error) {
         if(error.code===11000){
@@ -41,6 +69,7 @@ async function register(req, res){
             }
             return res.status(409).json({ message: 'Registration Failed' });
         }else{
+            console.log(error);
             return res.status(500).json({ message: 'Something went wrong' });
         }
     }

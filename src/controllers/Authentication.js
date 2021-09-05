@@ -1,23 +1,20 @@
-const process = require('../config/evironment/index');
-
 const jwtHelper = require("../helpers/jwt.helper");
 const adminAccount = require('../services/matchAdminAccount');
 const clientAccount = require('../services/matchClientAccount');
-const debug = console.log.bind(console);
 
 // Biến cục bộ trên server này sẽ lưu trữ tạm danh sách token
 // Trong dự án thực tế, nên lưu chỗ khác, có thể lưu vào Redis hoặc DB
 // let tokenList = {};
 
 // Thời gian sống của token
-const accessTokenLife = process.token.authentication.REFRESH_TOKEN_LIFE;
+const accessTokenLife = process.env.JWT_ACCESS_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const accessTokenSecret = process.token.authentication.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = process.env.JWT_ACCESS_TOKEN_SECRET;
 
 // Thời gian sống của refreshToken
-const refreshTokenLife = process.token.authentication.REFRESH_TOKEN_LIFE;
+const refreshTokenLife = process.env.JWT_REFRESH_TOKEN_LIFE;
 // Mã secretKey này phải được bảo mật tuyệt đối, các bạn có thể lưu vào biến môi trường hoặc file
-const refreshTokenSecret = process.token.authentication.REFRESH_TOKEN_SECRET;
+const refreshTokenSecret = process.env.JWT_REFRESH_TOKEN_SECRET;
 
 /**
  * controller login

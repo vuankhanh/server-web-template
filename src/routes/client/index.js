@@ -13,7 +13,6 @@ const ProductCategory = require('../../controllers/client/ProductCategory');
 const Product = require('../../controllers/client/Product');
 const Cart = require('../../controllers/client/Cart');
 const Order = require('../../controllers/client/Order');
-const ShippingPartner = require('../../controllers/client/ShippingPartner');
 
 const CheckExistsUserName = require('../../controllers/client/CheckExistsAccount');
 const UpdateInformation = require('../../controllers/client/UpdateInformation');
@@ -73,7 +72,5 @@ router.get('/order/:_id', Order.getDetail);
 router.post('/order/insert', Order.insert);
 // router.put('/order/update', Order.update);
 router.post('/order/revoke', Order.revoke);
-
-router.get('/order/shipping/estimate', ShippingPartner.astimateShippingFee)
 
 module.exports = router;
