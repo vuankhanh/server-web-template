@@ -34,7 +34,7 @@ let login = async (req, res) => {
             }
         }
         if(matchedAccount){
-            if(matchedAccount.account.isVerified != undefined && matchedAccount.account.isVerified === false){
+            if(matchedAccount.account && matchedAccount.account.isVerified != undefined && matchedAccount.account.isVerified === false){
                 return res.status(205).json({message: 'this account is not activated yet'});
             }
             let tokenGenerating = await generateToken(typeOfAccount[1], matchedAccount);
@@ -52,6 +52,7 @@ let login = async (req, res) => {
             return res.status(403).json({message: 'Sai tên đăng nhập hoặc mật khẩu'});
         }
     } catch (error) {
+        console.log(error);
         return res.status(500).json(error);
     }
 }

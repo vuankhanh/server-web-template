@@ -3,7 +3,8 @@ const Identification = require('../models/Identification');
 
 async function getConfig(req, res){
     let configuration = {
-        orderStatus: Order.orderStatus
+        orderStatus: Order.orderStatus,
+        orderCreatedBy: Order.orderCreatedBy
     }
 
     const identification = await Identification.model.Identification.findOne({});

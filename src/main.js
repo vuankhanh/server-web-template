@@ -2,12 +2,6 @@
 const dotenv = require('dotenv');
 dotenv.config({path: './dotenv/.env'});
 
-const config = require('config');
-const dbConfig = config.get('BackEnd');
-
-console.log(process.env.NODE_ENV);
-console.log(dbConfig);
-
 const express = require("express");
 const app = express();
 const cors = require('cors');

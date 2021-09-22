@@ -5,7 +5,7 @@ const SendEmail = require('../email/SendEmail');
 const templateUrl = path.join(__dirname, '../email/template/VerifyEmail.html');
 const config = require('config');
 const frontEndConfig = config.get('FrontEnd');
-const { app } = frontEndConfig;
+const backEndConfig = config.get('BackEnd');
 
 async function verificationEmail(clientInfo){
     try {
@@ -13,7 +13,8 @@ async function verificationEmail(clientInfo){
             return null;
         }else{
             let templateData = {
-                host: app,
+                frontEnd: frontEndConfig.app,
+                backEnd: backEndConfig.host,
                 userInfo: clientInfo
             }
             const html = await readHTMLFile(templateData);

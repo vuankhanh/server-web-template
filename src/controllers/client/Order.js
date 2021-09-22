@@ -20,9 +20,9 @@ async function getAll(req, res){
                 conditional,
                 {
                     code: 1,
-                    products: 1,
-                    totalValue: 1,
                     status: 1,
+                    totalValue: 1,
+                    createdBy: 1,
                     createdAt: 1,
                     updatedAt: 1
                 }
@@ -62,9 +62,7 @@ async function getDetail(req, res){
             if(!accountId._id){
                 return res.status(400).json({message: 'Account not found'});
             }else{
-    
-                let conditional = { _id: orderId };
-                let orderDetail = await Order.model.Order.findOne(conditional)
+                let orderDetail = await Order.model.Order.findById(orderId)
                 .populate(
                     {
                         path: 'products.productId',
@@ -119,10 +117,11 @@ async function insert(req, res){
                     accountId: accountId._id,
                     deliverTo: formData.deliverTo,
                     products: [],
-                    totalValue: 0
+                    totalValue: 0,
+                    createdBy: 'customer'
                 }
                 for(let i=0; i<products.length; i++){
-                    let price = await productService.getProductPrice(products[i]._id);
+                    let price = await productService.getProductPrice(products[i]._id, products[i].quantity);
                     if(price >= 0){
                         orderObj.totalValue += (products[i].quantity*price);
                     }else{

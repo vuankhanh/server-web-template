@@ -4,7 +4,7 @@ const handlebars = require('handlebars');
 const fse = require('fs-extra');
 const config = require('config');
 const frontEndConfig = config.get('FrontEnd');
-const { app } = frontEndConfig;
+const backEndConfig = config.get('BackEnd');
 
 const bcrypt = require("../../services/bcrypt");
 
@@ -50,7 +50,8 @@ async function checkEmail(req, res){
                     }
     
                     let templateData = {
-                        host: app,
+                        frontEnd: frontEndConfig.app,
+                        backEnd: backEndConfig.host,
                         userInfo: userData
                     }
                     const html = await readHTMLFile(templateData);

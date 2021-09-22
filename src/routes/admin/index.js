@@ -4,6 +4,7 @@ const AuthMiddleWare = require("../../middleware/AuthMiddleware");
 
 const Auth = require('../../controllers/Authentication');
 const Config = require('../../controllers/Config');
+const UserManagement = require('../../controllers/admin/UserManagement');
 const ProductCategory = require('../../controllers/admin/ProductCategory');
 const BannerGallery = require('../../controllers/admin/BannerGallery');
 const ProductGallery = require('../../controllers/admin/ProductGallery');
@@ -11,6 +12,7 @@ const Product = require('../../controllers/admin/Product');
 const Post = require('../../controllers/admin/Post');
 const Identification = require('../../controllers/admin/Identification');
 const AdministrativeUnits = require('../../controllers/client/AdministrativeUnits');
+const Order = require('../../controllers/admin/Order');
 
 router.post("/login", Auth.login);
 router.post("/refresh-token", Auth.refreshToken);
@@ -20,6 +22,10 @@ router.use(AuthMiddleWare.isAuth);
 
 // List Protect APIs:
 router.get("/config", Config);
+
+router.get('/user-management', UserManagement.getAll);
+router.get('/user-management/userId', UserManagement.getDetail);
+
 router.get('/product-category', ProductCategory.getAll);
 router.post('/product-category/insert', ProductCategory.insert);
 router.put('/product-category/update', ProductCategory.update);
@@ -55,5 +61,13 @@ router.put('/identification/address/update', Identification.updateAddress);
 router.get("/administrative-units", AdministrativeUnits.province);
 router.get("/administrative-units/:provinceCode/district", AdministrativeUnits.district);
 router.get("/administrative-units/:districtCode/ward", AdministrativeUnits.ward);
+
+router.get('/order', Order.getAll);
+router.get('/order/:orderId', Order.getDetail);
+router.put('/order/:orderId/revoke', Order.revokeOrder);
+router.put('/order/:orderId/confirm', Order.confirmOrder);
+router.put('/order/:orderId/isComing', Order.isComing);
+router.put('/order/:orderId/done', Order.finish);
+router.post('/order/insert', Order.createOrder);
 
 module.exports = router;

@@ -1,11 +1,12 @@
 const DetailedArticle = require('../../models/DetailedArticle');
 
 async function getAll(req, res){
-    let size = parseInt(req.query.size) || 10;
-    let page = parseInt(req.query.page) || 1;
-    let query = req.query.type || "product";
+    const query = req.query;
+    let size = parseInt(query.size) || 10;
+    let page = parseInt(query.page) || 1;
+    let type = query.type || "product";
     try {
-        const condition = { type: query };
+        const condition = { type };
         const countTotalPosts = await DetailedArticle.model.DetailedArticle.countDocuments(condition);
         const filterPagePosts = await DetailedArticle.model.DetailedArticle.find(condition)
         .skip((size * page) - size) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
@@ -19,7 +20,7 @@ async function getAll(req, res){
             data: filterPagePosts
         });
     } catch (error) {
-        
+        return res.status(500).json({ message: 'Something went wrong' });
     }
 }
 

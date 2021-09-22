@@ -5,6 +5,11 @@
             "domain": "localhost",
             "port": 3000
         },
+        "host": {
+            "protocol": "https",
+            "domain": "api.carota.vn",
+            "port": 443
+        },
         "db": {
             "domain": "localhost",
             "port": "27017",

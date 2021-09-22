@@ -5,6 +5,11 @@
             "domain": "localhost",
             "port": 3000
         },
+        "host": {
+            "protocol": "http",
+            "domain": "localhost",
+            "port": 3000
+        },
         "db": {
             "domain": "localhost",
             "port": "27017",
