@@ -28,7 +28,7 @@ let login = async (req, res) => {
         let matchedAccount;
         if(typeOfAccount.length>0 && typeOfAccount[1]){
             if(typeOfAccount[1]==='admin'){
-                matchedAccount = await adminAccount(req.body);
+                matchedAccount = await adminAccount.getAccount(req.body);
             }else if(typeOfAccount[1]==='client'){
                 matchedAccount = await clientAccount.checkAccount(req.body);
             }

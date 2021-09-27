@@ -16,4 +16,20 @@ async function getAccount(account){
     }
 }
 
-module.exports = getAccount
+
+async function getAccountId(account){
+    try {
+        const accountId = await AdminAccount.findOne(
+            { userName: account.userName },
+            { _id: 1 }
+        );
+        return accountId;
+    } catch (error) {
+        return error;
+    }
+}
+
+module.exports = {
+    getAccount,
+    getAccountId
+}

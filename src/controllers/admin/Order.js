@@ -1,4 +1,8 @@
 const Order = require('../../models/Order');
+const matchAdminAccount = require('../../services/matchAdminAccount');
+const nextSequenceCode = require('../../services/nextSequenceCode');
+const productService = require('../../services/product');
+
 const enumOrderStatus = Order.orderStatus.map(status=>status.code);
 const enumOrderCreatedBy = Order.orderCreatedBy.map(createdBy=>createdBy.code);
 
@@ -11,6 +15,10 @@ async function getAll(req, res){
     const createdBy = query.createdBy;
     const orderCode = query.orderCode;
 
+    const date = new Date();
+    const fromDate = (new Date(parseInt(query.fromDate))).getTime() > 0 ? new Date(parseInt(query.fromDate)) : new Date(date.getFullYear(), date.getMonth(), 1);
+    const toDate = (new Date(parseInt(query.toDate))).getTime() > 0 ? new Date(parseInt(query.toDate)) : new Date();
+
     try {
         if(
             (!enumOrderStatus.includes(status) && status) ||
@@ -21,11 +29,18 @@ async function getAll(req, res){
             const statusCondition = !status ? {} : { status };
             const createdByCondition = !createdBy ? {} : { createdBy };
             const orderCodeCondition = !orderCode ? {} : { code: orderCode };
+            const createdAtCondition = {
+                createdAt: {
+                    $gte: fromDate, 
+                    $lt: toDate
+                }
+            }
 
             const condition = {
                 ...statusCondition,
                 ...createdByCondition,
-                ...orderCodeCondition
+                ...orderCodeCondition,
+                ...createdAtCondition
             }
             const countTotalOrders = await Order.model.Order.countDocuments(condition);
             const filterPageOders = await Order.model.Order.find(
@@ -65,41 +80,14 @@ async function getDetail(req, res){
         if(!orderId){
             return res.status(400).json({message: 'Order Id is not found'});
         }else{
-            const order = await Order.model.Order.findById(orderId)
-            .populate(
+            const order = Order.model.Order.findOne(
                 {
-                    path: 'products.productId',
-                    select: {
-                        name: 1,
-                        price: 1,
-                        thumbnailUrl: 1,
-                        category: 1
-                    }
+                    _id: orderId
                 }
-            )
-            .populate(
-                {
-                    path: 'accountId',
-                    select: {
-                        customerCode: 1,
-                        email: 1,
-                        phoneNumber: 1,
-                        name: 1
-                    }
-                    
+            );
 
-                }
-            )
-            .map(res=> res ? res.toObject() : res);
-            
-            order.products = order.products.map(product=>{
-                return {
-                    ...product.productId,
-                    quantity: product.quantity
-                }
-            })
-            // console.log(orderNice);
-            return res.status(200).json(order);
+            let populate = await populateOrder(order);
+            return res.status(200).json(populate);
         }
     } catch (error) {
         console.log(error);
@@ -120,7 +108,7 @@ async function revokeOrder(req, res){
                 newStatus: 'revoke',
                 comments: formData.comments
             }
-            const orderIsRevoked = await Order.model.Order.findOneAndUpdate(
+            const orderIsRevoked = Order.model.Order.findOneAndUpdate(
                 {
                     _id: orderId,
                     status: {
@@ -136,42 +124,10 @@ async function revokeOrder(req, res){
                     }
                 },
                 { 'new': true }
-            ).populate(
-                {
-                    path: 'products.productId',
-                    select: {
-                        name: 1,
-                        price: 1,
-                        thumbnailUrl: 1,
-                        category: 1
-                    }
-                }
             )
-            .populate(
-                {
-                    path: 'accountId',
-                    select: {
-                        customerCode: 1,
-                        email: 1,
-                        phoneNumber: 1,
-                        name: 1
-                    }
-                }
-            )
-
-            if(!orderIsRevoked){
-                return res.status(200).json(orderIsRevoked);
-            }
             
-            let newObject = orderIsRevoked.toObject();
-            console.log(newObject);
-            newObject.products = newObject.products.map(product=>{
-                return {
-                    ...product.productId,
-                    quantity: product.quantity
-                }
-            });
-            return res.status(200).json(newObject);
+            let populate = await populateOrder(orderIsRevoked);
+            return res.status(200).json(populate);
         }
     } catch (error) {
         console.log(error);
@@ -191,7 +147,7 @@ async function confirmOrder(req, res){
                 newStatus: 'confirmed',
             }
 
-            const orderIsConfirmed = await Order.model.Order.findOneAndUpdate(
+            const orderIsConfirmed = Order.model.Order.findOneAndUpdate(
                 {
                     _id: orderId,
                     status: 'pending'
@@ -207,7 +163,8 @@ async function confirmOrder(req, res){
                 { 'new': true }
             );
     
-            return res.status(200).json(orderIsConfirmed);
+            let populate = await populateOrder(orderIsConfirmed);
+            return res.status(200).json(populate);
         }
     } catch (error) {
         console.log(error);
@@ -219,12 +176,14 @@ async function isComing(req, res){
     const params = req.params;
     const orderId = params.orderId;
     const formData = req.body;
+
     try {
         if(
             !orderId ||
             (Object.keys(formData).length === 0 && formData.constructor === Object) ||
             !formData.shippingPartner.id ||
-            !formData.shippingPartner.shippingFee
+            !formData.shippingPartner.shippingFee ||
+            isNaN(formData.shippingPartner.shippingFee)
         ){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
@@ -236,7 +195,7 @@ async function isComing(req, res){
                     shippingFee: formData.shippingPartner.shippingFee,
                 }
             }
-            const orderIsConfirmed = await Order.model.Order.findOneAndUpdate(
+            const orderIsComing = Order.model.Order.findOneAndUpdate(
                 {
                     _id: orderId,
                     status: 'confirmed'
@@ -252,8 +211,9 @@ async function isComing(req, res){
                 },
                 { 'new': true }
             );
-    
-            return res.status(200).json(orderIsConfirmed);
+
+            let populate = await populateOrder(orderIsComing);
+            return res.status(200).json(populate);
         }
     } catch (error) {
         console.log(error);
@@ -272,7 +232,7 @@ async function finish(req, res){
                 handledBy: 'admin',
                 newStatus: 'done',
             }
-            const orderIsConfirmed = await Order.model.Order.findOneAndUpdate(
+            const orderIsFinished = Order.model.Order.findOneAndUpdate(
                 {
                     _id: orderId,
                     status: 'isComing'
@@ -287,8 +247,9 @@ async function finish(req, res){
                 },
                 { 'new': true }
             );
-    
-            return res.status(200).json(orderIsConfirmed);
+
+            let populate = await populateOrder(orderIsFinished);
+            return res.status(200).json(populate);
         }
     } catch (error) {
         console.log(error);
@@ -298,17 +259,113 @@ async function finish(req, res){
 
 async function createOrder(req, res){
     const formData = req.body;
-    console.log(formData);
+    const decoded = req.jwtDecoded.data;
+    const products = formData.products;
     try {
-        if(Object.keys(formData).length === 0 && formData.constructor === Object){
+        if(
+            (Object.keys(formData).length === 0 &&
+            formData.constructor === Object) ||
+            !products ||
+            !products.length === 0
+        ){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
+            //pending here
+            let accountId = await matchAdminAccount.getAccountId(decoded);
+            console.log(accountId);
+            if(!accountId){
+                return res.status(400).json({message: 'Account not found'});
+            }else{
+                let orderCode = ''
+                let nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
+                if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
+                    orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
+                }else{
+                    for(let i=0; i<=5; i++){
+                        if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
+                            nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
+                            orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
+                            break;
+                        }
+                    }
+                }
 
+                let orderObj = {
+                    status: 'confirmed',
+                    code: orderCode,
+                    accountId: accountId._id,
+                    deliverTo: formData.deliverTo,
+                    products: [],
+                    totalValue: 0,
+                    createdBy: 'admin',
+                    activities: [
+                        {
+                            handledBy: 'admin',
+                            newStatus: 'confirmed',
+
+                        }
+                    ]
+                }
+
+                for(let i=0; i<products.length; i++){
+                    let price = await productService.getProductPrice(products[i]._id, products[i].quantity);
+                    if(price >= 0){
+                        orderObj.totalValue += (products[i].quantity*price);
+                    }else{
+                        return res.status(404).json({message: 'Không tìm thấy sản phẩm'});
+                    }
+                    orderObj.products.push({
+                        productId: products[i]._id,
+                        quantity: products[i].quantity
+                    })
+                }
+
+                const order = new Order.model.Order(orderObj);
+                await order.save();
+                return res.status(200).json(order);
+            }
         }
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
+}
+
+async function populateOrder(result){
+    if(!result) return result;
+
+    let populate = await result.populate(
+        {
+            path: 'products.productId',
+            select: {
+                name: 1,
+                price: 1,
+                thumbnailUrl: 1,
+                category: 1
+            }
+        }
+    )
+    .populate(
+        {
+            path: 'accountId',
+            select: {
+                customerCode: 1,
+                email: 1,
+                phoneNumber: 1,
+                name: 1
+            }
+        }
+    );
+
+    let newObject = populate.toObject();
+
+    newObject.products = newObject.products.map(product=>{
+        return {
+            ...product.productId,
+            quantity: product.quantity
+        }
+    });
+    return newObject;
 }
 
 module.exports={
