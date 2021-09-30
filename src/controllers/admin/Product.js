@@ -22,6 +22,41 @@ async function getAll(req, res){
     }
 }
 
+async function searching(req, res){
+    const query = req.query;
+    try {
+        if(!query.productName){
+            return res.status(400).json({message: 'Missing parameter'});
+        }else{
+            const filterPage = await Product.model.Product.find(
+                {
+                    $text: {
+                        $search: query.productName
+                    }
+                },
+                {
+                    category: 1,
+                    name: 1,
+                    code: 1,
+                    sortDescription: 1,
+                    thumbnailUrl: 1,
+                    currencyUnit: 1,
+                    theRemainingAmount: 1,
+                    price: 1,
+                    unit: 1,
+                    createdAt: 1,
+                    updatedAt: 1
+                }
+            ).limit(5);
+
+            return res.status(200).json(filterPage);
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+}
+
 async function insert(req, res){
     const formData = req.body;
     formData.code = "abc";
@@ -104,6 +139,7 @@ async function remove(req, res){
 
 module.exports = {
     getAll,
+    searching,
     insert,
     update,
     remove

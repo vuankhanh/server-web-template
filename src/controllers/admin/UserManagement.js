@@ -26,7 +26,9 @@ async function getAll(req, res){
                 allowAccount: 1,
                 allowFacebook: 1,
                 allowGoogle: 1,
-                googleId: 1
+                googleId: 1,
+                createdAt: 1,
+                updatedAt: 1
             }
         )
         .skip((size * page) - size) // Trong page đầu tiên sẽ bỏ qua giá trị là 0

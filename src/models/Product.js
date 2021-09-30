@@ -27,6 +27,8 @@ const ProductShema = new Schema({
     timestamps: true,
 });
 
+ProductShema.index({name: 'text', 'longDescription.data' : 'text'})
+
 const Product = mongoose.model('Product', ProductShema, 'product');
 
 module.exports = {

@@ -16,7 +16,7 @@ const Order = require('../../controllers/client/Order');
 
 const CheckExistsUserName = require('../../controllers/client/CheckExistsAccount');
 const UpdateInformation = require('../../controllers/client/UpdateInformation');
-const AdministrativeUnits = require('../../controllers/client/AdministrativeUnits');
+const AdministrativeUnits = require('../../controllers/AdministrativeUnits');
 const CustomerAddress = require('../../controllers/client/CustomerAddress');
 const EstimateShippingFee = require('../../controllers/shipping-partner/ahamove/estimate-fee');
 

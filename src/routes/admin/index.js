@@ -11,7 +11,7 @@ const ProductGallery = require('../../controllers/admin/ProductGallery');
 const Product = require('../../controllers/admin/Product');
 const Post = require('../../controllers/admin/Post');
 const Identification = require('../../controllers/admin/Identification');
-const AdministrativeUnits = require('../../controllers/client/AdministrativeUnits');
+const AdministrativeUnits = require('../../controllers/AdministrativeUnits');
 const Order = require('../../controllers/admin/Order');
 
 router.post("/login", Auth.login);
@@ -42,6 +42,7 @@ router.put('/banner-gallery/update', BannerGallery.update);
 router.post('/banner-gallery/remove', BannerGallery.remove);
 
 router.get('/product', Product.getAll);
+router.get('/product/search', Product.searching);
 router.post('/product/insert', Product.insert);
 router.put('/product/update', Product.update);
 router.post('/product/remove', Product.remove);

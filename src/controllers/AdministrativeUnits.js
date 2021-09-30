@@ -1,4 +1,4 @@
-const VnAdminUnits = require('../../models/VnAdministrativeUnits');
+const VnAdminUnits = require('../models/VnAdministrativeUnits');
 
 async function province(req, res){
     let queryParams = req.query;

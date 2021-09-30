@@ -14,6 +14,7 @@ async function getAll(req, res){
     const status = query.status;
     const createdBy = query.createdBy;
     const orderCode = query.orderCode;
+    const phoneNumber = query.phoneNumber;
 
     const date = new Date();
     const fromDate = (new Date(parseInt(query.fromDate))).getTime() > 0 ? new Date(parseInt(query.fromDate)) : new Date(date.getFullYear(), date.getMonth(), 1);
@@ -35,12 +36,14 @@ async function getAll(req, res){
                     $lt: toDate
                 }
             }
+            const phoneNumberCondition = !phoneNumber ? {} : { 'deliverTo.phoneNumber': phoneNumber };
 
             const condition = {
                 ...statusCondition,
                 ...createdByCondition,
                 ...orderCodeCondition,
-                ...createdAtCondition
+                ...createdAtCondition,
+                ...phoneNumberCondition
             }
             const countTotalOrders = await Order.model.Order.countDocuments(condition);
             const filterPageOders = await Order.model.Order.find(
@@ -261,8 +264,10 @@ async function createOrder(req, res){
     const formData = req.body;
     const decoded = req.jwtDecoded.data;
     const products = formData.products;
+    const deliverTo = formData.deliverTo;
     try {
         if(
+            !deliverTo ||
             (Object.keys(formData).length === 0 &&
             formData.constructor === Object) ||
             !products ||
@@ -270,7 +275,6 @@ async function createOrder(req, res){
         ){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
-            //pending here
             let accountId = await matchAdminAccount.getAccountId(decoded);
             console.log(accountId);
             if(!accountId){
@@ -294,7 +298,7 @@ async function createOrder(req, res){
                     status: 'confirmed',
                     code: orderCode,
                     accountId: accountId._id,
-                    deliverTo: formData.deliverTo,
+                    deliverTo: deliverTo,
                     products: [],
                     totalValue: 0,
                     createdBy: 'admin',
@@ -323,6 +327,8 @@ async function createOrder(req, res){
                 const order = new Order.model.Order(orderObj);
                 await order.save();
                 return res.status(200).json(order);
+
+                //Pending here
             }
         }
     } catch (error) {
