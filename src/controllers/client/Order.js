@@ -87,54 +87,97 @@ async function getDetail(req, res){
 }
 
 async function insert(req, res){
-    let formData = req.body;
+    const formData = req.body;
+    const products = formData.products;
     try {
         let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
         if(!accountId._id){
             return res.status(400).json({message: 'Account not found'});
         }else{
-            if(!formData.products || !formData.products.length>0){
+            if(!products || !products.length>0){
                 return res.status(400).json({message: 'Missing parameter'});
             }else{
-                let orderCode = ''
-                let nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
-                if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
-                    orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
+
+                let checkProductsAvailable = await productService.checkProductsAvailable(products);
+                if(checkProductsAvailable.status === -1){
+                    //Lỗi những id này không tìm thấy
+                    
+                    if(!checkProductsAvailable.idsNotFound){
+                        console.log('Đã có lỗi xảy ra');
+                        return res.status(400).json({message: 'Missing ID parameter'});
+                    }else{
+                        console.log('Danh sách id không thấy document');
+                        console.log(checkProductsAvailable.idsNotFound);
+                        return res.status(404).json(
+                            {
+                                message: 'Missing parameter',
+                                data: checkProductsAvailable.idsNotFound
+                            }
+                        );
+                    }
                 }else{
-                    for(let i=0; i<=5; i++){
-                        if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
-                            nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
-                            orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
-                            break;
+                    let notAvailable = checkProductsAvailable.theProductIsNotAvailable;
+                    
+                    //Những sản phẩm không còn đủ
+                    if(notAvailable.length>0){
+                        console.log('Những sản phẩm không còn đủ');
+                        console.log(notAvailable);
+                        return res.status(404).json(
+                            {
+                                message: 'Out of stock',
+                                data: notAvailable
+                            }
+                        );
+                    }else{
+                        console.log('Tất cả sản phẩm đều có sẵn');
+
+                        //Chạy tiếp hàm trừ số lượng của sản phẩm
+                        let reduceProductTheRemainingAmount = await productService.reduceProductTheRemainingAmount(products);
+
+                        if(reduceProductTheRemainingAmount.status === -1){
+                            return res.status(404).json(
+                                {
+                                    message: 'Out of stock',
+                                    data: notAvailable
+                                }
+                            );
+                        }else{
+                            let totalValue = reduceProductTheRemainingAmount.totalValue;
+                            let productsHaveBeenChanged = reduceProductTheRemainingAmount.productsHaveBeenChanged;
+
+                            //Tạo mã đơn hàng
+                            let orderCode = '';
+                            let nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
+                            if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
+                                orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
+                            }else{
+                                for(let i=0; i<=5; i++){
+                                    if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
+                                        nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
+                                        orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            //Tạo Object để chuẩn bị ghi vào CSDL
+                            let orderObj = {
+                                code: orderCode,
+                                accountId: accountId._id,
+                                deliverTo: formData.deliverTo,
+                                products,
+                                totalValue,
+                                createdBy: 'customer'
+                            }
+                            
+                            const order = new Order.model.Order(orderObj);
+                            await order.save();
+                            productsHaveBeenChanged.forEach(product=>req.io.emit('product-quantity', product));
+                            
+                            return res.status(200).json(order);
                         }
                     }
                 }
-
-                let products = formData.products;
-    
-                let orderObj = {
-                    code: orderCode,
-                    accountId: accountId._id,
-                    deliverTo: formData.deliverTo,
-                    products: [],
-                    totalValue: 0,
-                    createdBy: 'customer'
-                }
-                for(let i=0; i<products.length; i++){
-                    let price = await productService.getProductPrice(products[i]._id, products[i].quantity);
-                    if(price >= 0){
-                        orderObj.totalValue += (products[i].quantity*price);
-                    }else{
-                        return res.status(400).json({message: 'Missing parameter'});
-                    }
-                    orderObj.products.push({
-                        productId: products[i]._id,
-                        quantity: products[i].quantity
-                    })
-                }
-                const order = new Order.model.Order(orderObj);
-                await order.save();
-                return res.status(200).json(order);
             }
         }
     } catch (error) {

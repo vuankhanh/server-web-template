@@ -15,19 +15,19 @@ const ProductShema = new Schema({
     currencyUnit: { type: String, required: true },
     unit: { type: String, required: true },
     thumbnailUrl: { type: String, required: true },
-    albumBanner: { type: BannerGallery, required: false },
+    albumBanner: { type: BannerGallery.scheme.BannerGalleryShema, required: false },
     sortDescription: { type: String, required: true },
     highlight: { type: Boolean, required: true },
-    theRemainingAmount: { type: Number, required: true },
-    longDescription: { type: DetailedArticle, required: true },
-    supplier: { type: Supplier, required: false },
-    albumImg: { type: ProductGallerySchema, required: false },
-    albumVideo: { type: ProductGallerySchema, required: false }
+    theRemainingAmount: { type: Number, min: 0, required: true },
+    longDescription: { type: DetailedArticle.scheme.DetailedArticleSchema, required: true },
+    supplier: { type: Supplier.schema.SupplierSchema, required: false },
+    albumImg: { type: ProductGallerySchema.scheme.ProductGalleryShema, required: false },
+    albumVideo: { type: ProductGallerySchema.scheme.ProductGalleryShema, required: false }
 },{
     timestamps: true,
 });
 
-ProductShema.index({name: 'text', 'longDescription.data' : 'text'})
+ProductShema.index({name: 'text', 'longDescription.data' : 'text'});
 
 const Product = mongoose.model('Product', ProductShema, 'product');
 

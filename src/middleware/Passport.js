@@ -32,7 +32,7 @@ module.exports = passport => {
                         await newAuthentication.save();
                         return done(null, newAuthentication);
                     }else{
-                        if(!authenticationResult.allowFacebook || authenticationResult.facebookId){
+                        if(!authenticationResult.allowFacebook || !authenticationResult.facebookId){
                             const authenticationResult = await ClientAuthentication.findOneAndUpdate(
                                 { email: object.email },
                                 {
@@ -86,12 +86,12 @@ module.exports = passport => {
                         await newAuthentication.save();
                         return done(null, newAuthentication);
                     }else{
-                        if(!authenticationResult.allowGoogle || authenticationResult.googleId){
+                        if(!authenticationResult.allowGoogle || !authenticationResult.googleId){
                             const authenticationResult = await ClientAuthentication.findOneAndUpdate(
                                 { email: object.email },
                                 {
                                     $set: {
-                                        'googleId': object.facebookId,
+                                        'googleId': object.googleId,
                                         'allowGoogle': true
                                     }
                                 },

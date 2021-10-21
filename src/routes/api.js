@@ -9,9 +9,15 @@ const clientRoutes = require('../routes/client');
  * Init all APIs on your application
  * @param {*} app from express
  */
-let initRoutes = (app) => {
+let initRoutes = (app, io) => {
     app.use('/gallery', express.static(localPathConfig.gallery));
     app.use('/icon', express.static(localPathConfig.icon));
+
+    app.use(function(req,res,next){
+        req.io = io;
+        next();
+    });
+
     app.use('/admin', adminRoutes);
     app.use('/client', clientRoutes);
 

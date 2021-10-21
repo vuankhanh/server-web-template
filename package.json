@@ -19,8 +19,7 @@
   },
   "homepage": "https://github.com/vuankhanh/server-web-template#readme",
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.1.16",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "bcrypt": "^5.0.1",
     "config": "^3.3.6",
     "cors": "^2.8.5",
@@ -38,6 +37,7 @@
     "passport-google-oauth-token": "^1.0.2",
     "passport-jwt": "^4.0.0",
     "sharp": "^0.28.3",
+    "socket.io": "^4.2.0",
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
