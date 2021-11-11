@@ -115,7 +115,28 @@ async function reduceProductTheRemainingAmount(products){
     }
 }
 
+async function getTheRemainingAmoutFollowIds(ids){
+    try {
+        let condition = { _id: { $in: ids } };
+        let productResult = await Product.model.Product.find(
+            condition,
+            { theRemainingAmount: 1 }
+        );
+        return {
+            status: 1,
+            data: productResult
+        }
+    } catch (error) {
+        return {
+            status: -1,
+            data: []
+        }
+    }
+    
+}
+
 module.exports = {
     checkProductsAvailable,
     reduceProductTheRemainingAmount,
+    getTheRemainingAmoutFollowIds
 }

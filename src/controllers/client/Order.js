@@ -87,7 +87,9 @@ async function getDetail(req, res){
 }
 
 async function insert(req, res){
+    const userInfo = req.jwtDecoded.data;
     const formData = req.body;
+
     const products = formData.products;
     try {
         let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
@@ -172,7 +174,14 @@ async function insert(req, res){
                             
                             const order = new Order.model.Order(orderObj);
                             await order.save();
-                            productsHaveBeenChanged.forEach(product=>req.io.emit('product-quantity', product));
+                            
+                            productsHaveBeenChanged.forEach(product=>{
+                                let socketData = {
+                                    email: userInfo.email,
+                                    product
+                                }
+                                req.io.emit('product-quantity', socketData);
+                            });
                             
                             return res.status(200).json(order);
                         }

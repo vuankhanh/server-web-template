@@ -1,36 +1,24 @@
-const mongoose = require("mongoose");
-const config = require('config');
-const dbConfig = config.get('BackEnd');
-const { db: { domain, port, name } } = dbConfig;
-const ClientAuthentication = require('./src/models/ClientAuthentication');
-
-async function connect(){
-    try {
-        await mongoose.connect(`mongodb://${domain}:${port}/${name}`, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false,
-            useCreateIndex: true
-        });
-        console.log("Connect Mongodb successfully!!!");
-        const result = await ClientAuthentication.findOne(
-            {
-                $or: [
-                    {
-                        email: 'vuankhan071992@gmail.com'
-                    },
-                    {
-                        'account.userName': 'vuankhanh'
-                    }
-                ]
-            }
-        );
-        console.log(result);
-    } catch (error) {
-        console.log("Connect Mongodb failure!!!");
+function randomChars(length){
+    // var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var randomChars = 'ABC';
+    var result = '';
+    for ( var i = 0; i < length; i++ ) {
+        result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
     }
+    return result;
 }
 
-connect()
+async function generateCode(){
+    
+    let randomChar;
 
+    while(randomChar != 'C'){
+        randomChar = randomChars(1);
+        console.log(randomChar);
+    }
 
+    // console.log(randomChar)
+
+}
+
+generateCode();

@@ -4,6 +4,7 @@ const localPathConfig = require('../config/local-path');
 
 const adminRoutes = require("../routes/admin");
 const clientRoutes = require('../routes/client');
+const redirect = require('../routes/redirect');
 
 /**
  * Init all APIs on your application
@@ -20,6 +21,7 @@ let initRoutes = (app, io) => {
 
     app.use('/admin', adminRoutes);
     app.use('/client', clientRoutes);
+    app.use('/redirect', redirect);
 
     return app.use("/", router);
 }

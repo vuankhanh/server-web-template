@@ -11,6 +11,7 @@ const ProductGallery = require('../../controllers/admin/ProductGallery');
 const Product = require('../../controllers/admin/Product');
 const Post = require('../../controllers/admin/Post');
 const Identification = require('../../controllers/admin/Identification');
+const Redirect = require('../../controllers/admin/Redirect');
 const AdministrativeUnits = require('../../controllers/AdministrativeUnits');
 const Order = require('../../controllers/admin/Order');
 
@@ -58,6 +59,8 @@ router.put('/identification/logo/update', Identification.updateLogo);
 router.put('/identification/phone-number/update', Identification.updatePhoneNumber);
 router.put('/identification/social-networking/update', Identification.updateSocialNetwork);
 router.put('/identification/address/update', Identification.updateAddress);
+
+router.post('/redirect/insert', Redirect.insert);
 
 router.get("/administrative-units", AdministrativeUnits.province);
 router.get("/administrative-units/:provinceCode/district", AdministrativeUnits.district);

@@ -47,9 +47,6 @@ async function estimateFee(req, res){
                 return res.status(404).json({message: 'Tham số có chứa ID không đúng'});
             }else{
                 let totalPrice = summationPrice(priceOfProducts);
-                console.log(userInfo);
-                console.log(addressId);
-                console.log(totalPrice);
                 EstimateFee.calculator(res, userInfo, addressId, totalPrice);
             }
         }
