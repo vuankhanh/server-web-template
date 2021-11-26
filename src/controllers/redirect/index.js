@@ -9,7 +9,6 @@ async function redirectSite(req, res){
         }else{
             let condition = { strings: urlCode };
             let result = await Redirect.model.Redirect.findOne(condition);
-            console.log(result);
             return res.redirect(result.url);
         }
     } catch (error) {

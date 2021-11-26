@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ProductGallerySchema = require('./ProductGallery');
+const ProductGalleryVideo = require('./ProductGalleryVideo');
 const BannerGallery = require('./BannerGallery');
 const ProductCategory = require('./ProductCategory');
 const Supplier = require('./Supplier');
@@ -22,7 +23,7 @@ const ProductShema = new Schema({
     longDescription: { type: DetailedArticle.scheme.DetailedArticleSchema, required: true },
     supplier: { type: Supplier.schema.SupplierSchema, required: false },
     albumImg: { type: ProductGallerySchema.scheme.ProductGalleryShema, required: false },
-    albumVideo: { type: ProductGallerySchema.scheme.ProductGalleryShema, required: false }
+    albumVideo: { type: ProductGalleryVideo.scheme.ProductGalleryVideoShema, required: false }
 },{
     timestamps: true,
 });

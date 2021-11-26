@@ -61,7 +61,12 @@ async function insert(req, res){
     const formData = req.body;
     formData.code = "abc";
     try {
-        const product = new Product.model.Product(formData);
+        const medias = formData.albumImg.media;
+        const index = medias.findIndex(media=>media.isMain);
+        let mediaMain = index >=0 ? medias[index] : medias[0];
+
+        const object = {...formData, thumbnailUrl: mediaMain.srcThumbnail };
+        const product = new Product.model.Product(object);
         await product.save();
         return res.status(200).json(product);
     } catch (error) {
@@ -80,6 +85,10 @@ async function update(req, res){
     const formData = req.body;
     try {
         if(formData){
+            const medias = formData.albumImg.media;
+            const index = medias.findIndex(media=>media.isMain);
+            let mediaMain = index >=0 ? medias[index] : medias[0];
+
             const result = await Product.model.Product.findByIdAndUpdate(
                 { _id: formData._id },
                 {
@@ -89,7 +98,7 @@ async function update(req, res){
                         'price': formData.price,
                         'currencyUnit': formData.currencyUnit,
                         'unit': formData.unit,
-                        'thumbnailUrl': formData.albumImg.thumbnail,
+                        'thumbnailUrl': mediaMain.srcThumbnail,
                         'sortDescription': formData.sortDescription,
                         'highlight': formData.highlight,
                         'albumBanner': formData.albumBanner,

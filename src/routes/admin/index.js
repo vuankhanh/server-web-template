@@ -8,6 +8,7 @@ const UserManagement = require('../../controllers/admin/UserManagement');
 const ProductCategory = require('../../controllers/admin/ProductCategory');
 const BannerGallery = require('../../controllers/admin/BannerGallery');
 const ProductGallery = require('../../controllers/admin/ProductGallery');
+const ProductGalleryVideo = require('../../controllers/admin/ProductGalleryVideo');
 const Product = require('../../controllers/admin/Product');
 const Post = require('../../controllers/admin/Post');
 const Identification = require('../../controllers/admin/Identification');
@@ -36,6 +37,11 @@ router.get('/product-gallery', ProductGallery.getAll);
 router.post('/product-gallery/insert', ProductGallery.insert);
 router.put('/product-gallery/update', ProductGallery.update);
 router.post('/product-gallery/remove', ProductGallery.remove);
+
+router.get('/product-gallery-video', ProductGalleryVideo.getAll);
+router.post('/product-gallery-video/insert', ProductGalleryVideo.insert);
+router.put('/product-gallery-video/update', ProductGalleryVideo.update);
+router.put('/product-gallery-video/remove', ProductGalleryVideo.remove);
 
 router.get('/banner-gallery', BannerGallery.getAll);
 router.post('/banner-gallery/insert', BannerGallery.insert);
