@@ -23,7 +23,7 @@ app.use(cors());
 //Áp dụng mildleware cho 
 applyPassportStrategy(passport);
 
-const server = app.listen(3000, '0.0.0.0', () => {
+const server = app.listen(3000, 'localhost', () => {
     console.log('Server is running at localhost: 3000');
 });
 
