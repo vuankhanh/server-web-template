@@ -29,7 +29,11 @@ const server = app.listen(3000, 'localhost', () => {
 
 // Socket setup
 const io = socket(server, {
-    path: '/ws/'
+    path: '/ws/',
+    cors: {
+        origin: '*',
+        credentials:true
+    }
 });
 connectSocket(io);
 
