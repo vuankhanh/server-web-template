@@ -11,6 +11,7 @@ const DetailedArticle = require('./DetailedArticle');
 const ProductShema = new Schema({
     code: { type: String, required: true },
     name: { type: String, required: true },
+    route: { type: String, required: true, unique: true },
     category: { type: ProductCategory.scheme, required: true },
     price: { type: Number, required: true },
     currencyUnit: { type: String, required: true },

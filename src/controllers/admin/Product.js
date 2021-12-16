@@ -1,4 +1,5 @@
 const Product = require('../../models/Product');
+const convertVieService = require('../../services/convert-Vie');
 
 async function getAll(req, res){
     let size = parseInt(req.query.size) || 10;
@@ -61,6 +62,8 @@ async function insert(req, res){
     const formData = req.body;
     formData.code = "abc";
     try {
+        formData.route = convertVieService(formData.name);
+
         const medias = formData.albumImg.media;
         const index = medias.findIndex(media=>media.isMain);
         let mediaMain = index >=0 ? medias[index] : medias[0];
@@ -85,6 +88,8 @@ async function update(req, res){
     const formData = req.body;
     try {
         if(formData){
+            formData.route = convertVieService(formData.name);
+
             const medias = formData.albumImg.media;
             const index = medias.findIndex(media=>media.isMain);
             let mediaMain = index >=0 ? medias[index] : medias[0];
@@ -94,6 +99,7 @@ async function update(req, res){
                 {
                     $set:{
                         'name': formData.name,
+                        'route': formData.route,
                         'category': formData.category,
                         'price': formData.price,
                         'currencyUnit': formData.currencyUnit,

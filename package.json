@@ -5,6 +5,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "SET NODE_ENV=development&&nodemon main",
+    "start-linux": "export NODE_ENV=development&&nodemon main",
     "deploy": "export NODE_ENV=production&&node src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

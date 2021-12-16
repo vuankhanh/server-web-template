@@ -25,6 +25,7 @@ async function getAll(req, res){
                 {
                     category: 1,
                     name: 1,
+                    route: 1,
                     code: 1,
                     sortDescription: 1,
                     thumbnailUrl: 1,
@@ -56,16 +57,17 @@ async function getAll(req, res){
 };
 
 async function getDetail(req, res){
-    let id = req.params._id;
+    let route = req.params.route;
     try {
-        if(id){
-            let result = await Product.model.Product.findOne({_id: id});
+        if(route){
+            let result = await Product.model.Product.findOne({route});
             return res.status(200).json(result);
         }else{
             console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: 'Something went wrong' });
     }
 };

@@ -39,7 +39,7 @@ router.post('/forgot-password/new-password', ForgotPassword.createNewPassword);
 router.get("/product-category", ProductCategory);
 router.get("/product-hightlight", Product.getProductHightlight);
 router.get("/product", Product.getAll);
-router.get("/product/:_id", Product.getDetail);
+router.get("/product/:route", Product.getDetail);
 
 router.post('/cart/total-bill', Cart.totalBill);
 
