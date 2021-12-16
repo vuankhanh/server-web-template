@@ -28,7 +28,9 @@ const server = app.listen(3000, 'localhost', () => {
 });
 
 // Socket setup
-const io = socket(server);
+const io = socket(server, {
+    path: '/ws/'
+});
 connectSocket(io);
 
 // Khởi tạo các routes cho ứng dụng
