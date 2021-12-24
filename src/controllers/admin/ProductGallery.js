@@ -64,7 +64,7 @@ async function insert(req, res){
                 return res.status(200).json(productCategory);
             }
         }else{
-            return res.status(400).json({message: 'Missing parameter'})
+            return res.status(400).json({message: 'Missing parameter'});
         }
         
     } catch (error) {
