@@ -52,7 +52,6 @@ let login = async (req, res) => {
             return res.status(403).json({message: 'Sai tên đăng nhập hoặc mật khẩu'});
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json(error);
     }
 }

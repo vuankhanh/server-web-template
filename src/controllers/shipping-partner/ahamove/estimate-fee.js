@@ -56,7 +56,6 @@ async function calculator(res, userInfo, addressId, totalValue){
             }
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -118,7 +117,6 @@ async function callAhamoveApi(path){
                 data: error.response.data,
             };
         }else{
-            console.log(error);
             if(error.errno === -4039){
                 return {
                     code: 408,

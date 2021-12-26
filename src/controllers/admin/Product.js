@@ -18,7 +18,6 @@ async function getAll(req, res){
         });
         
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -53,7 +52,6 @@ async function searching(req, res){
             return res.status(200).json(filterPage);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -73,7 +71,6 @@ async function insert(req, res){
         await product.save();
         return res.status(200).json(product);
     } catch (error) {
-        console.log(error);
         if(error.code===11000){
             if(error.keyPattern){
                 return res.status(409).json({ key: error.keyPattern, message: 'Insert product category failed' });
@@ -118,11 +115,9 @@ async function update(req, res){
             );
             return res.status(200).json(result);
         }else{
-            console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         if(error.code===11000){
             if(error.keyPattern){
                 return res.status(409).json({ key: error.keyPattern, message: 'Insert product category failed' });
@@ -140,14 +135,11 @@ async function remove(req, res){
             const result = await Product.model.Product.findOneAndRemove(
                 {_id: formData._id}
             );
-            console.log(result);
             return res.status(200).json(result);
         }else{
-            console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

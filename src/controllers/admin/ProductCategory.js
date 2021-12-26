@@ -5,7 +5,6 @@ async function getAll(req, res){
         let productCategorys = await ProductCategory.model.ProductCategory.find({});
         res.status(200).json(productCategorys);
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }   
@@ -43,11 +42,9 @@ async function update(req, res){
             );
             return res.status(200).json(result);
         }else{
-            console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         if(error.code===11000){
             if(error.keyPattern){
                 return res.status(409).json({ key: error.keyPattern, message: 'Insert product category failed' });
@@ -65,14 +62,11 @@ async function remove(req, res){
             const result = await ProductCategory.model.ProductCategory.findOneAndRemove(
                 {_id: formData._id}
             );
-            console.log(result);
             return res.status(200).json(result);
         }else{
-            console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

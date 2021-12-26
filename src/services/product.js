@@ -12,7 +12,6 @@ async function checkProductsAvailable(products){
                 }
                 return true;
             });
-            // console.log(filteredResult);
             return { status: -1 };
         }else{
             let condition = { _id: { $in: ids } };
@@ -47,7 +46,6 @@ async function checkProductsAvailable(products){
             }
         }
     } catch (error) {
-        console.log(error);
         return { status: -1 };
     }
 }

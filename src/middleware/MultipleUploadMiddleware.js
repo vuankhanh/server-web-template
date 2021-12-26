@@ -32,7 +32,6 @@ let storage = multer.diskStorage({
     filename: (req, file, callback) => {
         // ở đây các bạn có thể làm bất kỳ điều gì với cái file nhé.
         // Mình ví dụ chỉ cho phép tải lên các loại ảnh png & jpg
-        // console.log(file);
         let query = req.query;
         let math = ["image/png", "image/jpeg"];
         if (math.indexOf(file.mimetype) === -1) {

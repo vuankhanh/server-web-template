@@ -70,7 +70,6 @@ async function getAll(req, res){
             });
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -93,7 +92,6 @@ async function getDetail(req, res){
             return res.status(200).json(populate);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -133,7 +131,6 @@ async function revokeOrder(req, res){
             return res.status(200).json(populate);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -170,7 +167,6 @@ async function confirmOrder(req, res){
             return res.status(200).json(populate);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -219,7 +215,6 @@ async function isComing(req, res){
             return res.status(200).json(populate);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -255,7 +250,6 @@ async function finish(req, res){
             return res.status(200).json(populate);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -276,7 +270,6 @@ async function createOrder(req, res){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
             let accountId = await matchAdminAccount.getAccountId(decoded);
-            console.log(accountId);
             if(!accountId){
                 return res.status(400).json({message: 'Account not found'});
             }else{
@@ -332,7 +325,6 @@ async function createOrder(req, res){
             }
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

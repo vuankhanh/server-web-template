@@ -48,7 +48,6 @@ async function getAll(req, res){
             });
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -81,7 +80,6 @@ async function getDetail(req, res){
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -105,11 +103,8 @@ async function insert(req, res){
                     //Lỗi những id này không tìm thấy
                     
                     if(!checkProductsAvailable.idsNotFound){
-                        console.log('Đã có lỗi xảy ra');
                         return res.status(400).json({message: 'Missing ID parameter'});
                     }else{
-                        console.log('Danh sách id không thấy document');
-                        console.log(checkProductsAvailable.idsNotFound);
                         return res.status(404).json(
                             {
                                 message: 'Missing parameter',
@@ -122,8 +117,6 @@ async function insert(req, res){
                     
                     //Những sản phẩm không còn đủ
                     if(notAvailable.length>0){
-                        console.log('Những sản phẩm không còn đủ');
-                        console.log(notAvailable);
                         return res.status(404).json(
                             {
                                 message: 'Out of stock',
@@ -131,8 +124,6 @@ async function insert(req, res){
                             }
                         );
                     }else{
-                        console.log('Tất cả sản phẩm đều có sẵn');
-
                         //Chạy tiếp hàm trừ số lượng của sản phẩm
                         let reduceProductTheRemainingAmount = await productService.reduceProductTheRemainingAmount(products);
 
@@ -190,7 +181,6 @@ async function insert(req, res){
             }
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -229,7 +219,6 @@ async function revoke(req, res){
             }
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

@@ -11,7 +11,6 @@ async function getAll(req, res){
         const bannerGallerys = await BannerGallery.model.BannerGallery.find({});
         return res.status(200).json(bannerGallerys);
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
@@ -59,7 +58,6 @@ async function insert(req, res){
         }
         
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
@@ -139,7 +137,6 @@ async function remove(req, res){
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

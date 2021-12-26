@@ -37,7 +37,6 @@ async function insert(req, res){
         }
         
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -60,11 +59,9 @@ async function update(req, res){
             );
             return res.status(200).json(result);
         }else{
-            console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -76,14 +73,11 @@ async function remove(req, res){
             const result = await DetailedArticle.model.DetailedArticle.findOneAndRemove(
                 {_id: formData._id}
             );
-            console.log(result);
             return res.status(200).json(result);
         }else{
-            console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

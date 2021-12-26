@@ -48,7 +48,6 @@ async function getAll(req, res){
                 data: filterPage
             });
         }else{
-            console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
@@ -63,11 +62,9 @@ async function getDetail(req, res){
             let result = await Product.model.Product.findOne({route});
             return res.status(200).json(result);
         }else{
-            console.log('Bad request');
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: 'Something went wrong' });
     }
 };

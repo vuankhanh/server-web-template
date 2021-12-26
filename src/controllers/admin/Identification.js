@@ -40,7 +40,6 @@ async function insertLogo(req, res){
             return res.status(200).json(identification);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -75,7 +74,6 @@ async function updateLogo(req, res){
             return res.status(200).json(identification);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -98,14 +96,12 @@ async function updatePhoneNumber(req, res){
             return res.status(200).json(identification);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
 
 async function updateSocialNetwork(req, res){
     const formData = req.body;
-    console.log(formData);
     try {
         if(!formData.socialNetwork){
             return res.status(400).json({message: 'Missing parameter'});
@@ -122,7 +118,6 @@ async function updateSocialNetwork(req, res){
             return res.status(200).json(identification);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -145,7 +140,6 @@ async function updateAddress(req, res){
             return res.status(200).json(identification);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

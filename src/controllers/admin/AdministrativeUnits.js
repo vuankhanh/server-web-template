@@ -10,7 +10,6 @@ async function province(req, res){
             return res.status(403).json({ message: "Not found province parameter" });
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -27,7 +26,6 @@ async function district(req, res){
             return res.status(403).json({ message: "Not found "+ " " });
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -44,7 +42,6 @@ async function ward(req, res){
             return res.status(403).json({ message: "Not found "+ " " });
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

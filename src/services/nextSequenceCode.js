@@ -18,7 +18,6 @@ async function getNextSequence(codeType){
             return error
         }
     }else{
-        console.log("Null");
         return null;
     }
 }

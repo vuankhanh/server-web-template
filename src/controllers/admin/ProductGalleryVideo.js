@@ -20,7 +20,6 @@ async function getAll(req, res){
         })
         
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
@@ -59,7 +58,6 @@ async function insert(req, res){
             return res.status(200).json(productGalleryVideoResult);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -105,7 +103,6 @@ async function update(req, res){
             return res.status(200).json(productGalleryVideoResult);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -121,7 +118,6 @@ async function remove(req, res){
             return res.status(200).json(productGalleryVideoResult);
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

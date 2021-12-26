@@ -14,11 +14,7 @@ async function generateCode(){
 
     while(randomChar != 'C'){
         randomChar = randomChars(1);
-        console.log(randomChar);
     }
-
-    // console.log(randomChar)
-
 }
 
 generateCode();

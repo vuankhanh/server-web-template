@@ -26,7 +26,6 @@ async function verificationEmail(clientInfo){
             }
         }
     } catch (error) {
-        console.log(error);
         return null;
     }
 }

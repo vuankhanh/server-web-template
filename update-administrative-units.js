@@ -74,32 +74,18 @@ async function converter(){
             }
         }
 
-        // for(let province of provinces){
-        //     let districtList = districts.filter(district=>district.provinceCode === province.code);
-        //     province.districts = districtList;
-        //     for(let district of districts){
-        //         let wardList = wards.filter(ward=>ward.districtCode === district.code);
-        //         district.wards = wardList;
-        //     }
-        // }
-        console.log(provinces.length);
-
-
         try {
             await fse.writeJSON(jsonProvince, provinces);
             await fse.writeJSON(jsonDistrict, districts);
             await fse.writeJSON(jsonWard, wards);
             let provinceMongoose = new VnAdminUnits.Province(provinces);
             let resultProvince = await provinceMongoose.save();
-            console.log(resultProvince);
 
             let districtMongoose = new VnAdminUnits.District(districts);
             let resultDistrict = await districtMongoose.save();
-            console.log(resultDistrict);
 
             let wardMongoose = new VnAdminUnits.Ward(wards);
             let resultWard = await wardMongoose.save();
-            console.log(resultWard);
         } catch (error) {
             console.log(error.errors);
             

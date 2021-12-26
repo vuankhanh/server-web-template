@@ -11,10 +11,6 @@ module.exports = passport => {
             },
             async (accessToken, refreshToken, profile, done)=>{
                 try {
-                    // console.log('accessToken ', accessToken);
-                    // console.log('refreshToken ', refreshToken);
-                    // console.log('profile ', profile);
-
                     let object = {
                         customerCode: 'tuthan-000001',
                         email: profile.emails[0].value,
@@ -50,8 +46,6 @@ module.exports = passport => {
                     }
                     
                 } catch (error) {
-                    console.log('lỗi trong này');
-                    console.log(error);
                     done(error, false)
                 }
             }
@@ -66,9 +60,6 @@ module.exports = passport => {
             },
             async (accessToken, refreshToken, profile, done)=>{
                 try {
-                    // console.log('accessToken ', accessToken);
-                    // console.log('refreshToken ', refreshToken);
-                    // console.log('profile ', profile);
                     let object = {
                         customerCode: 'tuthan-000001',
                         email: profile.emails[0].value,
@@ -104,8 +95,6 @@ module.exports = passport => {
                     }
                     
                 } catch (error) {
-                    console.log('lỗi trong này');
-                    console.log(error);
                     done(error, false)
                 }
             }

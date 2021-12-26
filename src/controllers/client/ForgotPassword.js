@@ -67,7 +67,6 @@ async function checkEmail(req, res){
             }
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
@@ -118,7 +117,6 @@ async function createNewPassword(req, res){
                 }
             }
         } catch (error) {
-            console.log(error);
             return res.status(500).json({ message: 'Something went wrong' });
         }
     }
@@ -161,7 +159,6 @@ async function readHTMLFile(data){
         const template = handlebars.compile(html);
         return template(data);
     } catch (error) {
-        console.log(error);
         return null;
     }
 }

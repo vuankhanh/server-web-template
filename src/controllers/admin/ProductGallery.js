@@ -14,7 +14,6 @@ async function getAll(req, res){
         const productGallerys = await productGalleryDb.get(size, page);
         return res.status(200).json(productGallerys);
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
@@ -88,8 +87,6 @@ async function update(req, res){
             // // Nếu upload thành công, không lỗi thì tất cả các file của bạn sẽ được lưu trong biến req.files
             // debug(req.files);
             // Mình kiểm tra thêm một bước nữa, nếu như không có file nào được gửi lên thì trả về thông báo cho client
-            // console.log(req.files.length);
-            // console.log(req.body.oldMedia);
             if ((req.files.length <= 0) && !req.body.oldMedia) {
                 return res.status(400).json({message: 'Missing parameter'})
             }
@@ -101,7 +98,6 @@ async function update(req, res){
                 media: oldMedia ? oldMedia : []
             }
             let isMain = parseInt(req.body.isMain);
-            console.log(isMain);
 
             for(let [index, file] of req.files.entries()){
                 let absoluteUrlPath = file.path.replace(/\\/g,"/");
@@ -151,7 +147,6 @@ async function remove(req, res){
             return res.status(400).json({message: 'Missing parameter'});
         }
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }
