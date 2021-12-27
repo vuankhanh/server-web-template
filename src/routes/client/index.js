@@ -12,13 +12,14 @@ const ForgotPassword = require('../../controllers/client/ForgotPassword');
 const ProductCategory = require('../../controllers/client/ProductCategory');
 const Product = require('../../controllers/client/Product');
 const Cart = require('../../controllers/client/Cart');
-const Order = require('../../controllers/client/Order');
+const AdministrativeUnits = require('../../controllers/AdministrativeUnits');
+const OrderFromVisitors = require('../../controllers/client/OrderFromVisitors');
 
 const CheckExistsUserName = require('../../controllers/client/CheckExistsAccount');
 const UpdateInformation = require('../../controllers/client/UpdateInformation');
-const AdministrativeUnits = require('../../controllers/AdministrativeUnits');
 const CustomerAddress = require('../../controllers/client/CustomerAddress');
 const EstimateShippingFee = require('../../controllers/shipping-partner/ahamove/estimate-fee');
+const Order = require('../../controllers/client/Order');
 
 router.get("/");
 
@@ -43,6 +44,12 @@ router.get("/product/:route", Product.getDetail);
 
 router.post('/cart/total-bill', Cart.totalBill);
 
+router.get("/administrative-units", AdministrativeUnits.province);
+router.get("/administrative-units/:provinceCode/district", AdministrativeUnits.district);
+router.get("/administrative-units/:districtCode/ward", AdministrativeUnits.ward);
+
+router.post("/order-from-visitors/insert", OrderFromVisitors.insert);
+
 // Sử dụng authMiddleware.isAuth trước những api cần xác thực
 router.use(AuthMiddleWare.isAuth);
 
@@ -51,12 +58,7 @@ router.get("/check", (req, res)=>{
     return res.status(200).json({message: 'success'});
 });
 
-
 router.put("/update-customer", UpdateInformation);
-
-router.get("/administrative-units", AdministrativeUnits.province);
-router.get("/administrative-units/:provinceCode/district", AdministrativeUnits.district);
-router.get("/administrative-units/:districtCode/ward", AdministrativeUnits.ward);
 
 router.get("/customer/address", CustomerAddress.address);
 router.post("/customer/address/insert", CustomerAddress.insert);

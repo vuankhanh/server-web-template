@@ -6,8 +6,8 @@ let enumOrderStatus = orderStatus().map(status=>status.code);
 let enumOrderCreatedBy = orderCreatedBy().map(createdBy=>createdBy.code);
 
 const ProductSchema = new Schema({
-    productId: { type: Schema.Types.ObjectId, ref: 'Product' },
-    quantity: { type: Number, default: 1 }
+    productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
+    quantity: { type: Number, default: 1, required: true }
 });
 
 const activitySchema = new Schema({

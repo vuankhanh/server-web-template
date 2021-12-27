@@ -4,7 +4,6 @@ const matchClientAccount = require('../../services/matchClientAccount');
 const nextSequenceCode = require('../../services/nextSequenceCode');
 const productService = require('../../services/product');
 
-
 async function getAll(req, res){
     try {
         let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
@@ -85,38 +84,44 @@ async function getDetail(req, res){
 }
 
 async function insert(req, res){
-    const userInfo = req.jwtDecoded.data;
     const formData = req.body;
-
     const products = formData.products;
+    const deliverTo = formData.deliverTo;
     try {
-        let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
-        if(!accountId._id){
-            return res.status(400).json({message: 'Account not found'});
+        if(!products || !products.length || !(deliverTo && deliverTo !== 'null' && deliverTo !== 'undefined')){
+            return res.status(400).json({message: 'Missing parameter'});
         }else{
-            if(!products || !products.length>0){
-                return res.status(400).json({message: 'Missing parameter'});
-            }else{
 
-                let checkProductsAvailable = await productService.checkProductsAvailable(products);
-                if(checkProductsAvailable.status === -1){
-                    //Lỗi những id này không tìm thấy
-                    
-                    if(!checkProductsAvailable.idsNotFound){
-                        return res.status(400).json({message: 'Missing ID parameter'});
-                    }else{
-                        return res.status(404).json(
-                            {
-                                message: 'Missing parameter',
-                                data: checkProductsAvailable.idsNotFound
-                            }
-                        );
-                    }
+            let checkProductsAvailable = await productService.checkProductsAvailable(products);
+            if(checkProductsAvailable.status === -1){
+                //Lỗi những id này không tìm thấy
+                
+                if(!checkProductsAvailable.idsNotFound){
+                    return res.status(400).json({message: 'Missing ID parameter'});
                 }else{
-                    let notAvailable = checkProductsAvailable.theProductIsNotAvailable;
-                    
-                    //Những sản phẩm không còn đủ
-                    if(notAvailable.length>0){
+                    return res.status(404).json(
+                        {
+                            message: 'Missing parameter',
+                            data: checkProductsAvailable.idsNotFound
+                        }
+                    );
+                }
+            }else{
+                let notAvailable = checkProductsAvailable.theProductIsNotAvailable;
+                
+                //Những sản phẩm không còn đủ
+                if(notAvailable.length>0){
+                    return res.status(404).json(
+                        {
+                            message: 'Out of stock',
+                            data: notAvailable
+                        }
+                    );
+                }else{
+                    //Chạy tiếp hàm trừ số lượng của sản phẩm
+                    let reduceProductTheRemainingAmount = await productService.reduceProductTheRemainingAmount(products);
+
+                    if(reduceProductTheRemainingAmount.status === -1){
                         return res.status(404).json(
                             {
                                 message: 'Out of stock',
@@ -124,65 +129,52 @@ async function insert(req, res){
                             }
                         );
                     }else{
-                        //Chạy tiếp hàm trừ số lượng của sản phẩm
-                        let reduceProductTheRemainingAmount = await productService.reduceProductTheRemainingAmount(products);
+                        let totalValue = reduceProductTheRemainingAmount.totalValue;
+                        let productsHaveBeenChanged = reduceProductTheRemainingAmount.productsHaveBeenChanged;
 
-                        if(reduceProductTheRemainingAmount.status === -1){
-                            return res.status(404).json(
-                                {
-                                    message: 'Out of stock',
-                                    data: notAvailable
-                                }
-                            );
+                        //Tạo mã đơn hàng
+                        let orderCode = '';
+                        let nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
+                        if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
+                            orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
                         }else{
-                            let totalValue = reduceProductTheRemainingAmount.totalValue;
-                            let productsHaveBeenChanged = reduceProductTheRemainingAmount.productsHaveBeenChanged;
-
-                            //Tạo mã đơn hàng
-                            let orderCode = '';
-                            let nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
-                            if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
-                                orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
-                            }else{
-                                for(let i=0; i<=5; i++){
-                                    if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
-                                        nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
-                                        orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
-                                        break;
-                                    }
+                            for(let i=0; i<=5; i++){
+                                if(nextSequenceOrderCode && nextSequenceOrderCode.orderCode){
+                                    nextSequenceOrderCode = await nextSequenceCode.getNextSequence('orderCode');
+                                    orderCode = nextSequenceCode.padWithZero(nextSequenceOrderCode.orderCode);
+                                    break;
                                 }
                             }
-                            
-                            //Tạo Object để chuẩn bị ghi vào CSDL
-                            let orderObj = {
-                                code: orderCode,
-                                accountId: accountId._id,
-                                deliverTo: formData.deliverTo,
-                                products: [],
-                                totalValue,
-                                createdBy: 'customer'
-                            }
-
-                            for(let i=0; i<products.length; i++){
-                                orderObj.products.push({
-                                    productId: products[i]._id,
-                                    quantity: products[i].quantity
-                                })
-                            }
-                            
-                            const order = new Order.model.Order(orderObj);
-                            await order.save();
-                            
-                            productsHaveBeenChanged.forEach(product=>{
-                                let socketData = {
-                                    email: userInfo.email,
-                                    product
-                                }
-                                req.io.emit('product-quantity', socketData);
-                            });
-                            
-                            return res.status(200).json(order);
                         }
+                        
+                        //Tạo Object để chuẩn bị ghi vào CSDL
+                        let orderObj = {
+                            code: orderCode,
+                            accountId: null,
+                            deliverTo: deliverTo,
+                            products: [],
+                            totalValue,
+                            createdBy: 'customer'
+                        }
+
+                        for(let i=0; i<products.length; i++){
+                            orderObj.products.push({
+                                productId: products[i]._id,
+                                quantity: products[i].quantity
+                            })
+                        }
+                        
+                        const order = new Order.model.Order(orderObj);
+                        await order.save();
+                        
+                        productsHaveBeenChanged.forEach(product=>{
+                            let socketData = {
+                                product
+                            }
+                            req.io.emit('product-quantity', socketData);
+                        });
+                        
+                        return res.status(200).json(order);
                     }
                 }
             }
