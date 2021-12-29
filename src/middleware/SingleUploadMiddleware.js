@@ -20,9 +20,11 @@ let storage = multer.diskStorage({
             case '/admin/banner-gallery/insert':
             case '/admin/banner-gallery/update':
                 galleryFolder = 'banner';
+                break;
             case '/admin/identification/logo/insert':
             case '/admin/identification/logo/update':
                 galleryFolder = 'identification';
+                break;
         }
 
         try {
