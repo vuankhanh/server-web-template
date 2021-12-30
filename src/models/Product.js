@@ -8,14 +8,18 @@ const ProductCategory = require('./ProductCategory');
 const Supplier = require('./Supplier');
 const DetailedArticle = require('./DetailedArticle');
 
-const ProductShema = new Schema({
+const ProductSchema = new Schema({
     code: { type: String, required: true },
     name: { type: String, required: true },
     route: { type: String, required: true, unique: true },
     category: { type: ProductCategory.scheme, required: true },
     price: { type: Number, required: true },
     currencyUnit: { type: String, required: true },
-    unit: { type: String, required: true },
+    unit: { type: {
+        packagingType: { type: String, required: true },
+        weightNumber: { type: Number, required: true },
+        unitOfMassMeasurement: { type: String, required: true },
+    }, required: true },
     thumbnailUrl: { type: String, required: true },
     albumBanner: { type: BannerGallery.scheme.BannerGalleryShema, required: false },
     sortDescription: { type: String, required: true },
@@ -29,13 +33,13 @@ const ProductShema = new Schema({
     timestamps: true,
 });
 
-ProductShema.index({name: 'text', 'longDescription.data' : 'text'});
+ProductSchema.index({name: 'text', 'longDescription.data' : 'text'});
 
-const Product = mongoose.model('Product', ProductShema, 'product');
+const Product = mongoose.model('Product', ProductSchema, 'product');
 
 module.exports = {
     scheme: {
-        ProductShema
+        ProductSchema
     },
     model:{
         Product
