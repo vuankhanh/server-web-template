@@ -34,6 +34,7 @@ router.put('/product-category/update', ProductCategory.update);
 router.post('/product-category/remove', ProductCategory.remove);
 
 router.get('/product-gallery', ProductGallery.getAll);
+router.get('/product-gallery/:id', ProductGallery.getDetail);
 router.post('/product-gallery/insert', ProductGallery.insert);
 router.put('/product-gallery/update', ProductGallery.update);
 router.post('/product-gallery/remove', ProductGallery.remove);

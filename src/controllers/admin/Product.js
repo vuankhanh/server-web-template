@@ -62,11 +62,9 @@ async function insert(req, res){
     try {
         formData.route = convertVieService(formData.name);
 
-        const medias = formData.albumImg.media;
-        const index = medias.findIndex(media=>media.isMain);
-        let mediaMain = index >=0 ? medias[index] : medias[0];
+        const thumbnail = formData.albumImg.thumbnail;
 
-        const object = {...formData, thumbnailUrl: mediaMain.srcThumbnail };
+        const object = {...formData, thumbnailUrl: thumbnail };
         const product = new Product.model.Product(object);
         await product.save();
         return res.status(200).json(product);
@@ -87,9 +85,7 @@ async function update(req, res){
         if(formData){
             formData.route = convertVieService(formData.name);
 
-            const medias = formData.albumImg.media;
-            const index = medias.findIndex(media=>media.isMain);
-            let mediaMain = index >=0 ? medias[index] : medias[0];
+            const thumbnail = formData.albumImg.thumbnail;
 
             const result = await Product.model.Product.findByIdAndUpdate(
                 { _id: formData._id },
@@ -101,7 +97,7 @@ async function update(req, res){
                         'price': formData.price,
                         'currencyUnit': formData.currencyUnit,
                         'unit': formData.unit,
-                        'thumbnailUrl': mediaMain.srcThumbnail,
+                        'thumbnailUrl': thumbnail,
                         'sortDescription': formData.sortDescription,
                         'highlight': formData.highlight,
                         'albumBanner': formData.albumBanner,
@@ -123,6 +119,7 @@ async function update(req, res){
                 return res.status(409).json({ key: error.keyPattern, message: 'Insert product category failed' });
             }
         }else{
+            console.log(error);
             return res.status(500).json({ message: 'Something went wrong' });
         }
     }

@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ProductGalleryShema = new Schema({
-    name: { type: String, required: true, unique: false },
-    productName: { type: String, required: true, unique: false },
+    name: { type: String, required: true, unique: true },
+    route: { type: String, required: true, unique: true },
+    thumbnail: { type: String, required: true },
     media: [
         {
             type: { type: String, required: true },
             src: { type: String, required: true },
-            srcThumbnail: { type: String, required: false, default: null },
+            srcThumbnail: { type: String, required: true },
             isMain: { type: Boolean, required: true, default: false },
         }
     ]

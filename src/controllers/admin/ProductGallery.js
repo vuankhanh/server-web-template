@@ -2,51 +2,82 @@ const localPathConfig = require('../../config/local-path');
 const multipleUploadMiddleware = require("../../middleware/MultipleUploadMiddleware");
 const proccessImage = require('../../services/proccess-image');
 const writeBufferToFile = require('../../services/write-buffer-to-file');
-const productGalleryDb = require('./ProductGalleryDb');
+
+const ProductGallery = require('../../models/ProductGallery');
+
 const convertVie = require('../../services/convert-Vie');
-let debug = console.log.bind(console);
+const imageAlbumService = require('../../services/image-album');
 
 async function getAll(req, res){
     let size = parseInt(req.query.size) || 10;
     let page = parseInt(req.query.page) || 1;
 
     try {
-        const productGallerys = await productGalleryDb.get(size, page);
-        return res.status(200).json(productGallerys);
+        const condition = { };
+        let countTotal = await ProductGallery.model.ProductGallery.countDocuments(condition);
+        let filterPage = await ProductGallery.model.ProductGallery.find(
+            condition,
+            {
+                media: 0
+            }
+        )
+        .skip((size * page) - size) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+        .limit(size);
+        return res.status(200).json({
+            totalItems: countTotal,
+            size: size,
+            page: page,
+            totalPages: Math.ceil(countTotal/size),
+            data: filterPage
+        });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
 
-async function insert(req, res){
+async function getDetail(req, res){
     try {
-        let query = req.query;
-        if(query && query.name){
-            // thực hiện upload
-            await multipleUploadMiddleware(req, res);
-            
-            // // Nếu upload thành công, không lỗi thì tất cả các file của bạn sẽ được lưu trong biến req.files
-            // debug(req.files);
-            // Mình kiểm tra thêm một bước nữa, nếu như không có file nào được gửi lên thì trả về thông báo cho client
+        const params = req.params;
+        if(!params.id){
+            return res.status(400).json({message: 'Missing parameter'})
+        }else{
+            const productGallery = await ProductGallery.model.ProductGallery.findById(params.id);
+            return res.status(200).json(productGallery);
+        }
+    } catch (error) {
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+}
 
-            if (!req.files || (req.files && req.files.length <= 0)) {
+async function insert(req, res){
+    const query = req.query;
+    try {
+        if(!query || !query.name){
+            return res.status(400).json({message: 'Missing parameter'})
+        }else{
+            await multipleUploadMiddleware(req, res);
+    
+            if (!req.files || !req.files.length) {
                 return res.status(400).json({message: 'Missing parameter'})
             }else{
-
                 let objGallery = {
-                    name: convertVie(query.name),
-                    productName: query.name,
+                    name: query.name,
+                    route: convertVie(query.name),
+                    thumbnail: null,
                     media: []
-                }
-                let isMain = parseInt(req.body.isMain);
+                };
+
+                let parseIntIsMain = parseInt(req.body.isMain);
+                let isMain = parseIntIsMain >= 0 ? parseIntIsMain : 0;
     
                 for(let [index, file] of req.files.entries()){
-                    let absoluteUrlPath = file.path.replace(/\\/g,"/");
-    
-                    let buffer = await proccessImage.thumbnail(file.path);
-                    let absoluteUrlThumbnail = writeBufferToFile.thumbnail(file.path, buffer).replace(/\\/g,"/");
-    
-                    let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
+                    let imageAfterResizing = await proccessImage.resize(file.path);
+                        imageAfterResizing = imageAfterResizing.replace(/\\/g,"/");
+                    let buffer = await proccessImage.thumbnail(imageAfterResizing);
+                    let absoluteUrlThumbnail = writeBufferToFile.thumbnail(imageAfterResizing, buffer).replace(/\\/g,"/");
+
+                    let relativeUrlPath = imageAfterResizing.replace(localPathConfig.gallery, '');
                     let relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.gallery, '');
     
                     let objMedia = {
@@ -55,85 +86,143 @@ async function insert(req, res){
                         srcThumbnail: relativeUrlThumbnail,
                         isMain: index === isMain ? true : false
                     }
+
+                    if(index === isMain){
+                        objGallery.thumbnail = relativeUrlThumbnail;
+                    }
+
                     objGallery.media.push(objMedia);
-                }
-    
-                const productCategory = await productGalleryDb.insert(objGallery);
-                // trả về cho người dùng cái thông báo đơn giản.
-                return res.status(200).json(productCategory);
+                };
+                const result = new ProductGallery.model.ProductGallery(objGallery);
+                await result.save();
+
+                return res.status(200).json(result);
             }
-        }else{
-            return res.status(400).json({message: 'Missing parameter'});
         }
-        
     } catch (error) {
-        // Nếu có lỗi thì debug lỗi xem là gì ở đây
-        debug(error);
-        // Bắt luôn lỗi vượt quá số lượng file cho phép tải lên trong 1 lần
         if (error.code === "LIMIT_UNEXPECTED_FILE") {
             return res.status(400).json(`Exceeds the number of files allowed to upload.`);
+        }else if(error.code === 'INVALID_IMAGE_FORMAT'){
+            return res.status(400).json({ message: error.message });
+        }else if(error.code === 'UNSOPPORTED_FILE'){
+            return res.status(501).json({ message: error.message });
+        }else if(error.code===11000){
+            return res.status(409).json(
+                {
+                    message: 'This image album already exists',
+                    field: error.keyPattern
+                }
+            );
+        }else{
+            console.log(error);
+            return res.status(500).json({ message: 'Something went wrong' });
         }
-        return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
 
 async function update(req, res){
+    const query = req.query;
     try {
-        let query = req.query;
-        if(query && query.name && query._id){
-            // thực hiện upload
+        if(!query || !query.name || !query._id){
+            return res.status(400).json({message: 'Missing parameter'});
+        }else{
             await multipleUploadMiddleware(req, res);
-            
-            // // Nếu upload thành công, không lỗi thì tất cả các file của bạn sẽ được lưu trong biến req.files
-            // debug(req.files);
-            // Mình kiểm tra thêm một bước nữa, nếu như không có file nào được gửi lên thì trả về thông báo cho client
-            if ((req.files.length <= 0) && !req.body.oldMedia) {
-                return res.status(400).json({message: 'Missing parameter'})
+
+            let mediaWillBeDeleted = req.body.mediaWillBeDeleted;
+            let objGallery = {
+                name: query.name,
+                route: convertVie(query.name),
+                thumbnail: null,
+                mediaWillBeAdded: [],
+                mediaWillBeDeleted: mediaWillBeDeleted? JSON.parse(mediaWillBeDeleted) : []
             }
 
-            let oldMedia = JSON.parse(req.body.oldMedia);
-            let objGallery = {
-                name: convertVie(query.name),
-                productName: query.name,
-                media: oldMedia ? oldMedia : []
-            }
-            let isMain = parseInt(req.body.isMain);
+            let parseIntIsMain = parseInt(req.body.isMain);
+            let isMain = parseIntIsMain >= 0 ? parseIntIsMain : 0;
 
             for(let [index, file] of req.files.entries()){
-                let absoluteUrlPath = file.path.replace(/\\/g,"/");
+                
+                let imageAfterResizing = await proccessImage.resize(file.path);
+                    imageAfterResizing = imageAfterResizing.replace(/\\/g,"/");
+                let buffer = await proccessImage.thumbnail(imageAfterResizing);
+                let absoluteUrlThumbnail = writeBufferToFile.thumbnail(imageAfterResizing, buffer).replace(/\\/g,"/");
 
-                let buffer = await proccessImage.thumbnail(file.path);
-                let absoluteUrlThumbnail = writeBufferToFile.thumbnail(file.path, buffer).replace(/\\/g,"/");
-
-                let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
+                let relativeUrlPath = imageAfterResizing.replace(localPathConfig.gallery, '');
                 let relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.gallery, '');
 
-                let objWillUpload = {
+                let objMedia = {
                     type: file.mimetype.split('/')[0],
                     src: relativeUrlPath,
                     srcThumbnail: relativeUrlThumbnail,
+                    isMain: index === isMain ? true : false
                 }
-                objGallery.media.push(objWillUpload);
+
+                if(index === isMain){
+                    objGallery.thumbnail = relativeUrlThumbnail;
+                }
+
+                objGallery.mediaWillBeAdded.push(objMedia);
             }
 
-            for(let [index, media] of objGallery.media.entries()){
-                media.isMain = (isMain === index) ? true : false;
-            }
+            const result = await ProductGallery.model.ProductGallery.findByIdAndUpdate(
+                query._id,
+                {
+                    $set:{
+                        'name': objGallery.name,
+                        'route': objGallery.route
+                    },$push:{
+                        'media':{
+                            $each: objGallery.mediaWillBeAdded
+                        }
+                    }
+                },
+                { 'new': true }
+            );
+            
+            if(!result){
+                return res.status(200).json(result);
+            }else{
+                if(!objGallery.mediaWillBeDeleted.length){
+                    const afterRefreshMain = await imageAlbumService.refreshMain(query._id, isMain);
+                    return res.status(200).json(afterRefreshMain);
+                }else{
+                    const pullAllProductGallery = await ProductGallery.model.ProductGallery.findByIdAndUpdate(
+                        query._id,
+                        {
+                            $pullAll: {
+                                'media': objGallery.mediaWillBeDeleted
+                            }
+                        },{ 'new': true }
+                    );
 
-            const productCategory = await productGalleryDb.update(query._id, objGallery);
-            // trả về cho người dùng cái thông báo đơn giản.
-            return res.status(200).json(productCategory);
-        }else{
-            return res.status(400).json({message: 'Missing parameter'})
+                    if(!pullAllProductGallery){
+                        return res.status(200).json(pullAllProductGallery);
+                    }else{
+                        imageAlbumService.removeImage(objGallery.mediaWillBeDeleted);
+                        const afterRefreshMain = await imageAlbumService.refreshMain(query._id, isMain);
+                        return res.status(200).json(afterRefreshMain);
+                    }
+                }
+            }
         }
     } catch (error) {
-        // Nếu có lỗi thì debug lỗi xem là gì ở đây
-        debug(error);
-        // Bắt luôn lỗi vượt quá số lượng file cho phép tải lên trong 1 lần
         if (error.code === "LIMIT_UNEXPECTED_FILE") {
             return res.status(400).json(`Exceeds the number of files allowed to upload.`);
+        }else if(error.code === 'INVALID_IMAGE_FORMAT'){
+            return res.status(400).json({ message: error.message });
+        }else if(error.code === 'UNSOPPORTED_FILE'){
+            return res.status(501).json({ message: error.message });
+        }else if(error.code===11000){
+            return res.status(409).json(
+                {
+                    message: 'This image album already exists',
+                    field: error.keyPattern
+                }
+            );
+        }else{
+            console.log(error);
+            return res.status(500).json({ message: 'Something went wrong' });
         }
-        return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
 
@@ -141,8 +230,10 @@ async function remove(req, res){
     const formData = req.body;
     try {
         if(formData._id){
-            const productCategory = await productGalleryDb.remove(formData._id);
-            return res.status(200).json(productCategory);
+            const result = await ProductGallery.model.ProductGallery.findOneAndRemove(
+                {_id: formData._id}
+            );
+            return res.status(200).json(result);
         }else{
             return res.status(400).json({message: 'Missing parameter'});
         }
@@ -153,6 +244,7 @@ async function remove(req, res){
 
 module.exports = {
     getAll,
+    getDetail,
     insert,
     update,
     remove
