@@ -18,13 +18,24 @@ let storage = multer.diskStorage({
         let galleryFolder;
         switch(urlRoute){
             case '/admin/banner-gallery/insert':
-            case '/admin/banner-gallery/update':
+            case '/admin/banner-gallery/update':{
                 galleryFolder = 'banner';
                 break;
+            }
             case '/admin/identification/logo/insert':
             case '/admin/identification/logo/update':
-                galleryFolder = 'identification';
-                break;
+                {
+                    galleryFolder = 'identification';
+                    break;
+                }
+            default: {
+                galleryFolder = 'other';
+                let error = {
+                    code: 'UNSOPPORTED_FILE',
+                    message: 'This route does not support files'
+                }
+                return callback(error, null);
+            }
         }
 
         try {

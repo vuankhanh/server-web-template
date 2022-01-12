@@ -86,6 +86,7 @@ async function update(req, res){
             formData.route = convertVieService(formData.name);
 
             const thumbnail = formData.albumImg.thumbnail;
+            console.log(formData.albumImg)
 
             const result = await Product.model.Product.findByIdAndUpdate(
                 { _id: formData._id },

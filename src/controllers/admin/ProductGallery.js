@@ -1,12 +1,12 @@
 const localPathConfig = require('../../config/local-path');
 const multipleUploadMiddleware = require("../../middleware/MultipleUploadMiddleware");
-const proccessImage = require('../../services/proccess-image');
-const writeBufferToFile = require('../../services/write-buffer-to-file');
 
 const ProductGallery = require('../../models/ProductGallery');
 
-const convertVie = require('../../services/convert-Vie');
-const imageAlbumService = require('../../services/image-album');
+const proccessImageService = require('../../services/proccess-image');
+const convertVieService = require('../../services/convert-Vie');
+const writeBufferToFile = require('../../services/write-buffer-to-file');
+const productGalleryService = require('../../services/product-gallery');
 
 async function getAll(req, res){
     let size = parseInt(req.query.size) || 10;
@@ -56,6 +56,10 @@ async function insert(req, res){
         if(!query || !query.name){
             return res.status(400).json({message: 'Missing parameter'})
         }else{
+            let count = await productGalleryService.checkExistAlbumRoute(query.name);
+            if(count){
+                return res.status(409).json({ message: 'This image album already exists' });
+            }
             await multipleUploadMiddleware(req, res);
     
             if (!req.files || !req.files.length) {
@@ -63,7 +67,7 @@ async function insert(req, res){
             }else{
                 let objGallery = {
                     name: query.name,
-                    route: convertVie(query.name),
+                    route: convertVieService(query.name),
                     thumbnail: null,
                     media: []
                 };
@@ -72,9 +76,9 @@ async function insert(req, res){
                 let isMain = parseIntIsMain >= 0 ? parseIntIsMain : 0;
     
                 for(let [index, file] of req.files.entries()){
-                    let imageAfterResizing = await proccessImage.resize(file.path);
+                    let imageAfterResizing = await proccessImageService.resize(file.path, 'product');
                         imageAfterResizing = imageAfterResizing.replace(/\\/g,"/");
-                    let buffer = await proccessImage.thumbnail(imageAfterResizing);
+                    let buffer = await proccessImageService.thumbnail(imageAfterResizing);
                     let absoluteUrlThumbnail = writeBufferToFile.thumbnail(imageAfterResizing, buffer).replace(/\\/g,"/");
 
                     let relativeUrlPath = imageAfterResizing.replace(localPathConfig.gallery, '');
@@ -126,12 +130,17 @@ async function update(req, res){
         if(!query || !query.name || !query._id){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
+            let count = await productGalleryService.checkExistAlbumId(query._id);
+            if(!count){
+                return res.status(404).json({ message: 'The Product Gallery is not found' });
+            }
+
             await multipleUploadMiddleware(req, res);
 
             let mediaWillBeDeleted = req.body.mediaWillBeDeleted;
             let objGallery = {
                 name: query.name,
-                route: convertVie(query.name),
+                route: convertVieService(query.name),
                 thumbnail: null,
                 mediaWillBeAdded: [],
                 mediaWillBeDeleted: mediaWillBeDeleted? JSON.parse(mediaWillBeDeleted) : []
@@ -142,9 +151,9 @@ async function update(req, res){
 
             for(let [index, file] of req.files.entries()){
                 
-                let imageAfterResizing = await proccessImage.resize(file.path);
+                let imageAfterResizing = await proccessImageService.resize(file.path, 'product');
                     imageAfterResizing = imageAfterResizing.replace(/\\/g,"/");
-                let buffer = await proccessImage.thumbnail(imageAfterResizing);
+                let buffer = await proccessImageService.thumbnail(imageAfterResizing);
                 let absoluteUrlThumbnail = writeBufferToFile.thumbnail(imageAfterResizing, buffer).replace(/\\/g,"/");
 
                 let relativeUrlPath = imageAfterResizing.replace(localPathConfig.gallery, '');
@@ -183,7 +192,7 @@ async function update(req, res){
                 return res.status(200).json(result);
             }else{
                 if(!objGallery.mediaWillBeDeleted.length){
-                    const afterRefreshMain = await imageAlbumService.refreshMain(query._id, isMain);
+                    const afterRefreshMain = await productGalleryService.refreshMain(query._id, isMain);
                     return res.status(200).json(afterRefreshMain);
                 }else{
                     const pullAllProductGallery = await ProductGallery.model.ProductGallery.findByIdAndUpdate(
@@ -198,8 +207,8 @@ async function update(req, res){
                     if(!pullAllProductGallery){
                         return res.status(200).json(pullAllProductGallery);
                     }else{
-                        imageAlbumService.removeImage(objGallery.mediaWillBeDeleted);
-                        const afterRefreshMain = await imageAlbumService.refreshMain(query._id, isMain);
+                        productGalleryService.removeImage(objGallery.mediaWillBeDeleted);
+                        const afterRefreshMain = await productGalleryService.refreshMain(query._id, isMain);
                         return res.status(200).json(afterRefreshMain);
                     }
                 }

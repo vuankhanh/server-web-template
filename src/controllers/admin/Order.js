@@ -321,7 +321,6 @@ async function createOrder(req, res){
                 await order.save();
                 return res.status(200).json(order);
 
-                //Pending here
             }
         }
     } catch (error) {

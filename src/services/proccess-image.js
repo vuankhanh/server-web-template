@@ -1,15 +1,24 @@
 const sharp = require('sharp');
 const fse = require('fs-extra');
 
-const carotaStandart = {
-    width: 1280,
-    height: 720
+const carotaSize = {
+    product: {
+        width: 1000,
+        height: 1000
+    },
+    banner: {
+        width: 1280,
+        height: 720
+    }
 }
 
-async function resize(url){
+
+async function resize(url, type){
+    let size = type === 'product' ? carotaSize.product : carotaSize.banner;
+    console.log(size);
     let destinationImage = changeFileExtension(url, 'webp');
     await sharp(url)
-    .resize(carotaStandart)
+    .resize(size)
     .webp()
     .toFile(destinationImage);
 

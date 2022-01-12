@@ -3,10 +3,15 @@ const fse = require('fs-extra');
 const ProductGallery = require('../models/ProductGallery');
 const localPathConfig = require('../config/local-path');
 
-const convertVie = require('./convert-Vie');
+const convertVieService = require('./convert-Vie');
 
-async function checkExistAlbum(name){
-    let condition = { route: convertVie(name) }
+async function checkExistAlbumRoute(name){
+    let condition = { route: convertVieService(name) }
+    return await ProductGallery.model.ProductGallery.countDocuments(condition);
+}
+
+async function checkExistAlbumId(id){
+    let condition = { _id: id }
     return await ProductGallery.model.ProductGallery.countDocuments(condition);
 }
 
@@ -61,7 +66,8 @@ function removeFile(image){
 }
 
 module.exports = {
-    checkExistAlbum,
+    checkExistAlbumRoute,
+    checkExistAlbumId,
     refreshMain,
     removeImage
 }

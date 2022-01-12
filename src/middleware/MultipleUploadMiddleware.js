@@ -7,36 +7,29 @@ const multer = require("multer");
 const fse = require('fs-extra');
 const convertVie = require('../services/convert-Vie');
 const localPathConfig = require('../config/local-path');
-const imageAlbumService = require('../services/image-album');
 
 // Khởi tạo biến cấu hình cho việc lưu trữ file upload
 let storage = multer.diskStorage({
     // Định nghĩa nơi file upload sẽ được lưu lại
-    destination: async(req, file, callback) => {
+    destination: (req, file, callback) => {
         let urlRoute = req.baseUrl + req.path;
         let query = req.query;
 
         let galleryFolder;
         switch(urlRoute){
             case '/admin/product-gallery/insert':
-                let count = await imageAlbumService.checkExistAlbum(query.name);
-                
-                if(count){
-                    console.log(count);
-                    return callback({ code: 11000 }, null);
-                }
+            case '/admin/product-gallery/update': {
                 galleryFolder = 'product';
                 break;
-            case '/admin/product-gallery/update':
-                galleryFolder = 'product';
-                break;
-            default: 
+            }
+            default: {
                 galleryFolder = 'other';
                 let error = {
                     code: 'UNSOPPORTED_FILE',
                     message: 'This route does not support files'
                 }
                 return callback(error, null);
+            }
         }
 
         try {
