@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const ProductGalleryVideoShema = new Schema({
     name: { type: String, required: true, unique: false },
-    productName: { type: String, required: true, unique: false },
+    route: { type: String, required: true, unique: true },
+    thumbnail: { type: String, required: true },
     media: [
         {
             type: { type: String, required: true },

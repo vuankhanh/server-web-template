@@ -7,6 +7,7 @@ const proccessImageService = require('../../services/proccess-image');
 const writeBufferToFileService = require('../../services/write-buffer-to-file');
 const convertVieService = require('../../services/convert-Vie');
 const bannerGalleryService = require('../../services/banner-gallery');
+const matchAdminAccountService = require('../../services/matchAdminAccount');
 
 async function getAll(req, res){
     try {
@@ -72,7 +73,6 @@ async function update(req, res){
         }else{
             let condition = { _id: query._id };
             let bannerGalleryResult = await BannerGallery.model.BannerGallery.findOne(condition);
-            console.log(bannerGalleryResult);
             if(!bannerGalleryResult){
                 return res.status(404).json({ message: 'The Product Gallery is not found' });
             }
@@ -127,14 +127,31 @@ async function update(req, res){
 
 async function remove(req, res){
     const formData = req.body;
+    const jwtDecoded = req.jwtDecoded;
     try {
-        if(formData._id){
-            const bannerGallery = await BannerGallery.model.BannerGallery.findByIdAndRemove(
-                { _id: formData._id }
-            );
-            return res.status(200).json(bannerGallery);
-        }else{
+        const userInfor = jwtDecoded.data;
+        
+        if(!formData._id || !formData.password){
             return res.status(400).json({message: 'Missing parameter'});
+        }else{
+            let account = {
+                userName: userInfor.userName,
+                password: formData.password
+            }
+            let checkAccount = await matchAdminAccountService.getAccount(account);
+            if(!checkAccount){
+                return res.status(400).json({message: 'Passsword is incorrect'});
+            }else{
+                const bannerGalleryResult = await BannerGallery.model.BannerGallery.findByIdAndRemove(
+                    { _id: formData._id }
+                );
+                if(!bannerGalleryResult){
+                    return res.status(404).json({message: 'Id Banner Gallery is not found'});
+                }else{
+                    bannerGalleryService.removeFile(bannerGalleryResult.src, bannerGalleryResult.thumbnail);
+                    return res.status(200).json(bannerGalleryResult);
+                }
+            }
         }
     } catch (error) {
         return res.status(500).json({ message: 'Something went wrong' });

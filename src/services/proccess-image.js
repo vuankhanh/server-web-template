@@ -15,7 +15,6 @@ const carotaSize = {
 
 async function resize(url, type){
     let size = type === 'product' ? carotaSize.product : carotaSize.banner;
-    console.log(size);
     let destinationImage = changeFileExtension(url, 'webp');
     await sharp(url)
     .resize(size)

@@ -7,6 +7,7 @@ const proccessImageService = require('../../services/proccess-image');
 const convertVieService = require('../../services/convert-Vie');
 const writeBufferToFile = require('../../services/write-buffer-to-file');
 const productGalleryService = require('../../services/product-gallery');
+const matchAdminAccountService = require('../../services/matchAdminAccount');
 
 async function getAll(req, res){
     let size = parseInt(req.query.size) || 10;
@@ -237,14 +238,31 @@ async function update(req, res){
 
 async function remove(req, res){
     const formData = req.body;
+    const jwtDecoded = req.jwtDecoded;
     try {
-        if(formData._id){
-            const result = await ProductGallery.model.ProductGallery.findOneAndRemove(
-                {_id: formData._id}
-            );
-            return res.status(200).json(result);
-        }else{
+        const userInfor = jwtDecoded.data;
+        
+        if(!formData._id || !formData.password){
             return res.status(400).json({message: 'Missing parameter'});
+        }else{
+            let account = {
+                userName: userInfor.userName,
+                password: formData.password
+            }
+            let checkAccount = await matchAdminAccountService.getAccount(account);
+            if(!checkAccount){
+                return res.status(400).json({message: 'Passsword is incorrect'});
+            }else{
+                const result = await ProductGallery.model.ProductGallery.findOneAndRemove(
+                    {_id: formData._id}
+                );
+                if(!result){
+                    return res.status(404).json({message: 'Id Banner Gallery is not found'});
+                }else{
+                    productGalleryService.removeImage(result.media);
+                    return res.status(200).json(result);
+                }
+            }
         }
     } catch (error) {
         return res.status(500).json({ message: 'Something went wrong' });

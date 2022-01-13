@@ -42,7 +42,7 @@ router.post('/product-gallery/remove', ProductGallery.remove);
 router.get('/product-gallery-video', ProductGalleryVideo.getAll);
 router.post('/product-gallery-video/insert', ProductGalleryVideo.insert);
 router.put('/product-gallery-video/update', ProductGalleryVideo.update);
-router.put('/product-gallery-video/remove', ProductGalleryVideo.remove);
+router.post('/product-gallery-video/remove', ProductGalleryVideo.remove);
 
 router.get('/banner-gallery', BannerGallery.getAll);
 router.post('/banner-gallery/insert', BannerGallery.insert);
