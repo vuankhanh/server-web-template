@@ -2,7 +2,7 @@ const AdminAccount = require('../models/AdminAccount');
 const bcrypt = require("./bcrypt");
 
 async function getAccount(account){
-    const query = AdminAccount.where({ userName: account.userName });
+    const query = AdminAccount.model.AdminAccount.where({ userName: account.userName });
     try {
         const result = await query.findOne().map(res=> res ? res.toObject() : res);
         if(result){
@@ -19,7 +19,7 @@ async function getAccount(account){
 
 async function getAccountId(account){
     try {
-        const accountId = await AdminAccount.findOne(
+        const accountId = await AdminAccount.model.AdminAccount.findOne(
             { userName: account.userName },
             { _id: 1 }
         );

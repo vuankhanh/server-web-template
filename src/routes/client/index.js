@@ -23,7 +23,7 @@ const Order = require('../../controllers/client/Order');
 
 router.get("/");
 
-router.get("/config", Config);
+router.get("/config", Config.userConfig);
 
 router.post("/login", Auth.login);
 router.post('/auth-facebook', SocialAuthentication.Facebook);

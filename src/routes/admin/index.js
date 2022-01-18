@@ -4,6 +4,8 @@ const AuthMiddleWare = require("../../middleware/AuthMiddleware");
 
 const Auth = require('../../controllers/Authentication');
 const Config = require('../../controllers/Config');
+const Account = require('../../controllers/admin/Account');
+const AdminManagement = require('../../controllers/admin/AdminManagement');
 const UserManagement = require('../../controllers/admin/UserManagement');
 const ProductCategory = require('../../controllers/admin/ProductCategory');
 const BannerGallery = require('../../controllers/admin/BannerGallery');
@@ -23,10 +25,16 @@ router.post("/refresh-token", Auth.refreshToken);
 router.use(AuthMiddleWare.isAuth);
 
 // List Protect APIs:
-router.get("/config", Config);
+router.get("/config", Config.adminConfig);
+
+router.put('/account/change-password', Account.changePassword);
+// router.get('/account');
+
+router.get('/admin-management', AdminManagement.getAll);
+router.get('/admin-management/:id', AdminManagement.getDetail);
 
 router.get('/user-management', UserManagement.getAll);
-router.get('/user-management/userId', UserManagement.getDetail);
+router.get('/user-management/:id', UserManagement.getDetail);
 
 router.get('/product-category', ProductCategory.getAll);
 router.post('/product-category/insert', ProductCategory.insert);
