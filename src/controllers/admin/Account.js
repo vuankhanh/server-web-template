@@ -13,7 +13,7 @@ async function changePassword(req, res){
         });
     }else{
         const formData = req.body;
-        console.log(formData);
+
         if(!formData.oldPassword || !formData.password){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
@@ -31,13 +31,11 @@ async function changePassword(req, res){
                     const dataWillUpdate = {
                         password: bcryptService.hashPassword(formData.password)
                     }
-                    const result = await AdminAccount.model.AdminAccount.findOneAndUpdate(
+                    await AdminAccount.model.AdminAccount.findOneAndUpdate(
                         { email: accountInfo.email },
                         { $set: dataWillUpdate},
                         { new: true }
                     );
-        
-                    console.log(result);
                     return res.status(200).json({ message: 'successfully' });
                 }else{
                     return res.status(400).json({ message: 'Password is incorrect' });
@@ -52,13 +50,9 @@ function checkPasswordValid(password){
         return false;
     }else{
         const hasUpperCase = /[A-Z]+/.test(password);
-    
         const hasLowerCase = /[a-z]+/.test(password);
-    
         const hasNumeric = /[0-9]+/.test(password);
-    
         const length = password.length>=6;
-    
         const passwordValid = hasUpperCase && hasLowerCase && hasNumeric && length;
 
         return passwordValid;
