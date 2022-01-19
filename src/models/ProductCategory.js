@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const ProductCategoryShema = new Schema({
     name: { type: String, required: true, unique : true, dropDups: true },
     route: { type: String, required: true, unique : true, dropDups: true },
+    googleProductCategory: { type: String, required: true }
 },{
     timestamps: true,
 });
