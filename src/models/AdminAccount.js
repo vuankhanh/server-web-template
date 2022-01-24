@@ -11,7 +11,7 @@ const adminAccountSchema = new Schema({
     password: { type: String, required: true },
     name: { type: String, required: true },
     avatar: { type: String, required: true },
-    permission:  { type: Number, required: true }
+    permission:  { type: Number, required: true, min: 1 }
 },{
     timestamps: true,
 });

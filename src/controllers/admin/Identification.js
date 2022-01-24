@@ -1,7 +1,9 @@
-const Identification = require('../../models/Identification');
 const localPathConfig = require('../../config/local-path');
 const singleUploadMiddleware = require("../../middleware/SingleUploadMiddleware");
-const proccessImage = require('../../services/proccess-image');
+
+const Identification = require('../../models/Identification');
+
+const proccessImageService = require('../../services/proccess-image');
 const writeBufferToFile = require('../../services/write-buffer-to-file');
 
 async function getAll(req, res){
@@ -20,12 +22,12 @@ async function insertLogo(req, res){
         if (!file) {
             return res.status(400).json({message: 'Missing parameter'})
         }else{
-            let absoluteUrlPath = file.path.replace(/\\/g,"/");
+            let imageAfterResizing = await proccessImageService.resize(file.path, 'product');
+                imageAfterResizing = imageAfterResizing.replace(/\\/g,"/");
+            let buffer = await proccessImageService.thumbnail(imageAfterResizing);
+            let absoluteUrlThumbnail = writeBufferToFile.thumbnail(imageAfterResizing, buffer).replace(/\\/g,"/");
 
-            let buffer = await proccessImage.thumbnail(file.path);
-            let absoluteUrlThumbnail = writeBufferToFile.thumbnail(file.path, buffer).replace(/\\/g,"/");
-
-            let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
+            let relativeUrlPath = imageAfterResizing.replace(localPathConfig.gallery, '');
             let relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.gallery, '');
 
             const identification = new Identification.model.Identification(
@@ -40,7 +42,23 @@ async function insertLogo(req, res){
             return res.status(200).json(identification);
         }
     } catch (error) {
-        return res.status(500).json({ message: 'Something went wrong' });
+        if (error.code === "LIMIT_UNEXPECTED_FILE") {
+            return res.status(400).json(`Exceeds the number of files allowed to upload.`);
+        }else if(error.code === 'INVALID_IMAGE_FORMAT'){
+            return res.status(400).json({ message: error.message });
+        }else if(error.code === 'UNSOPPORTED_FILE'){
+            return res.status(501).json({ message: error.message });
+        }else if(error.code===11000){
+            return res.status(409).json(
+                {
+                    message: 'This image album already exists',
+                    field: error.keyPattern
+                }
+            );
+        }else{
+            console.log(error);
+            return res.status(500).json({ message: 'Something went wrong' });
+        }
     }
 }
 
@@ -51,12 +69,12 @@ async function updateLogo(req, res){
         if (!file) {
             return res.status(400).json({message: 'Missing parameter'})
         }else{
-            let absoluteUrlPath = file.path.replace(/\\/g,"/");
+            let imageAfterResizing = await proccessImageService.resize(file.path, 'product');
+                imageAfterResizing = imageAfterResizing.replace(/\\/g,"/");
+            let buffer = await proccessImageService.thumbnail(imageAfterResizing);
+            let absoluteUrlThumbnail = writeBufferToFile.thumbnail(imageAfterResizing, buffer).replace(/\\/g,"/");
 
-            let buffer = await proccessImage.thumbnail(file.path);
-            let absoluteUrlThumbnail = writeBufferToFile.thumbnail(file.path, buffer).replace(/\\/g,"/");
-
-            let relativeUrlPath = absoluteUrlPath.replace(localPathConfig.gallery, '');
+            let relativeUrlPath = imageAfterResizing.replace(localPathConfig.gallery, '');
             let relativeUrlThumbnail = absoluteUrlThumbnail.replace(localPathConfig.gallery, '');
 
             const identification = await Identification.model.Identification.findOneAndUpdate(
@@ -74,7 +92,23 @@ async function updateLogo(req, res){
             return res.status(200).json(identification);
         }
     } catch (error) {
-        return res.status(500).json({ message: 'Something went wrong' });
+        if (error.code === "LIMIT_UNEXPECTED_FILE") {
+            return res.status(400).json(`Exceeds the number of files allowed to upload.`);
+        }else if(error.code === 'INVALID_IMAGE_FORMAT'){
+            return res.status(400).json({ message: error.message });
+        }else if(error.code === 'UNSOPPORTED_FILE'){
+            return res.status(501).json({ message: error.message });
+        }else if(error.code===11000){
+            return res.status(409).json(
+                {
+                    message: 'This image album already exists',
+                    field: error.keyPattern
+                }
+            );
+        }else{
+            console.log(error);
+            return res.status(500).json({ message: 'Something went wrong' });
+        }
     }
 }
 
