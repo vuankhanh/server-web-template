@@ -32,7 +32,6 @@ async function getAll(req, res){
             data: filterPage
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
@@ -119,7 +118,6 @@ async function insert(req, res){
                 }
             );
         }else{
-            console.log(error);
             return res.status(500).json({ message: 'Something went wrong' });
         }
     }
@@ -230,7 +228,6 @@ async function update(req, res){
                 }
             );
         }else{
-            console.log(error);
             return res.status(500).json({ message: 'Something went wrong' });
         }
     }

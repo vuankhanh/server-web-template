@@ -59,7 +59,6 @@ async function insert(req, res){
         }
         
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong', error: error });
     }
 }
@@ -116,7 +115,6 @@ async function update(req, res){
             return res.status(200).json(bannerGallery);
         }
     } catch (error) {
-        console.log(error);
         // Bắt luôn lỗi vượt quá số lượng file cho phép tải lên trong 1 lần
         if (error.code === "LIMIT_UNEXPECTED_FILE") {
             return res.status(400).json(`Exceeds the number of files allowed to upload.`);

@@ -56,7 +56,6 @@ async function insertLogo(req, res){
                 }
             );
         }else{
-            console.log(error);
             return res.status(500).json({ message: 'Something went wrong' });
         }
     }
@@ -106,7 +105,6 @@ async function updateLogo(req, res){
                 }
             );
         }else{
-            console.log(error);
             return res.status(500).json({ message: 'Something went wrong' });
         }
     }

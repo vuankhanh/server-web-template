@@ -17,10 +17,8 @@ module.exports = async(req, res)=>{
                 productCategories[i].thumbnailUrl = product.thumbnailUrl;
             }
         }
-        // console.log(productCategories);
         return res.status(200).json(productCategories);
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Something went wrong' });
     }
 }

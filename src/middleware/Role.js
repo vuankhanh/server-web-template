@@ -2,7 +2,6 @@ exports.grantAccess = function(permission){
     return async (req, res, next) => {
         const jwtDecoded = req.jwtDecoded;
         const accountInfo = jwtDecoded.data;
-        console.log(accountInfo.permission)
         if(Number.isInteger(permission) && Number.isInteger(accountInfo.permission)){
             if(permission < accountInfo.permission){
                 return res.status(403).send({
