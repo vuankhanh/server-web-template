@@ -28,14 +28,22 @@ const server = app.listen(3000, 'localhost', () => {
 });
 
 // Socket setup
-const io = socket(server, {
+const ioNoneSecure = socket(server, {
     path: '/ws/',
     cors: {
         origin: '*',
-        credentials:true
+        credentials: true
     }
 });
-connectSocket(io);
+const ioSecure = socket(server, {
+    path: '/wssecure/',
+    cors: {
+        origin: '*',
+        credentials: true
+    }
+});
+connectSocket.connectSocketNonSecure(ioNoneSecure);
+connectSocket.connectSocketSecure(ioSecure);
 
 // Khởi tạo các routes cho ứng dụng
-initRoutes(app, io);
+initRoutes(app, ioNoneSecure, ioSecure);

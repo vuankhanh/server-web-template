@@ -34,7 +34,10 @@ let login = async (req, res) => {
             }
         }
         if(matchedAccount){
-            if(matchedAccount.account && matchedAccount.account.isVerified != undefined && matchedAccount.account.isVerified === false){
+            if(
+                (matchedAccount.account && matchedAccount.account.isVerified != undefined && matchedAccount.account.isVerified === false) ||
+                (matchedAccount.userName && !matchedAccount.activated)
+            ){
                 return res.status(205).json({message: 'this account is not activated yet'});
             }
             let tokenGenerating = await generateToken(typeOfAccount[1], matchedAccount);
@@ -78,7 +81,7 @@ let refreshToken = async (req, res) => {
             // Thông tin user lúc này các bạn có thể lấy thông qua biến decoded.data
             // có thể mở comment dòng debug bên dưới để xem là rõ nhé.
             // debug("decoded: ", decoded);
-            const userFakeData = decoded.data;
+            const accountInfo = decoded.data;
 
             const accessToken = await jwtHelper.generateToken(typeOfAccount[1], userFakeData, accessTokenSecret, accessTokenLife);
 

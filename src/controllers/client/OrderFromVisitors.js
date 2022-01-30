@@ -171,7 +171,7 @@ async function insert(req, res){
                             let socketData = {
                                 product
                             }
-                            req.io.emit('product-quantity', socketData);
+                            req.ioNoneSecure.emit('product-quantity', socketData);
                         });
                         
                         return res.status(200).json(order);

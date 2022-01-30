@@ -10,12 +10,13 @@ const redirect = require('../routes/redirect');
  * Init all APIs on your application
  * @param {*} app from express
  */
-let initRoutes = (app, io) => {
+let initRoutes = (app, ioNoneSecure, ioSecure) => {
     app.use('/gallery', express.static(localPathConfig.gallery));
     app.use('/icon', express.static(localPathConfig.icon));
 
-    app.use(function(req,res,next){
-        req.io = io;
+    app.use(function(req, res, next){
+        req.ioNoneSecure = ioNoneSecure;
+        req.ioSecure = ioSecure;
         next();
     });
 

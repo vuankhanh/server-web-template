@@ -35,6 +35,26 @@ let isAuth = async (req, res, next) => {
     }
 }
 
+async function checkSecureSocket (socket, next) {
+    // Lấy token được gửi lên từ phía client, thông thường tốt nhất là các bạn nên truyền token vào header
+    if (socket.handshake.query && socket.handshake.query['x-access-token']){
+        try{
+
+            const token = socket.handshake.query['x-access-token'];
+            const decoded = await jwtHelper.verifyToken('socketSecure', token, accessTokenSecret);
+            socket.decoded = decoded;
+            next();
+        }catch(err){
+            next(new Error('Authentication error'));
+        }
+    }
+    else {
+        next(new Error('Authentication error'));
+    }
+    
+}
+
 module.exports = {
-    isAuth: isAuth,
+    isAuth,
+    checkSecureSocket
 };

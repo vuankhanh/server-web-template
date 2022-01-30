@@ -55,21 +55,26 @@ let verifyToken = (originalUrl, token, secretKey) => {
             if (error) {
                 return reject(error);
             }
-            let typeOfAccount = originalUrl.split("/");
-            if((typeOfAccount && typeOfAccount[1])){
-                if(
-                    (typeOfAccount[1]==='admin' && decoded.data.permission) ||
-                    (typeOfAccount[1]==='client' && decoded.data.customerCode)
-                ){
+            if(originalUrl!='socketSecure'){
+                let typeOfAccount = originalUrl.split("/");
+                if((typeOfAccount && typeOfAccount[1])){
+                    if(
+                        (typeOfAccount[1]==='admin' && decoded.data.permission) ||
+                        (typeOfAccount[1]==='client' && decoded.data.customerCode)
+                    ){
+                        resolve(decoded);
+                    }else reject();
+                }else reject();
+            }else{
+                if(decoded.data.permission === 4){
                     resolve(decoded);
                 }else reject();
             }
-            else reject();
         });
     });
 }
 
 module.exports = {
-    generateToken: generateToken,
-    verifyToken: verifyToken,
+    generateToken,
+    verifyToken,
 };

@@ -4,42 +4,33 @@ const AdminAccount = require('../../models/AdminAccount');
 const matchAdminAccountService = require('../../services/matchAdminAccount');
 
 async function changePassword(req, res){
-    const jwtDecoded = req.jwtDecoded;
-    const accountInfo = jwtDecoded.data;
-    if(accountInfo.permission != 1){
-        // Không tìm thấy token trong request
-        return res.status(403).send({
-            message: 'Unable to access this route.',
-        });
-    }else{
-        const formData = req.body;
+    const formData = req.body;
 
-        if(!formData.oldPassword || !formData.password){
-            return res.status(400).json({message: 'Missing parameter'});
+    if(!formData.oldPassword || !formData.password){
+        return res.status(400).json({message: 'Missing parameter'});
+    }else{
+        let checkPassword = checkPasswordValid(formData.password);
+        if(!checkPassword){
+            return res.status(400).json({ message: 'Password is invalid' });
         }else{
-            let checkPassword = checkPasswordValid(formData.password);
-            if(!checkPassword){
-                return res.status(400).json({ message: 'Password is invalid' });
+            const account = {
+                userName: accountInfo.userName,
+                password: formData.oldPassword
+            }
+    
+            let matchedAccount = await matchAdminAccountService.getAccount(account);
+            if(matchedAccount){
+                const dataWillUpdate = {
+                    password: bcryptService.hashPassword(formData.password)
+                }
+                await AdminAccount.model.AdminAccount.findOneAndUpdate(
+                    { email: accountInfo.email },
+                    { $set: dataWillUpdate},
+                    { new: true }
+                );
+                return res.status(200).json({ message: 'successfully' });
             }else{
-                const account = {
-                    userName: accountInfo.userName,
-                    password: formData.oldPassword
-                }
-        
-                let matchedAccount = await matchAdminAccountService.getAccount(account);
-                if(matchedAccount){
-                    const dataWillUpdate = {
-                        password: bcryptService.hashPassword(formData.password)
-                    }
-                    await AdminAccount.model.AdminAccount.findOneAndUpdate(
-                        { email: accountInfo.email },
-                        { $set: dataWillUpdate},
-                        { new: true }
-                    );
-                    return res.status(200).json({ message: 'successfully' });
-                }else{
-                    return res.status(400).json({ message: 'Password is incorrect' });
-                }
+                return res.status(400).json({ message: 'Password is incorrect' });
             }
         }
     }

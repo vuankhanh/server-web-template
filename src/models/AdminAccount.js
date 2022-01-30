@@ -10,8 +10,9 @@ const adminAccountSchema = new Schema({
     },
     password: { type: String, required: true },
     name: { type: String, required: true },
-    avatar: { type: String, required: true },
-    permission:  { type: Number, required: true, min: 1 }
+    avatar: { type: String },
+    permission:  { type: Number, required: true, min: 1 },
+    activated: { type: Boolean, require: true, default: true }
 },{
     timestamps: true,
 });
@@ -29,6 +30,9 @@ function adminRights(){
         },{
             code: 3,
             name: 'Collaborators'
+        },{
+            code: 4,
+            name: 'SatelliteSystem'
         }
     ];
 }
