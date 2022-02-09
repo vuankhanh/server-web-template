@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\": \"admin\",\r\n    \"password\": \"123123\"\r\n}",
+					"raw": "{\r\n    \"userName\": \"admin\",\r\n    \"password\": \"qweQWE123!@#\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -89,6 +89,105 @@
 					"path": [
 						"admin",
 						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Account Change Password",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjF9LCJpYXQiOjE2NDI1MDk3NDksImV4cCI6MTY0Mjc2ODk0OX0.6r0pEtCTcmjZMrW5BhYNDIJsFBgVZBvweRfQIW90RU8",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"oldPassword\": \"123123\",\n    \"password\": \"qweQWE123!@#\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/account/change-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"account",
+						"change-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Account Admin Detail",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjEsInVwZGF0ZWRBdCI6IjIwMjItMDEtMThUMTQ6MDc6MzYuMjAxWiJ9LCJpYXQiOjE2NDM1MTY5OTIsImV4cCI6MTY0Mzc3NjE5Mn0.bWOuqnm1jYBt9ShlnR0JVTsEgedE-MdE3AOy1TbmQBQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/admin/admin-management/60b6157adecf0df78b6babeb",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"admin-management",
+						"60b6157adecf0df78b6babeb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin Account Admin Insert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiYWRtaW4iLCJuYW1lIjoiVsWpIEFuIEtow6FuaCIsImF2YXRhciI6IiIsInBlcm1pc3Npb24iOjEsInVwZGF0ZWRBdCI6IjIwMjItMDEtMThUMTQ6MDc6MzYuMjAxWiJ9LCJpYXQiOjE2NDM1MTY5OTIsImV4cCI6MTY0Mzc3NjE5Mn0.bWOuqnm1jYBt9ShlnR0JVTsEgedE-MdE3AOy1TbmQBQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\": \"longpv\",\n    \"name\": \"Phan Việt Long\",\n    \"avatar\": \"\",\n    \"permission\": 4\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/admin/admin-management/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"admin-management",
+						"insert"
 					]
 				}
 			},
@@ -359,12 +458,7 @@
 							"type": "text",
 							"disabled": true
 						}
-					],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3000/admin/product-gallery/insert?name=Cá Rô tách xương",
@@ -427,12 +521,7 @@
 							"value": "[{\"_id\":\"61dd1493745f56559ec36a5e\"}]",
 							"type": "text"
 						}
-					],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3000/admin/product-gallery/update?name=Cá Lạt&_id=60de8bee4658e62448f7d542",
@@ -598,12 +687,7 @@
 							"type": "file",
 							"src": "/home/oldcolor/Desktop/Productions/Cá Rô Hấp Tách Xương/IMG20200628165730.jpg"
 						}
-					],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3000/admin/banner-gallery/insert?name=Cá Rô tách xương",
@@ -651,12 +735,7 @@
 							"type": "file",
 							"src": "/home/oldcolor/Desktop/Productions/Cá Lạt/IMG20210604120240.jpg"
 						}
-					],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3000/admin/banner-gallery/update?name=Ten khac roi 2233&_id=60ee9808d1de972224dd39bf",
@@ -1028,12 +1107,7 @@
 							"type": "file",
 							"src": "/D:/MEAN/Angular/web-template/src/assets/logo/trademark/ccr-full.png"
 						}
-					],
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3000/admin/identification/logo/update?name=carota",
@@ -1165,13 +1239,39 @@
 			"response": []
 		},
 		{
+			"name": "Admin Fake Send SMS",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJOYW1lIjoiMDgzNDUxNzk4OSIsIm5hbWUiOiJWxakgQW4gS2jDoW5oIiwiYXZhdGFyIjoiIiwicGVybWlzc2lvbiI6NCwidXBkYXRlZEF0IjoiMjAyMi0wMS0xOFQxNDowNzozNi4yMDFaIn0sImlhdCI6MTY0MzUxNDg3MywiZXhwIjoxNjQzNzc0MDczfQ.PdxlYDHRdvoaRt5rRRJxY4azHJcB5qePwmx6-yLP1yM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/admin/ssm/fake-send-sms",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"ssm",
+						"fake-send-sms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Client Login",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\": \"vuankhanh\",\r\n    \"password\": \"asdASD123\"\r\n}",
+					"raw": "{\r\n    \"userName\": \"vuankhanh\",\r\n    \"password\": \"qweQWE123\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

@@ -4,7 +4,6 @@ const matchClientAccount = require('../../services/matchClientAccount');
 const nextSequenceCode = require('../../services/nextSequenceCode');
 const productService = require('../../services/product');
 
-
 async function getAll(req, res){
     try {
         let accountId = await matchClientAccount.getAccountId(req.jwtDecoded.data.email);
