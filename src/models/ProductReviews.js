@@ -27,11 +27,33 @@ const ProductReviewsSchema = new Schema({
 
 const ProductReviews = mongoose.model('ProductReviews', ProductReviewsSchema, 'product_reviews');
 
+function rating(){
+    return [
+        {
+            value: 1,
+            title: 'Rất không hài lòng'
+        },{
+            value: 2,
+            title: 'Không hài lòng'
+        },{
+            value: 3,
+            title: 'Bình thường'
+        },{
+            value: 4,
+            title: 'Hài lòng'
+        },{
+            value: 5,
+            title: 'Cực kì hài lòng'
+        }
+    ]
+}
+
 module.exports = {
     scheme: {
         ProductReviewsSchema
     },
     model: {
         ProductReviews
-    }
+    },
+    rating: rating()
 };

@@ -44,6 +44,7 @@ router.get('/product-hightlight', Product.getProductHightlight);
 router.get('/product', Product.getAll);
 router.get('/product/:route', Product.getDetail);
 
+router.get('/product-reviews-total', ProductReviews.getTotalProductReviews);
 router.get('/product-reviews', ProductReviews.getProductReviews)
 router.post('/product-reviews/insert', ProductReviews.insert);
 
