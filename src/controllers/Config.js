@@ -7,7 +7,8 @@ async function adminConfig(req, res){
     const configuration = {
         orderStatus: Order.orderStatus,
         orderCreatedBy: Order.orderCreatedBy,
-        adminRights: AdminAccount.adminRights
+        adminRights: AdminAccount.adminRights,
+        reviewStatus: ProductReviews.reviewStatus
     }
 
     const identification = await Identification.model.Identification.findOne({});

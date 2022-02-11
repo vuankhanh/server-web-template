@@ -18,6 +18,7 @@ const Identification = require('../../controllers/admin/Identification');
 const Redirect = require('../../controllers/admin/Redirect');
 const AdministrativeUnits = require('../../controllers/AdministrativeUnits');
 const Order = require('../../controllers/admin/Order');
+const ProductReviews = require('../../controllers/admin/ProductReviews');
 
 const SSMManagement = require('../../controllers/admin/SSMManagement');
 
@@ -93,6 +94,8 @@ router.put('/order/:orderId/confirm', RoleMiddleWare.grantAccess(1), Order.confi
 router.put('/order/:orderId/isComing', RoleMiddleWare.grantAccess(1), Order.isComing);
 router.put('/order/:orderId/done', RoleMiddleWare.grantAccess(1), Order.finish);
 router.post('/order/insert', RoleMiddleWare.grantAccess(1), Order.createOrder);
+
+router.get('/product-reviews', RoleMiddleWare.grantAccess(2), ProductReviews.getProductReviews);
 
 router.post('/ssm/fake-send-sms', RoleMiddleWare.grantAccess(4), SSMManagement.sendSMS);
 

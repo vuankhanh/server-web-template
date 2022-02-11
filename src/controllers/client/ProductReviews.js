@@ -9,7 +9,11 @@ async function getTotalProductReviews(req, res){
         }else{
             let result = {};
             for(let i=1; i<=5; i++){
-                let condition = { rating: i };
+                let condition = {
+                    rating: i,
+                    censored: true,
+                    status: 'confirmed'
+                };
                 let countTotal = await ProductReviews.model.ProductReviews.countDocuments(condition);
                 result['level'+i]=countTotal;
             }
@@ -27,7 +31,10 @@ async function getProductReviews(req, res){
         }else{
             const size = parseInt(req.query.size) || 10;
             const page = parseInt(req.query.page) || 1;
-            const condition = { product: productId };
+            const condition = {
+                product: productId,
+                status: 'confirmed'
+            };
 
             let countTotal = await ProductReviews.model.ProductReviews.countDocuments(condition);
             let filterPage = await ProductReviews.model.ProductReviews.find(condition)

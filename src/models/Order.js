@@ -43,9 +43,10 @@ const OrderShema = new Schema({
     status: {
         type: String,
         enum: enumOrderStatus,
-        default: enumOrderStatus[1]
+        default: enumOrderStatus[1],
+        required: true
     },
-    accountId: { type: Schema.Types.ObjectId, ref: 'ClientAuthentication' },
+    accountId: { type: Schema.Types.ObjectId, ref: 'ClientAuthentication', required: true },
     products: { type: [ProductSchema], required: true },
     deliverTo: { type: AddressSchema, required: true },
     totalValue: { type: Number, require: true },

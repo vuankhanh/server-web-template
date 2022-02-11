@@ -45,7 +45,7 @@ router.get('/product', Product.getAll);
 router.get('/product/:route', Product.getDetail);
 
 router.get('/product-reviews-total', ProductReviews.getTotalProductReviews);
-router.get('/product-reviews', ProductReviews.getProductReviews)
+router.get('/product-reviews', ProductReviews.getProductReviews);
 router.post('/product-reviews/insert', ProductReviews.insert);
 
 router.post('/cart/total-bill', Cart.totalBill);
@@ -55,7 +55,6 @@ router.get('/administrative-units/:provinceCode/district', AdministrativeUnits.d
 router.get('/administrative-units/:districtCode/ward', AdministrativeUnits.ward);
 
 router.post('/order-from-visitors/insert', OrderFromVisitors.insert);
-router.post('/product-reviews/new', OrderFromVisitors.insert);
 
 // Sử dụng authMiddleware.isAuth trước những api cần xác thực
 router.use(AuthMiddleWare.isAuth);

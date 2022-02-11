@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const enumReviewStatus = reviewStatus().map(status=>status.code);
+
 const ProductReviewsSchema = new Schema({
+    status: {
+        type: String,
+        enum: enumReviewStatus,
+        default: enumReviewStatus[1],
+        required: true
+    },
     product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
     clientInformation: {
         type: {
@@ -26,6 +34,24 @@ const ProductReviewsSchema = new Schema({
 });
 
 const ProductReviews = mongoose.model('ProductReviews', ProductReviewsSchema, 'product_reviews');
+
+function reviewStatus(){
+    return [
+        {
+            numericalOrder: 0,
+            code: 'revoke',
+            name: 'Đã hủy'
+        },{
+            numericalOrder: 1,
+            code: 'pending',
+            name: 'Chờ xác nhận'
+        },{
+            numericalOrder: 2,
+            code: 'confirmed',
+            name: 'Đang xử lý'
+        }
+    ]
+}
 
 function rating(){
     return [
@@ -55,5 +81,6 @@ module.exports = {
     model: {
         ProductReviews
     },
+    reviewStatus: reviewStatus(),
     rating: rating()
 };
