@@ -96,6 +96,8 @@ router.put('/order/:orderId/done', RoleMiddleWare.grantAccess(1), Order.finish);
 router.post('/order/insert', RoleMiddleWare.grantAccess(1), Order.createOrder);
 
 router.get('/product-reviews', RoleMiddleWare.grantAccess(2), ProductReviews.getProductReviews);
+router.get('/product-reviews/:commentId', RoleMiddleWare.grantAccess(2), ProductReviews.getProductReviewsDetail);
+router.put('/product-reviews/:commentId/changeStatus', RoleMiddleWare.grantAccess(2), ProductReviews.changeProductReviewsStatus);
 
 router.post('/ssm/fake-send-sms', RoleMiddleWare.grantAccess(4), SSMManagement.sendSMS);
 

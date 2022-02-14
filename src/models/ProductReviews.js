@@ -48,7 +48,7 @@ function reviewStatus(){
         },{
             numericalOrder: 2,
             code: 'confirmed',
-            name: 'Đang xử lý'
+            name: 'Đã xác nhận'
         }
     ]
 }

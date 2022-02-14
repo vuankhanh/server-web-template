@@ -8,7 +8,8 @@ async function adminConfig(req, res){
         orderStatus: Order.orderStatus,
         orderCreatedBy: Order.orderCreatedBy,
         adminRights: AdminAccount.adminRights,
-        reviewStatus: ProductReviews.reviewStatus
+        reviewStatus: ProductReviews.reviewStatus,
+        rating: ProductReviews.rating
     }
 
     const identification = await Identification.model.Identification.findOne({});

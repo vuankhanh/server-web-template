@@ -57,6 +57,95 @@ async function getProductReviews(req, res){
     }
 }
 
+async function getProductReviewsDetail(req, res){
+    const params = req.params;
+    try{
+        if(!params.commentId){
+            return res.status(400).json({message: 'Missing parameter'});
+        }else{
+            const id = params.commentId;
+            const result = await ProductReviews.model.ProductReviews.findById(id)
+            .populate(
+                {
+                    path: 'product',
+                    select: {
+                        name: 1,
+                        price: 1,
+                        thumbnailUrl: 1,
+                        category: 1,
+                        sortDescription: 1
+                    }
+                }
+            ).lean();
+
+            if(result){
+
+                let condition = {
+                    'products.productId': result.product._id,
+                    'deliverTo.phoneNumber': result.clientInformation.phoneNumber
+                }
+                let count = await Order.model.Order.countDocuments(condition);
+                if(count){
+                    result.purchaseConfirmation = true;
+                }
+            }
+
+            return res.status(200).json(result);
+        }
+    }catch(error){
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+}
+
+async function changeProductReviewsStatus(req, res){
+    const params = req.params;
+    const commentId = params.commentId;
+
+    const formData = req.body;
+    const newStatus = formData.newStatus;
+    try {
+        if(
+            !commentId ||
+            (Object.keys(formData).length === 0 && formData.constructor === Object) ||
+            !enumReviewsStatus.includes(newStatus)
+        ){
+            return res.status(400).json({message: 'Missing parameter'});
+        }else{
+            const productReviewsIsRevoked = await ProductReviews.model.ProductReviews.findOneAndUpdate(
+                { _id: commentId },
+                {
+                    $set: {
+                        status: newStatus
+                    }
+                },
+                { 'new': true }
+            ).populate(
+                {
+                    path: 'product'
+                }
+            ).lean();
+
+            if(productReviewsIsRevoked){
+
+                let condition = {
+                    'products.productId': productReviewsIsRevoked.product._id,
+                    'deliverTo.phoneNumber': productReviewsIsRevoked.clientInformation.phoneNumber
+                }
+                let count = await Order.model.Order.countDocuments(condition);
+                if(count){
+                    productReviewsIsRevoked.purchaseConfirmation = true;
+                }
+            };
+            return res.status(200).json(productReviewsIsRevoked);
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Something went wrong' });
+    }
+}
+
 module.exports = {
-    getProductReviews
+    getProductReviews,
+    getProductReviewsDetail,
+    changeProductReviewsStatus
 }
