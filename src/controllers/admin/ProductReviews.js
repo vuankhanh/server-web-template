@@ -121,7 +121,14 @@ async function changeProductReviewsStatus(req, res){
                 { 'new': true }
             ).populate(
                 {
-                    path: 'product'
+                    path: 'product',
+                    select: {
+                        name: 1,
+                        price: 1,
+                        thumbnailUrl: 1,
+                        category: 1,
+                        sortDescription: 1
+                    }
                 }
             ).lean();
 

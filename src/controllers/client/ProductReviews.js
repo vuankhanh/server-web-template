@@ -10,8 +10,8 @@ async function getTotalProductReviews(req, res){
             let result = {};
             for(let i=1; i<=5; i++){
                 let condition = {
+                    product: productId,
                     rating: i,
-                    censored: true,
                     status: 'confirmed'
                 };
                 let countTotal = await ProductReviews.model.ProductReviews.countDocuments(condition);
