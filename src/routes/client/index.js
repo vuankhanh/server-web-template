@@ -5,6 +5,7 @@ const AuthMiddleWare = require('../../middleware/AuthMiddleware');
 const Auth = require('../../controllers/Authentication');
 const SocialAuthentication = require('../../controllers/client/SocialAuthentication');
 const Config = require('../../controllers/Config');
+const Support = require('../../controllers/client/Support');
 const Register = require('../../controllers/client/Register');
 const SendEmail = require('../../controllers/email/SendEmail');
 const ForgotPassword = require('../../controllers/client/ForgotPassword');
@@ -26,6 +27,9 @@ const Comment = require('../../controllers/client/Comment');
 router.get('/');
 
 router.get('/config', Config.userConfig);
+
+router.get('/support', Support.getAll);
+router.get('/support/:route', Support.getDetail);
 
 router.post('/login', Auth.login);
 router.post('/auth-facebook', SocialAuthentication.Facebook);

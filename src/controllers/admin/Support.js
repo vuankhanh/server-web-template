@@ -15,7 +15,6 @@ async function getDetail(req, res){
     const params = req.params;
     const id = params.id;
 
-    console.log(params);
     try {
         if(!id){
             return res.status(400).json({message: 'Missing parameter'});
@@ -69,18 +68,13 @@ async function update(req, res){
         ){
             return res.status(400).json({message: 'Missing parameter'});
         }else{
-            const object = { 
-                name: formData.name,
-                route: convertVieService(formData.name),
-                postsId: formData.postsId
-            };
-
-            const condition = { _id: id };
-            const support = await Support.model.Support.findOneAndUpdate(
-                condition,
+            const support = await Support.model.Support.findByIdAndUpdate(
+                id,
                 {
                     $set: {
-                        object
+                        'name': formData.name,
+                        'route': convertVieService(formData.name),
+                        'postsId': formData.postsId
                     }
                 },
                 { 'new': true }
