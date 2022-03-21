@@ -15,6 +15,7 @@ const ProductGalleryVideo = require('../../controllers/admin/ProductGalleryVideo
 const Product = require('../../controllers/admin/Product');
 const Post = require('../../controllers/admin/Post');
 const Identification = require('../../controllers/admin/Identification');
+const Support = require('../../controllers/admin/Support');
 const Redirect = require('../../controllers/admin/Redirect');
 const AdministrativeUnits = require('../../controllers/AdministrativeUnits');
 const Order = require('../../controllers/admin/Order');
@@ -80,6 +81,11 @@ router.put('/identification/logo/update', RoleMiddleWare.grantAccess(1), Identif
 router.put('/identification/phone-number/update', RoleMiddleWare.grantAccess(1), Identification.updatePhoneNumber);
 router.put('/identification/social-networking/update', RoleMiddleWare.grantAccess(1), Identification.updateSocialNetwork);
 router.put('/identification/address/update', RoleMiddleWare.grantAccess(1), Identification.updateAddress);
+
+router.get('/support-management', RoleMiddleWare.grantAccess(1), Support.getAll);
+router.get('/support-management/:id', RoleMiddleWare.grantAccess(1), Support.getDetail);
+router.post('/support-management/insert', RoleMiddleWare.grantAccess(1), Support.insert);
+router.put('/support-management/update', RoleMiddleWare.grantAccess(1), Support.update);
 
 router.post('/redirect/insert', RoleMiddleWare.grantAccess(1), Redirect.insert);
 
